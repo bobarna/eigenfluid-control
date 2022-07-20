@@ -13,7 +13,7 @@ vec3f = ti.types.vector(3, ti.f32)
 
 # We evaluate on a PIxPI domain size, but sample it more dense
 original_domain_size = (math.pi, math.pi)
-sampling_size = (10, 10)
+sampling_size = (50, 50)
 dim = 2
 velocity_sample_field = ti.Vector.field(n=dim, dtype=ti.f32, shape=sampling_size)
 
@@ -43,16 +43,18 @@ def fill_values(k: vec2i):
         for k in ti.static(range(dim)):
             velocity_sample_field[x, y][k] = value[k]
 
-fill_values(vec2i(1,1))
-print(velocity_sample_field)
-
-X, Y = np.mgrid[0:sampling_size[0], 0:sampling_size[1]]
-X = Y = np.linspace(0, original_domain_size[0], sampling_size[0]) #square domain
-U = velocity_sample_field[:, :][0].to_numpy()
-V = velocity_sample_field[:, :][1].to_numpy()
-
-plt.quiver(X, Y, U, V)
-plt.show()
+for k1, k2 in [(a,b) for a in range(1, 6) for b in range(1,6)]:
+    fig = plt.figure(figsize=(8,8), dpi=500)
+    fill_values(vec2i(k1,k2))
+    X, Y = np.mgrid[0:sampling_size[0], 0:sampling_size[1]]
+    X = Y = np.linspace(0, original_domain_size[0], sampling_size[0]) #square domain
+    U = velocity_sample_field.to_numpy()[:, :, 0]
+    V = velocity_sample_field.to_numpy()[:, :, 1]
+    print(k1, k2)
+    plt.quiver(X, Y, U, V)
+    plt.title(f"(k_1, k_2) = ({k1}, {k2})")
+    fig.savefig(f"test_render/test_{k1}_{k2}.png")
+    plt.close(fig)
 # gui = ti.GUI("laplacian eigenfunctions test", sampling_size)
 # while gui.running:
     # gui.set_image(velocity_sample_field)
