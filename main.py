@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import taichi as ti
 
-ti.init(arch=ti.cpu)
+ti.init(arch=ti.gpu)
 
+# type shorthands
 vec2i = ti.types.vector(2, ti.i32)
 vec3i = ti.types.vector(3, ti.i32)
-
 vec2f = ti.types.vector(2, ti.f32)
 vec3f = ti.types.vector(3, ti.f32)
 
@@ -17,11 +17,15 @@ sampling_size = (50, 50)
 dim = 2
 velocity_sample_field = ti.Vector.field(n=dim, dtype=ti.f32, shape=sampling_size)
 
+# The used Laplacian eigenfunction.
+# k = (k_1, k_2): vector wave number (eigen-value = -(k_1**2 + k_2**2))
+# This closed-form expression is for a PIxPI square domain.
+
 @ti.func
 # def phi(k: vec2i, p: vec2f) -> vec2f:
 def phi(k, p):
     k_1, k_2, x, y = k[0], k[1], p[0], p[1]
-    const = 1 / (k_1**2 + k_2**2)
+    const = 1 / (k_1**2 + k_2**2) # -1/lambda
     k_1x, k_2y = k_1*x, k_2*y
     x = +const * (k_2 * ti.sin(k_1x) * ti.cos(k_2y))
     y = -const * (k_1 * ti.cos(k_1x) * ti.sin(k_2y))
@@ -52,7 +56,7 @@ for k1, k2 in [(a,b) for a in range(1, 6) for b in range(1,6)]:
     V = velocity_sample_field.to_numpy()[:, :, 1]
     print(k1, k2)
     plt.quiver(X, Y, U, V)
-    plt.title(f"(k_1, k_2) = ({k1}, {k2})")
+    plt.title(f"k = ({k1}, {k2}), λ_k={-(k1**2+k2**2)}")
     fig.savefig(f"test_render/test_{k1}_{k2}.png")
     plt.close(fig)
 # gui = ti.GUI("laplacian eigenfunctions test", sampling_size)
