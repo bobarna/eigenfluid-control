@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import taichi as ti
 
+# ti.init(arch=ti.gpu)
 ti.init(arch=ti.vulkan)
+# ti.init(arch=ti.cpu)
 
 # type shorthands
 vec2i = ti.types.vector(2, ti.i32)
@@ -33,6 +35,8 @@ visu_points = visu_point_struct.field(shape=(10000))
 
 # Number of basis fields to be used. Expected to be a perfect square
 N = 10**2
+# nu -- viscosity for the simulation
+viscosity = 0.999
 # math.isqrt(x) ~ math.floor(math.sqrt(x))
 N_sqrt = math.isqrt(N)
 # Velocity basis fields
@@ -119,9 +123,61 @@ def calculate_superposition():
             b = ti.static(basis_fields)
             vel_field[x, y] += b[i].w * phi_2d_rect(b[i].k, p)
 
-# @ti.kernel
+# N NxN matrices containing the precalculated advection parameters
+C_k = ti.Matrix.field(n=N, m=N, dtype=ti.f32, shape=(N))
+
 # def precalculate_advection():
-#     for 
+#     for h in range(N):
+#         h_1, h_2 = basis_fields[h].k[0], basis_fields[h].k[1]
+#         for i in range(N):
+#             i_1, i_2 = basis_fields[i].k[0], basis_fields[i].k[1]
+#             h_index, i_index = index_lookup[h_1, h_2], index_lookup[i_1, i_2]
+#             antipairs = [
+#                 [h_1-i_1, h_2-i_2],
+#                 [h_1-i_1, h_2+i_2],
+#                 [h_1+i_1, h_2-i_2],
+#                 [h_1+i_1, h_2+i_2]
+#             ]
+#             for c in range(4):
+#                 if antipairs[c][0] < N_sqrt and antipairs[c][1] < N_sqrt:
+#                     index = index_lookup[antipairs[c][0], antipairs[c][1]]
+#                 else:
+#                     index = -1
+#                 if(index != -1):
+#                     coef = coefdensity(h_1, h_2, i_1, i_2, c)
+#                     coef *= basis_fields.eig_inv[i_index]
+#                     C_k[index][h_index, i_index] = coef
+#                     C_k[index][h_index, i_index] = coef\
+#                         * -basis_fields.eig[i_index]/basis_fields.eig[h_index]
+
+def coefdensity(h_1, h_2, i_1, i_2, c):
+    if c == 0:
+        return 0.25 * (h_1*h_2 - h_2*i_1)
+    if c == 1:
+        return -0.25 * (h_1*h_2 + h_2*i_1)
+    if c == 2:
+        return 0.25 * (h_1*h_2 + h_2*i_1)
+    if c == 3:
+        return -0.25 * (h_1*h_2 - h_2*i_1)
+
+dw = ti.field(ti.f32, shape=(N))
+@ti.kernel
+def step(viscosity: ti.f32):
+    # for k in range(N):
+    #     dw[k] = ti.math.dot(ti.math.dot(basis_fields.w, C_k[k]),\
+    #                         basis_fields.w)
+    # # TODO RK4
+    # for k in range(N):
+    #     basis_fields.w[k] += dw[k] * dt
+    #     # dissipate energy for viscosity
+    #     visc = 0.99
+    #     basis_fields.w[k] *= ti.exp(-1.0 * basis_fields.eig[k] * dt * visc)
+    #     # TODO add external forces here
+
+    # viscosity
+    for k in range(N):
+        basis_fields[k].w *= viscosity
+
 
 @ti.kernel
 def init_visu_points():
@@ -156,7 +212,6 @@ def step_visu_points():
         # finally, perform step with weighted slopes
         p[i] += dt/6*(k_1 + 2*k_2 + 2*k_3 + k_4)
 
-
 # Scale visu points into range 0..1
 @ti.kernel
 def calc_visu_display_pos():
@@ -185,7 +240,7 @@ def print_basis_fields():
         b = basis_fields[i]
         print(f"i={b.i}, w={b.w}; ({b.k[0]},{b.k[1]}), eig={b.eig}")
 
-curr_basis = 90
+curr_basis = 0
 # TODO make this a taichi function to get gradients ?
 def use_single_basis_field():
     vel_field.fill(0)
@@ -193,16 +248,23 @@ def use_single_basis_field():
     basis_fields[curr_basis].w = 1
     calculate_superposition()
 
+@ti.kernel
+def use_random_basis_fields():
+    vel_field.fill(0)
+    for i in range(N):
+        basis_fields[i].w = ti.random()/N*3
+    calculate_superposition()
+
 def main():
     global curr_basis
+    global viscosity
     # fill up basis_fields details (e.g. k1,k2...)
     init_basis_fields()
-
+    # precalculate_advection()
+    # print(C_k)
     # use a single basis field for visualization
     use_single_basis_field()
-
     canvas.set_background_color((1.,1.,1.))
-
     init_visu_points()
     # print(visu_points)
     while window.running:
@@ -211,12 +273,22 @@ def main():
         canvas.circles(visu_points.pos, color=(0.1,0.1,0.1), radius=0.003)
         for _ in range(40):
             step_visu_points()
+            step(viscosity)
         if window.get_event(ti.ui.PRESS):
-            if window.event.key == 'j': curr_basis += 1
-            if window.event.key == 'k': curr_basis -= 1
+            if window.event.key == 'j':
+                curr_basis += 1
+                use_single_basis_field()
+                print(f"curr_basis={curr_basis}")
+            if window.event.key == 'k':
+                curr_basis -= 1
+                use_single_basis_field()
+                print(f"curr_basis={curr_basis}")
+            if window.event.key == 'r':
+                use_random_basis_fields()
+                print(basis_fields.w)
             if window.event.key == 'v': plot_vel_field()
-            use_single_basis_field()
-            print(f"curr_basis={curr_basis}")
+            if window.event.key == 't': viscosity = 1
+            if window.event.key == 'y': viscosity = 0.999
         window.show()
 
     # Plot each basis field individually using PyPlot

@@ -110,7 +110,7 @@ public class LE {
             // Calculate C_k matrix vector products
             dw[k] = this.dot(coef,this.Ck[k].mult(coef));
         */
-
+J207
         /* RK4: higher order explicit integrator */
         double [][] dwt = new double[4][this.N];
         double [][] qn = new double[4][this.N];
@@ -194,8 +194,8 @@ public class LE {
         }
 
         for (int d1 = 0; d1 < N; d1++) {
-            int a1 = this.basis_lookup(d1,0);
-            int a2 = this.basis_lookup(d1,1);
+            int a1 = this.basis_lookup(d1,0); // a1 === k1
+            int a2 = this.basis_lookup(d1,1); // a2 === k2
             int a1_2 = a1*a1;
             
             double lambda_a = -(a1*a1 + a2*a2);
@@ -208,8 +208,8 @@ public class LE {
                 double lambda_b = -(b1*b1 + b2*b2);
                 double inv_lambda_b = -1.0/(b1*b1 + b2*b2);
 
-                int k1 = this.basis_rlookup(a1,a2);
-                int k2 = this.basis_rlookup(b1,b2);
+                int k1 = this.basis_rlookup(a1,a2); // index of basis a
+                int k2 = this.basis_rlookup(b1,b2); // index of basis b
 
                 int [][]antipairs = new int[4][2];
                 antipairs[0][0] = a1-b1; antipairs[0][1] = a2-b2;
