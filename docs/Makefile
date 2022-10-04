@@ -1,4 +1,4 @@
-APER := thesis
+PAPER := thesis
 BUILD_DIR := ./build
 
 ARTIFACT_DIR := ../artifacts
