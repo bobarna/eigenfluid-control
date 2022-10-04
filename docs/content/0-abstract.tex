@@ -1,0 +1,49 @@
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\selecthungarian
+
+%----------------------------------------------------------------------------
+% Abstract in Hungarian
+%----------------------------------------------------------------------------
+\chapter*{Kivonat}\addcontentsline{toc}{chapter}{Kivonat}
+
+Fizikai környezetünk megértése és modellezése egy régóta fennálló kihívás, ami
+rengeteg tudományterületet érint az időjárás előrejelzéstől kezdve, járművek
+tervezésén át egészen a számítógépes grafikáig. Fizikai rendszereket általában
+Parciális Differenciálegyenletek segítségével írunk le, amiket meglévő numerikus
+módszerekkel tudunk közelíteni. A szimuláció mellett fontos feladat lehet egy
+fizikai folyamat irányítása is.
+Jelen munkánkban azt járjuk körbe, hogy hogyan tudjuk folyadékok viselkedését
+leírni és irányítani Laplace sajátfüggvények segítségével. Az explicit
+függvények általi leírásból megkapott deriváltakkal munkánkban neurális hálókat
+tanítunk be a fizikai folyamat kívánt módon történő befolyásolására.
+
+\vfill
+\selectenglish
+
+%----------------------------------------------------------------------------
+% Abstract in English
+%----------------------------------------------------------------------------
+\chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
+
+Understanding and modelling our environment is a great and important challenge,
+spanning many disciplines from weather and climate forecast, through vehicle
+design to computer graphics. Physical systems are usually described by Partial
+Differential Equations (PDEs), which we can approximate using established
+numerical techniques. Next to predicting outcomes, planning interactions to
+control physical systems is also a long-standing problem.
+
+In our work, we investigate the use of Laplacian Eigenfunctions to model and
+control fluid flow. We make use of an explicit description of our simulation
+domain to derive gradients of the physical simulation, enabling neural network
+agents to learn to control the physical process to achieve desired outcomes.
+
+\vfill
+\cleardoublepage
+
+\selectthesislanguage
+
+\newcounter{romanPage}
+\setcounter{romanPage}{\value{page}}
+\stepcounter{romanPage}

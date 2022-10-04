@@ -1,0 +1,31 @@
+name: deploy-thesis
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy_thesis:
+    runs-on: ubuntu-latest
+    env:
+      FILE: thesis.pdf
+      DIR: docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install texlive
+        run: sudo apt-get update && sudo apt-get install texlive texlive-publishers texlive-science 
+      - name: Build LaTeX
+        run: cd ${{env.DIR}} && make artifacts
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.FILE}}
+          path: artifacts/${{env.FILE}}
+      - name: Deploy on gh-pages Branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./artifacts
+          publish_branch: gh_pages
+          force_orphan: true
