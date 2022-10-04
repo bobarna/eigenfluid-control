@@ -2,7 +2,7 @@ name: deploy-thesis
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy_thesis:
