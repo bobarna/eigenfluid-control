@@ -5,12 +5,15 @@ import matplotlib.pyplot as plt
 def get_w_point_cloud(w):
     N = w.shape.get_size('k')
     x = math.range(instance(bars=N))
+    # Scale horizontal axis
+    step = w.max / N
+    x *= w.max/N
     bar_heights = stack(w, instance('bars'))
     # to be called inside vis.plot(...)
-    return PointCloud(Box(x=(x, x+1),
+    return PointCloud(Box(x=(x, x+step),
                           y=(0, bar_heights)),
-                      bounds=Box(x=(0,N),
-                                 y=(w.min-.3,w.max+.3))
+                      bounds=Box(x=(0,w.max), # scaled horizontal axis
+                                 y=(w.min,w.max))
                       )
 
 def get_rescaled_vel(vel, VIS_DIM=10, DOMAIN=Box(x=math.PI, y=math.PI)):
