@@ -1,10 +1,51 @@
-%----------------------------------------------------------------------------
 \chapter{\bevezetes}
-%----------------------------------------------------------------------------
 
-\textbf{TODO}
 Laying out the motivation, previous work and overall structure of the paper.
+
+\todo{Finish introduction}
 \section{Previous Work}
+\subsection{Fluid Simulation}
+\subsubsection*{Lagrangian Techniques}
+Fluid simulation has been 
+\subsubsection*{Eulerian Techniques}
+Eulerian, i.e. grid-based fluid simulation techniques are currently the
+\textit{de facto} techniques employed by most solutions.
+Ever since \todo{[cite]} introduced a technique..., grid-based techniques
+have been employing a \todo{finish based on SIGGRAPH course}
+
+\subsubsection{Reduced Order Modeling}
+\todo{write about previous work on ROM}
+
+\subsubsection*{Eigenfluids}
+\cite{dewitt} introduced a computationally efficient fluid simulation technique
+to the computer graphics community. Rather than using an Eulerian grid or
+Lagrangian particles, they represent velocity and vorticity using a basis of
+global functions defined over the entire simulation domain. They propose the use
+of Laplacian eigenfunctions. Following their method, the fluid simulation
+becomes a matter of evolving basis coefficients in the space spanned by
+these eigenfunctions, resulting in a speed-up characteristic of reduced-order
+methods.
+
+Multiple follow-up papers proposed improvements to the technique.
+\todo{list improvements of scalable eigenfluids, etc...}
+
+\subsection{Differentiable Solvers}
+\cite{control-pde} address grid-based solvers, noting them as
+particularly appropriate for dense, volumetric phenomena. They put forth
+\textit{PhiFlow}, an open-source simulation toolkit build for optimization and
+machine learning applications, written mostly in Python.
+
+\todo{Write more about \cite{control-pde}.}
+
+\subsubsection*{Physics-based Deep Learning}
+Integrating physical solvers in training-based methods have been shown to
+outperform previously used learning approaches.(\cite{solver-in-the-loop})
+
+Drawing on a wide breadth of current research, \cite{pbdl} gives an overview of
+deep learning methods in the context of physical simulations. 
+
+\todo{Elaborate this more. Maybe later on, when we see our own results.}
+
 
 \section{Structure}
 Short description of each chapter.
