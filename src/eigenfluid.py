@@ -72,6 +72,15 @@ class Eigenfluid():
         w = tensor(w, instance(k=N))
         return w
 
+    # p.shape should be (channel('vector'='x,y')
+    #   with optional batch dimensions, e.g. (batch(i), channel(..))
+    def get_phi_at(self, p):
+        phi = self.phi_template(self.w, self.N, self.basis_fields)
+        return phi(p)
+
+    def get_phi(self):
+        return self.phi_template(self.w, self.N, self.basis_fields)
+
     # The base function phi, scaled by w[i]
     def phi_template(self, w, N, basis_fields):
         def phi(p):
@@ -139,8 +148,8 @@ class Eigenfluid():
 
         # Energy after time step
         e_2 = math.l2_loss(w)*2
-        # Renormalize energy
-        w *= math.sqrt(e_1/e_2)
+        # Renormalize energy + epsilon for numerical stability
+        w *= math.sqrt(e_1/e_2 + 1e-05)
 
         # Dissipate energy for viscosity
         eig = rename_dims(self.basis_fields.k['eig'], 'i', 'k')
