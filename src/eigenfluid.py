@@ -149,7 +149,8 @@ class Eigenfluid():
         # Energy after time step
         e_2 = math.l2_loss(w)*2
         # Renormalize energy + epsilon for numerical stability
-        w *= math.sqrt(e_1/e_2 + 1e-05)
+        if all(e_1 > 1e-5):
+            w *= math.sqrt(e_1/e_2)
 
         # Dissipate energy for viscosity
         eig = rename_dims(self.basis_fields.k['eig'], 'i', 'k')

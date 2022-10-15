@@ -6,13 +6,13 @@ def get_w_point_cloud(w):
     N = w.shape.get_size('k')
     x = math.range(instance(bars=N))
     # Scale horizontal axis
-    step = w.max / N
-    x *= w.max/N
+    # step = w.max / N
+    # x *= w.max/N
     bar_heights = stack(w, instance('bars'))
     # to be called inside vis.plot(...)
-    return PointCloud(Box(x=(x, x+step),
+    return PointCloud(Box(x=(x, x+1),
                           y=(0, bar_heights)),
-                      bounds=Box(x=(0,w.max), # scaled horizontal axis
+                      bounds=Box(x=(0,N), # scaled horizontal axis
                                  y=(w.min,w.max))
                       )
 
