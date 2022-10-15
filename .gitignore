@@ -6,6 +6,16 @@ thesis-pdflatex*.pdf
 thesis-xelatex*.pdf
 thesis-lualatex*.pdf
 
+## notebook
+.ipynb_checkpoints/*
+### Python cache
+src/__pycache__/
+*.pyc
+
+## taichi version
+taichi/imgui.ini
+
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
