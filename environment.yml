@@ -1,0 +1,30 @@
+# Create environment based on this file:
+## `conda env create`
+
+# When finished with project, export precise version numbers with:
+## `conda env export > environment.yml`
+
+# Updating the environment (when this file changes):
+## `conda env update --prune`
+## https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#updating-an-environment
+
+# Same as name of git repository
+name: eigenfluid-control
+# Prefer conda-forge channels
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.5
+  - pip
+  - jupyterlab
+  - notebook
+  - ipykernel # for conda env in notebook
+  - pip:
+    - phiflow
+    - dash
+    - torch
+    - torchvision
+    # Optionally delete tf later on
+    - tensorflow
+    # Add Jax?
