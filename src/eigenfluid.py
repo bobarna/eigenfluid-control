@@ -1,5 +1,3 @@
-# TODO Imports
-
 from phi.torch.flow import *
 
 class Eigenfluid():
