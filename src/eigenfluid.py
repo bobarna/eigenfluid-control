@@ -61,13 +61,13 @@ class Eigenfluid():
         # short form:
         # w = tensor([1.0 if i == 3 or i==2 or i==5 else 0. for i in range(N)])
         w = []
-        for i in range(N):
+        for i in range(self.N):
             if i == 2: w.append(1.3)
             elif i == 4: w.append(.7)
             elif i == 5: w.append(2.3)
             elif i == 6: w.append(.4)
             else: w.append(0)
-        w = tensor(w, instance(k=N))
+        w = tensor(w, instance(k=self.N)) / self.N
         return w
 
     # p.shape should be (channel('vector'='x,y')
