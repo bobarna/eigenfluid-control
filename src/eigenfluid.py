@@ -7,7 +7,7 @@ class Eigenfluid():
     sampling_size: For reconstructing the velocity field
     visu_size: for visualizing the velocity field
     '''
-    def __init__(self, N, DOMAIN, SAMPLING_SIZE):
+    def __init__(self, N, DOMAIN, SAMPLING_SIZE, init_w='random'):
         # Number of basis fields
         self.N = N
         self.N_sqrt = int(math.sqrt(N))
@@ -20,7 +20,10 @@ class Eigenfluid():
         self.basis_fields = self.get_initial_basis_fields()
 
         # Initialize basis coefficient vector
-        self.w = self.get_initial_w(random=True)
+        if init_w == 'random':
+            self.w = self.get_initial_w(random=True)
+        if init_w == 'zero':
+            self.w = self.get_initial_w(zero=True)
 
         # Precalculate advection tensor
         # TODO use sparse matrices
@@ -52,7 +55,9 @@ class Eigenfluid():
         return -1
 
     # Initialize the w basis field coefficient vecotr
-    def get_initial_w(self, random=False, seed=42):
+    def get_initial_w(self, random=False, seed=42, zero=False):
+        if zero:
+            return math.zeros(instance(k=self.N))
         math.seed(seed)
         if random:
             # Scaled by 1/N
@@ -147,15 +152,15 @@ class Eigenfluid():
         # Energy after time step
         e_2 = math.l2_loss(w)*2
         # Renormalize energy + epsilon for numerical stability
-        if all(e_1 > 1e-5):
-            w *= math.sqrt(e_1/e_2)
+        w *= math.sqrt(e_1/e_2 + 1e-5)
 
         # Dissipate energy for viscosity
-        eig = rename_dims(self.basis_fields.k['eig'], 'i', 'k')
-        w *= math.exp(eig * dt * viscosity)
+        if viscosity > 0:
+            eig = rename_dims(self.basis_fields.k['eig'], 'i', 'k')
+            w *= math.exp(eig * dt * viscosity)
 
-        # TODO add external forces
-        # self.w += f
+        # TODO add external forces here?
+        # w += f
 
         return w
 
