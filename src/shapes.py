@@ -19,9 +19,8 @@ def get_points_for_shapes(shape_0, shape_target, O=30, U=30):
     p_0 = shape_0.create_points(p_0)
     p_t = math.concat((sampler_union.p, sampler_target.p), instance('i'))
     p_t = shape_target.create_points(p_t)
-    
-    return (p_0, p_t)
 
+    return (p_0, p_t)
 
 '''
 N: number of sample points
@@ -39,7 +38,6 @@ class ShapeSampler:
 
         self.p = []
 
-        # TODO fill up p with straightforward points (e.g. center, top, down)
         # generate N points in [0,1]x[0,1]
         # Check wheter (u,v) is inside the shape
         # if not, then throw it away, and try another one
@@ -119,6 +117,16 @@ class Circle:
 
         return smoke
 
+    def get_trivial_points(self):
+        return math.tensor([
+            [0.5, 0.5], # center
+            [0.885, 0.885], # upper right
+            [0.115, 0.885], # upper left
+            [0.115, 0.115], # lower left
+            [0.885, 0.115], # lower right
+        ], instance(i=5) & channel(vector='x,y'))
+
+
 '''
 pos: (x,y) position of lower left corner
 size: side length of the square
@@ -162,6 +170,15 @@ class Square:
         )
 
         return smoke
+
+    def get_trivial_points(self,):
+        return math.tensor([
+            [0.5, 0.5], # center
+            [1, 1], # upper right
+            [0, 1], # upper left
+            [0, 0], # lower left
+            [1, 0], # lower right
+        ], instance(i=5) & channel(vector='x,y'))
 
 '''
 pos: lower left corner of the encompassing rectangle
@@ -214,6 +231,15 @@ class Triangle():
         bool_inside = math.all(bool_inside, 'vector')
 
         return bool_inside
+
+    def get_trivial_points(self):
+        return math.tensor([
+            [0.5, 0.5], # center
+            [0.5, 1], # upper right
+            [0.5, 1], # upper left
+            [0, 0], # lower left
+            [1, 0], # lower right
+        ], instance(i=5) & channel(vector='x,y'))
 
 # TODO
 def get_f_moon():
