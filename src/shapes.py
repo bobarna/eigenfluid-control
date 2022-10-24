@@ -4,9 +4,24 @@ Generating and sampling shapes
 u,v \in [0,1]
 '''
 
-# TODO create base class to derive each shape from
+# TODO Derive each class from PhiFlow Geometry class
 
 from phi.torch.flow import *
+
+# Helper function to sample initial and target position of 2 shapes
+# Get O overlapping, and U non-necessarily overlapping ('unique') sample points
+def get_points_for_shapes(shape_0, shape_target, O=30, U=30):
+    sampler_union = ShapeSampler(shape_0, shape_target, N=O, h1=2, h2=7)
+    sampler_0 = ShapeSampler(shape_0, N=U, h1=3, h2=11)
+    sampler_target = ShapeSampler(shape_target, N=U, h1=3, h2=11)
+    # Concatenate both the union and non-union points
+    p_0 = math.concat((sampler_union.p, sampler_0.p), instance('i'))
+    p_0 = shape_0.create_points(p_0)
+    p_t = math.concat((sampler_union.p, sampler_target.p), instance('i'))
+    p_t = shape_target.create_points(p_t)
+    
+    return (p_0, p_t)
+
 
 '''
 N: number of sample points
@@ -23,6 +38,7 @@ class ShapeSampler:
         self.h2 = h2
 
         self.p = []
+
         # TODO fill up p with straightforward points (e.g. center, top, down)
         # generate N points in [0,1]x[0,1]
         # Check wheter (u,v) is inside the shape
@@ -58,12 +74,13 @@ class ShapeSampler:
 
 '''
 pos: lower left corner of the encompassing rectangle
-radius: radius of the circle
+size: size by which to scale encompassing rectangle
 '''
 class Circle:
-    def __init__(self, pos=(1,1), radius=1):
+    def __init__(self, pos=(1,1), size=1):
         self.pos = pos
-        self.radius = radius
+        self.size = size
+        self.radius = size/2
 
     '''
     (u, v): sample point in [0,1]x[0,1]
@@ -85,10 +102,22 @@ class Circle:
         return self.p
 
     def f(self, p):
-        scale = tensor([self.radius, self.radius], channel(p))
+        scale = tensor([self.size, self.size], channel(p))
         tx, ty = self.pos
         translate = tensor([tx, ty], channel(p))
         return (p * scale) + translate
+
+    def get_smoke(self, domain=Box(x=math.PI, y=math.PI), x=100, y=100):
+        r = self.radius
+        center = tensor([self.pos[0]+r, self.pos[1]+r], channel(vector='x,y'))
+        smoke = CenteredGrid(
+            Sphere(center=center, radius=r),
+            extrapolation.BOUNDARY,
+            x=x, y=y,
+            bounds=(domain)
+        )
+
+        return smoke
 
 '''
 pos: (x,y) position of lower left corner
@@ -121,10 +150,23 @@ class Square:
         translate = tensor([tx, ty], channel(p))
         return (p * scale) + translate
 
+    def get_smoke(self, domain=Box(x=math.PI, y=math.PI), x=100, y=100):
+        lower = tensor([self.pos[0], self.pos[1]], channel(vector='x,y'))
+        upper = tensor([self.pos[0]+self.size, self.pos[1]+self.size], channel(vector='x,y'))
+        smoke = CenteredGrid(
+            Box(lower=lower, 
+            upper=upper),
+            extrapolation.BOUNDARY,
+            x=x, y=y,
+            bounds=(domain)
+        )
+
+        return smoke
+
 '''
 pos: lower left corner of the encompassing rectangle
 '''
-class Triangle:
+class Triangle():
     def __init__(self, pos=(1,1), size=1.0):
         self.pos   = pos
         self.size = size
@@ -154,6 +196,10 @@ class Triangle:
         tx, ty = self.pos
         translate = tensor([tx, ty], channel(p))
         return (p * scale) + translate
+
+    def get_smoke(self,domain=Box(x=math.PI, y=math.PI), x=100, y=100):
+        raise NotImplementedError("TODO: implement triangle smoke.")
+
 
 # TODO
 def get_f_moon():
