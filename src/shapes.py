@@ -198,8 +198,22 @@ class Triangle():
         return (p * scale) + translate
 
     def get_smoke(self,domain=Box(x=math.PI, y=math.PI), x=100, y=100):
-        raise NotImplementedError("TODO: implement triangle smoke.")
+        smoke = CenteredGrid(
+            self.get_marker,
+            extrapolation.BOUNDARY,
+            x=x, y=y,
+            bounds=(domain)
+        )
+        return smoke
 
+    def get_marker(self, p):
+        u, v = p.vector['x'], p.vector['y']
+        y_left  = +2*(u-self.pos[0]) + self.pos[1]
+        y_right = -2*(u-self.pos[0]) + 2 + self.pos[1]
+        bool_inside = (v < y_left) & (v < y_right) & (v > self.pos[1])
+        bool_inside = math.all(bool_inside, 'vector')
+
+        return bool_inside
 
 # TODO
 def get_f_moon():
