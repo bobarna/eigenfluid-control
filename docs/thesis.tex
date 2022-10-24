@@ -2,6 +2,7 @@
 %\documentclass[11pt,a4paper,twoside,openright]{report}  % Duplex
 
 \input{include/packages}
+\input{acronyms.tex}
 
 %Set the main variables
 \newcommand{\vikszerzoVezeteknev}{Börcsök}
@@ -61,18 +62,18 @@
 %Hallgatói nyilatkozat -- TDK és OTDK esetén törlendő!
 % \include{include/declaration} 
 % Összefoglaló -- TDK és OTDK esetén nem kötelező
-\include{content/0-abstract} 
+\include{content/abstract} 
 
 % The main part of the thesis
 \pagenumbering{arabic}
 
-\include{content/0-introduction}
+\include{content/introduction}
 
-\include{content/1-mathematical-foundations}
-\include{content/2-differentiable-physics}
-\include{content/3-fluid-simulation}
-\include{content/8-results}
-\include{content/9-discussion-and-future-work}
+\include{content/mathematical-foundations}
+\include{content/physical-simulations}
+\include{content/fluid-simulation}
+\include{content/results}
+\include{content/discussion-and-future-work}
 
 % Acknowledgements
 \include{content/acknowledgement}
@@ -86,7 +87,7 @@
 \bibliography{bib/mybib}
 
 % Appendix
-\include{content/a1-advection-matrix}
+\include{content/advection-matrix}
 
 %\label{page:last}
 \end{document}

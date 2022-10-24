@@ -1,0 +1,187 @@
+\chapter{Mathematical Foundations}
+\label{sec:mathematicalFoundations}
+This chapter gives a short overview of the mathematical foundation for the
+techniques we discuss later on, while also establishing the notation used in
+later sections.
+
+In the following,
+\begin{equation*}
+    \vb{i} = \mqty( 1 \\ 0 \\ 0 )\quad
+    \vb{j} = \mqty( 0 \\ 1 \\ 0 )\quad
+    \vb{k} = \mqty( 0 \\ 0 \\ 1 )
+\end{equation*}
+will denote the canonical basis vectors.
+
+\section{Basic Notation}
+
+$\vb{x} \in \mathbb{R}^n$ is considered a column-matrix, i.e. $\mathbb{R}^n
+= \mathbb{R}^{n \times 1}$. This also means that $\vb{x}^T$ (the transpose of
+$\vb{x}$) is a row-matrix.
+
+We denote the scalar components of a vector $\vb{x}\in \mathbb{R}^{n}$ with $(x_1,
+x_2 \dots x_n)$. We will also use $\vb{x} = (x,y,z)$ interchangably, when
+$\vb{x}$ denotes a position in 3D, and $\vb{x} = (x,y)$ in 2D.
+
+Bold uppercase letters denote matrices: $\vb{A}\in \mathbb{R}^{n \times m}$, and
+its elements are indexed with $\vb{A}_ij$
+
+A function $f(x_1, \dots x_n)$ is a scalar-valued function $\mathbb{R}^n \to
+\mathbb{R}$.  When $\vb{f}: \mathbb{R}^n \to \mathbb{R}^m$ is a vector field, we
+will denote it as 
+
+$$\vb{f}(\vb{x}) = \vb{f}(x_1,\dots x_n) =(f_1(\vb{x}), \dots, f_m(\vb{x}))$$
+
+Keeping with the conventions of fluid mechanics literature, we use the letter
+$\vb{u}$ to denote the velocity of a fluid. It is hard to say where this notation
+came from, but it fits another convention to call the three components of 3D
+velocity $(u,v,w)$ (dropping $w$ for the 2D case).
+
+\section{Multivariable Calculus}
+\subsection*{Gradient}
+The gradient $\grad$ is a generalization of the derivative to multiple
+dimensions. The symbol $\grad$ is called \textit{nabla}, and typically denotes
+taking partial derivatives along all spatial dimensions. 
+
+In three dimensions, 
+$$\grad f(x,y) = \mqty(\pdv*{f}{x} \\ \pdv*{f}{y} \\ \pdv*{f}{z}),$$ 
+and in two dimensions,
+$$\grad f(x,y) = \mqty(\pdv*{f}{x} \\ \pdv*{f}{y}).$$
+
+It can be helpful to think of the gradient operator as a symbolic
+vector, e.g. in three dimensions:
+$$\grad = \mqty(\pdv*{x} \\ \pdv*{y} \\ \pdv*{z}).$$ 
+
+We can also take gradient of vector-valued functions, which results in a matrix.
+When $\vb{f}(x_1,\dots x_n) = (f_1, \dots, f_n)$, i.e. $\vb{f}: \mathbb{R}^n \to
+\mathbb{R}^n$, mapping the $n$ dimensional euclidean space onto itself, it is
+often called the \textit{Jacobian (matrix)} of $\vb{f}$:
+
+$$\grad \vb{f} = \mqty[\grad^T{f_1}\\\grad^T{f_2}\\\vdots\\\grad^T f_n] = 
+\mqty[
+\pdv{f_1}{x_1} & \pdv{f_1}{x_2} & \dots & \pdv{f_1}{x_n}\\
+\pdv{f_2}{x_1} & \pdv{f_2}{x_2} & \dots & \pdv{f_2}{x_n}\\
+\vdots         &                & \ddots & \vdots \\
+\pdv{f_n}{x_1} & \pdv{f_n}{x_2} & \dots & \pdv{f_n}{x_n}
+].$$
+
+\subsection*{Divergence}
+The divergence operator measures how much the values of a vector field are
+converging or diverging at any point in space. In three dimensions:
+$$\div{\vb{u}(x,y,z)} = \div(u(\vb{x}), v(\vb{x}), w(\vb{x})) = 
+\pdv{u}{x}+\pdv{v}{y}+\pdv{w}{z}.$$
+
+Note that the input is a vector, and the output is a scalar, i.e. $\vb{u}:
+\mathbb{R}^3 \to \mathbb{R}^3, \div{\vb{u}}: \mathbb{R}^3\to\mathbb{R}$).
+Heuristically, in the case of a fluid velocity field $\vb{u}$, this translates
+to a measure of whether a given point acts as a source, or a sink, i.e. whether
+particles are created or lost in that infinitesimal region. (Later on, we will
+come back to the notion of a divergence-free fluid.)
+
+\subsection*{Curl}
+The curl operator measures how much a vector field is rotating around any point. 
+In three dimensions, it is given by the vector
+$$\curl{\vb{u}(x,y,z) = 
+    \mqty(\pdv*{x} \\ \pdv*{y} \\ \pdv*{z}) \cross 
+    \mqty(u(x,y,z) \\ v(x,y,z) \\ w(x,y,z))
+= \mqty|
+    \vb{i}   & \vb{j}   & \vb{k}   \\
+    \pdv*{x} & \pdv*{y} & \pdv*{z} \\
+    u        & v        & w
+|} = \mqty(
+\pdv*{w}{y} - \pdv*{v}{z} \\
+\pdv*{u}{z} - \pdv*{w}{x} \\
+\pdv*{v}{x} - \pdv*{u}{y}
+).$$
+
+We will reduce this formula to two dimension by taking the third component of
+the expression above, as if we were looking at the three-dimensional vector
+field $(u,v,0)$. Thus, the two-dimensional curl is a scalar:
+$$\curl{\vb{u}(x,y)} = 
+    \mqty(\pdv*{x} \\ \pdv*{y}) \cross 
+    \mqty(u(x,y) \\ v(x,y))
+    = \pdv{v}{x} - \pdv{u}{y}.$$
+
+\subsection*{Material Derivative}
+For a velocity $\vb{u}(t,x,y,z) = \mqty(u \\ v \\ w)$, 
+we define the material derivative as 
+$$\dv{\vb{u}}{t} = \pdv{\vb{u}}{t} + \qty(\vb{u}\vdot\grad)\vb{u} ,$$
+
+a special case of the total derivative. Keeping in mind that $x, y, z$ depend on
+the time $t$ themselves (i.e. $\vb{u}(t, x(t), y(t), z(t))$), and utilizing the
+chain rule, we can arrive on the above definition by taking the total derivative
+of $\vb{u}(t, x(t), y(t), z(t))$:
+\begin{alignat*}{2}
+    \dv{\vb{u}}{t} &= \pdv{\vb{u}}{t}\dv{t}{t} 
+                    + \pdv{\vb{u}}{x}\dv{x}{t} 
+                    + \pdv{\vb{u}}{y}\dv{y}{t} 
+                    + \pdv{\vb{u}}{z}\dv{z}{t} \\
+                    &= \pdv{\vb{u}}{t} 1 \quad
+                    + \pdv{\vb{u}}{x} u \quad
+                    + \pdv{\vb{u}}{y} v \quad
+                    + \pdv{\vb{u}}{z} w \\
+                    &= \pdv{\vb{u}}{t} 1 \quad
+                    + u \pdv{\vb{u}}{x} \quad
+                    + v \pdv{\vb{u}}{y} \quad
+                    + w \pdv{\vb{u}}{z} \\
+                    &= \pdv{\vb{u}}{t}
+                    \qty(
+                        \vb{u}
+                        \vdot
+                        \mqty[ \pdv*{x} \\ \pdv*{y} \\ \pdv*{z} ]
+                    ) \vdot \vb{u} \\
+                    &= \pdv{\vb{u}}{t}
+                    + \qty(\vb{u}\vdot\grad)\vdot\vb{u}.
+\end{alignat*}
+
+\subsection*{Laplacian}
+The Laplacian operator is the divergence of the gradient of a scalar function
+$f$. In general, for $f(\vb{x}): \mathbb{R}^n \to \mathbb{R}$, it is given by
+
+$$\Delta f = \laplacian{f} = \grad \vdot \grad f = \sum_{i=1}^n
+\pdv[2]{f}{x_i}.$$
+
+In three dimensions, this reduces to 
+$$\grad \vdot \grad f = \pdv[2]{f}{x} + \pdv[2]{f}{y} + \pdv[2]{f}{z},$$
+
+and in two dimensions,
+
+$$ \grad \vdot \grad f = \pdv[2]{f}{x} + \pdv[2]{f}{y}.$$
+
+\subsection*{Vector Laplacian}
+The Laplacian can also be applied to vector (or even matrix) fields, and the
+result is simply the Laplacian of each component.
+
+Essentially, the vector Laplacian is what we have been building towards so far,
+as this operator is going to be the cornerstone of the eigenfluids simulation
+technique.\todo{link to section} As such, we will show some important properties
+of this operator. We will return to these in later sections.\todo{link to
+section}
+
+The vector Laplacian of a vector field $\vb{f}$ is defined as
+
+$$\underbrace{\Delta \vb{f}}_{vector Laplacian} = 
+\underbrace{\grad(\div{\vb{f}})}_{\text{gradient of the divergence}} - 
+\underbrace{\curl(\curl{\vb{f}})}_{\text{curl of curl = curl}^2} =
+    \text{grad(div(f))} - \underbrace{\text{curl(curl(f))}}_{\text{curl}^2(f)}$$
+
+In Cartesian coordinates, the vector Laplacian simplifies to taking the
+Laplacian of each component:
+
+\begin{equation}
+    \Delta\vb{f}(x, y, z) = (\grad\vdot\grad)\vb{f} = 
+    \mqty(\Delta f_1 \\ \Delta f_2 \\ \Delta f_3) =
+    \mqty(
+        \pdv*[2]{f_1}{x} + \pdv*[2]{f_1}{y} + \pdv*[2]{f_1}{z}\\
+        \pdv*[2]{f_2}{x} + \pdv*[2]{f_2}{y} + \pdv*[2]{f_2}{z}\\
+        \pdv*[2]{f_3}{x} + \pdv*[2]{f_3}{y} + \pdv*[2]{f_3}{z}
+    ).
+\end{equation}
+
+\todo{Look into this in a bit more depth. Which one is the definition, what is
+the proper wording? (Anal course notes mention $\Delta$ only briefly, and
+doesn't mention the vector Laplacian at all.)}
+
+\subsection*{Integrating Multivariable Functions}
+\todo{Write this. What's necessary?}
+
+
