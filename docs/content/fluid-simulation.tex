@@ -1,9 +1,92 @@
 \chapter{Fluid Simulation}
+The simulation of fluids is a long-standing challenge of computer graphics,
+especially when considering real-time applications. There are multiple ways to
+simulate fluids, the two most widespread being Eulerian (i.e. grid-based) and
+Lagrangian (i.e. particle-based) methods. Here, we will restrict ourselves to
+discussing Eulerian methods, but will also introduce the Laplacian Eigenfunction
+method (\cite{dewitt}).
 
-\todo{Write about Fluid Simulation in general, citing the SIGGRAPH course for
-the most part + other relevant papers.}
+The dynamics of fluids are governed by the Navier-Stokes Equations:
+\begin{equation}
+    \label{eq:NSE}
+    \begin{aligned}
+        \pdv{\vb{u}}{t} = -\vb{u}\cdot\grad{\vb{u}} + 
+        \nu \grad\cdot\grad \vb{u} - \grad{p} + \vb{f}
+    \end{aligned}
+\end{equation}
 
+\todo{Write about simulating the NS equations, from an Eulerian simulation
+perspective
+- We are also advecting some marker density (add equation for that too)}
 \section{The Laplacian Eigenfunction Method}
-\citet{dewitt}
+\subsection{Preliminaries}
+\todo{Write Preliminaries}
+We now summarize the method of using Laplacian eigenfunctions for fluid
+simulation, introduced by \citet{dewitt}.
 
-\todo{Write about the eigenfluid algorithm}
+\subsection*{Laplacian Eigenfunctions as Basis Fields}
+We express the velocity field $\vb{u}$ of a fluid on a domain $D$ as
+$$\vb{u}(\vb{x})=\sum_i^N w_i \Phi_i(\vb{x}),$$
+where the $N$ scalar elements of $\vb{w}$ are called basis coefficients, and
+${\Phi_i}$ are basis functions.
+
+As our basis functions, we choose the eigenfunctions of the vector Laplacian
+operator (see Section~\ref{section:vector-laplacian}). If we further require our
+basis fields $\Phi_{\vb{k}}$ to be divergence-free, and to satisfy a free slip
+boundary condition, $\Phi_{\vb{k}}$ is fully characterized by
+
+\begin{align*}
+\nabla^2 \Phi_{\textbf{k}} &= \lambda_{\textbf{k}}\Phi_{\textbf{k}} \\
+\nabla \cdot \Phi_{\textbf{k}} &= 0 \\
+\Phi_{\textbf{k}} \cdot \textbf{n} &= 0 \text{ at } \partial D,
+\end{align*}
+where $\textbf{n}$ is the normal vector at the boundary $\partial D$.
+
+Thus, on the two dimensional $D \in [0, \pi] \times [0, \pi]$ square domain, the
+two scalar components of the $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
+\Phi_{\vb{k},y})$ functions take the form 
+
+\begin{align}
+\Phi_{\textbf{k},x}(x, y) &= -\lambda_k^{-1} 
+    ( k_2 \sin(k_1 x) \cos(k_2 y) ) \\
+\Phi_{\textbf{k},y}(x, y) &= -\lambda_k^{-1}
+    ( -k_1 \cos(k_1 x) \sin(k_2 y) ).
+\end{align}
+
+$\textbf{k} = (k_1, k_2) \in \mathbb{Z}^2$ is known as the *vector wave
+number*, with eigenvalue $\lambda_k = -(k_1^2 + k_2^2)$. 
+The function is scaled by the negative inverse of its eigenvalue, 
+$-\lambda_k^{-1} = 1/(k_1^2 + k_2^2)$.
+
+\subsection*{Dynamics}
+\todo{Write this section}
+The vorticity formulation of the Navier-Stokes equation is
+\begin{equation}\label{eq:NSE-vorticity}
+    \dot{\bf{\omega}} = \text{Adv}(\bf{u}, \bf{\omega}) + \nu \Delta\bf{\omega}
+    + \text{curl}(\bf{f})
+\end{equation}
+where $\bf{\omega} = \curl{\bf{u}}$ and $\bf{f}$ are external forces.
+
+\subsubsection*{Precomputation of the Advection Dynamics}
+\todo{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

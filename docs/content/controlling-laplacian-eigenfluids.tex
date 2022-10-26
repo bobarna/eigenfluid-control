@@ -1,0 +1,81 @@
+\chapter{Controlling Laplacian Eigenfluids}
+Many real world applications require us to optimize for some parameters of
+a physics-based problem. A toy problem would be to optimize for some initial
+angle and velocity of a projectile to hit some target \todo{Learning to Throw
+figure + description}. For a more involved example we can also think of finding
+the best shape for a vehicle to minimize its drag.\cite{MinDrag} These kinds of
+inverse problems have been around for quite some time in engineering
+applications.
+
+Building on all of the previously introduced ideas, we now introduce our
+investigation into the use of eigenfluids in fluid control problems, making use
+of their explicit closed form description of a velocity field (\todo{link to
+equation}). Our main proposition is to achieve reduced-order modeling-like
+speed-increase: in lieu of representing the fluid as a grid, we reconstruct the
+velocity field only at discrete points in space, while simulating the dynamics
+of the fluid in a reduced dimensional space.\todo{Link to eq.}
+
+\todo{
+- Reformulate problem as model reduction?
+(\url{http://physicsbaseddeeplearning.com/others-timeseries.html})
+- Is this end-to-end training? (I think it is, but let's read up a bit on the
+term)
+}
+
+\section{Controlling Shape Transitions}
+\label{section:controlling-shape-transitions}
+\todo{Formulate problem, loss function, etc here}
+\subsection*{Sampling}
+\todo{Write about sampling strategies of points, how shapes are defined, etc.}
+\subsection{Initial Velocity}
+\todo{Move some parts of this under main
+Section~\ref{section:controlling-shape-transitions}}
+
+In the following, we will showcase an optimization scenario, where we try to
+find an initial base coefficient vector $\vb{w}^{0}$ for an eigenfluid
+simulation with $N=16$ basis fields, such that when simulated for $t$ time
+steps, the reconstructed velocity field will advect a set of initial points
+$\vb{p}^0 = [p^0_0\dots p^i_0]$ to line up with target positions 
+$\vb{p}^{t} = [p^t_0\dots p^t_i]$. We can write this optimization problem as 
+
+$$\arg\min_{\vb{w}} \text{Loss}(\vb{w}, \vb{p}^0, \vb{p}^t)
+= \arg\min_{\vb{w}} \left| \mathcal{P}^{t}(\vb{p}^0, \vb{w})
+- \vb{p}^t\right|_2^2 = \arg\min_{\vb{w}}
+\sum_{i}\left|\mathcal{P}^{t}(p^0_i, \vb{w}) - p^t_i\right|_2^2, $$
+
+where $\mathcal{P}^t(\vb{w}, \vb{p}) = \underbrace{\mathcal{P} \circ
+\mathcal{P} \dots \circ \mathcal{P}(\vb{w}, \vb{p})}_{t \text{ times}}$
+denotes the physical simulation of base coefficients $\vb{w}$ and 
+points $\vb{p}$ in the velocity field reconstructed from $\vb{w}$. We
+use a simple mean-square error (also known as $L_2$ norm) for measuring the error.
+
+The main difficulty of this non-linear optimization problem lies in that we have
+no control over the natural flow of the fluid besides supplying an initial
+$\vb{w}^0$ vector.
+
+Making use of the differentiability of our physical simulator $\mathcal{P}$, and
+the multivariable chain rule for deriving the gradient of the above
+$\mathcal{P}^t$ function composition, we can derive its gradient with respect to
+the initial coefficients:
+$$\frac{\partial \mathcal{P}^t(\vb{w},\vb{p})}{\partial \vb{w}}.$$
+
+\todo{Where to put Gradient Descent part? Maybe later? Or put NN training here?}
+\todo{Should we add an optimization chapter? (Maybe that's too much right now)}
+
+Finally, we can simply iterate a gradient descent optimizer with learning
+rate $\mu$ to find a (good enough) solution for our above minimization problem:
+
+
+$$\vb{w}_{\text{better}} = \vb{w} - \mu
+\frac{
+    \partial\text{Loss}(\vb{w}, \vb{p}_0, \vb{p}^t)
+}{
+    \partial \vb{w}
+}$$
+
+\subsection{Control Force Estimation}
+\todo{Write only about problem statement + optimization part for optimizing
+for $f \in \mathbb{R}^{t \times N}$ force vector.}
+\subsection{Neural Network Training}
+\todo{Move this section a bit up in the hierarchy? Where?}
+\todo{Write about generalizing the CFE to arbitrary shapes via training a NN.}
