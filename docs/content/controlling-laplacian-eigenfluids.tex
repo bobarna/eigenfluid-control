@@ -15,25 +15,33 @@ speed-increase: in lieu of representing the fluid as a grid, we reconstruct the
 velocity field only at discrete points in space, while simulating the dynamics
 of the fluid in a reduced dimensional space.\todo{Link to eq.}
 
-\todo{
-- Reformulate problem as model reduction?
-(\url{http://physicsbaseddeeplearning.com/others-timeseries.html})
-- Is this end-to-end training? (I think it is, but let's read up a bit on the
-term)
+\todo{Reformulate problem as model reduction? 
+\url{http://physicsbaseddeeplearning.com/others-timeseries.html}
 }
 
-\section{Experiments}
-In the following, we showcase the different optimization scenarios, where
-we try out different aspects of controlling eigenfluids. The first couple of
-examples are "traditional" optimization scenarios, where "traditional" implies
-finding individual solutions to problems via a gradient descent optimization.
-Moving further, we look for generalized solutions to a set of problems by
-training \acp{NN}.
+\todo{Is this end-to-end training? (I think it is, but let's read up a bit on
+the term.) 
+}
 
-\subsection{Finding Initial Velocity}
-Our baseline optimization scenario is finding an initial basis coefficient
-vector $\vb{w}^0$ for an eigenfluid simulation with $N=16$ basis fields, such
-that when simulated for $t$ time steps, the reconstructed 
+\section{Our Experiments}
+In the following, we showcase different optimization scenarios, where we try out
+different aspects of controlling eigenfluids via \acf{DP} gradients. (See
+section~\ref{dp-loss}.)
+
+The first couple of examples are "traditional" optimization scenarios. By
+"traditional", we mean finding individual solutions to problems via gradient
+descent optimization. Moving further, we look for generalized solutions to a set
+of problems by training \acfp{NN}.
+
+\subsection{Finding Initial Velocities}
+To verify feasibility before moving on to more involved setups, our most
+straightforward optimziation scenario is to find an initial basis coefficient
+vector $\vb{w}_0 \in \mathbb{R}^N$ for an eigenfluid simulation using $N=16$
+basis fields, such that when simulated for $t$ time steps, the reconstructed
+$\text{Reconstruct}(\vb{w}_t) = \vb{u}_t$ velocity field will match up some
+precalculated $\vb{u}^*$ velocity field.
+
+This is a good time to also introduce some notation 
 
 \subsection{Controlling Shape Transitions}
 \label{section:controlling-shape-transitions}
