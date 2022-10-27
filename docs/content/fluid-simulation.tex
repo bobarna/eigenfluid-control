@@ -1,10 +1,10 @@
 \chapter{Fluid Simulation}
-The simulation of fluids is a long-standing challenge of computer graphics,
-especially when considering real-time applications. There are multiple ways to
-simulate fluids, the two most widespread being Eulerian (i.e. grid-based) and
-Lagrangian (i.e. particle-based) methods. Here, we will restrict ourselves to
-discussing Eulerian methods, but will also introduce the Laplacian Eigenfunction
-method (\cite{dewitt}).
+Simulating convincing fluid dynamics is a continuing challenge of computer
+graphics, especially when considering real-time applications. There are multiple
+established ways to simulate fluids, the two most widespread being Eulerian
+(i.e. grid-based) and Lagrangian (i.e. particle-based) methods. Here, we
+restrict ourselves to discussing Eulerian methods, and also introduce the
+Laplacian Eigenfunction method (\cite{dewitt}).
 
 The dynamics of fluids are governed by the Navier-Stokes Equations:
 \begin{equation}
@@ -46,12 +46,12 @@ Thus, on the two dimensional $D \in [0, \pi] \times [0, \pi]$ square domain, the
 two scalar components of the $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
 \Phi_{\vb{k},y})$ functions take the form 
 
-\begin{align}
+\begin{align*}
 \Phi_{\textbf{k},x}(x, y) &= -\lambda_k^{-1} 
     ( k_2 \sin(k_1 x) \cos(k_2 y) ) \\
 \Phi_{\textbf{k},y}(x, y) &= -\lambda_k^{-1}
     ( -k_1 \cos(k_1 x) \sin(k_2 y) ).
-\end{align}
+\end{align*}
 
 $\textbf{k} = (k_1, k_2) \in \mathbb{Z}^2$ is known as the *vector wave
 number*, with eigenvalue $\lambda_k = -(k_1^2 + k_2^2)$. 

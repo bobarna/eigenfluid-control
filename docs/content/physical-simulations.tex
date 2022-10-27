@@ -25,14 +25,11 @@ the governing \ac{PDE} can be written as
 where $\mathcal{P}$ models the physical behavior of the system, and $\vb{y}(t)$
 denotes an (optional) external force factor. 
 
-\todo{Should we give example(s) of a PDE here? (e.g. Dirichlet boundary
-condition, Navier-Stokes, Burger's Equation, or anything else?)}
-
 \subsection{Numerical Methods}
 Analytic solutions (i.e. closed-form expressions) can be found usually only for
 very simple \acfp{PDE}. 
 
-\todo{How much does it makes sense to write about these?}
+\todo{Write only about things that come up later on:}
 \todo{
   Numerical Integration:
   \begin{itemize}
@@ -80,21 +77,20 @@ to be computed for each optimizable parameter.
 solvers, solving the adjoint problem \todo{cite?} via analytic derivatives.
 Differentiable solvers can efficiently compute the derivatives with respect to
 any of the inputs $\pdv*{\vb{u}(t_{i+1})}{\vb{u}(t_i)}$ and
-$\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$
+$\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$.
 
-\todo{
-\begin{itemize}
-  \item Example of a differentiable language built for CG: DiffTaichi
-    introduced by \cite{difftaichi}
-  \item todo link phiflow, we are using that for our implementation
-\end{itemize}
-}
+Recently, multiple have been developed oriented towards differentiable
+physics-based simulations. (\cite{difftaichi},
+\cite{holl2019pdecontrol},\cite{warp2022} ) 
 
+\todo{ Write here that we're using PhiFlow?  }
 
-\todo{Write short intro on optimization?}
+\todo{Mention that we tried out the others too?}
 
 For a basic comparison of the characteristics of supervised and differentiable
 physics approaches, see Figure~\ref{fig:learning-to-throw}.
+
+\todo{Rewriting this explanation, and shorten the figure description.}
 
 \section{Loss Functions}
 \todo{Write about inductive physical bias}

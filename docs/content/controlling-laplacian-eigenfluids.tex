@@ -1,9 +1,9 @@
 \chapter{Controlling Laplacian Eigenfluids}
 Many real world applications require us to optimize for some parameters of
 a physics-based problem. A toy problem would be to optimize for some initial
-angle and velocity of a projectile to hit some target \todo{Learning to Throw
-figure + description}. For a more involved example we can also think of finding
-the best shape for a vehicle to minimize its drag.\cite{MinDrag} These kinds of
+angle and velocity of a projectile to hit some target \todo{Refer back to the
+learning to throw example}. As a more involved example, \cite{MinDrag} address
+finding the best shape of a vehicle to minimize its drag. These kinds of
 inverse problems have been around for quite some time in engineering
 applications.
 
@@ -22,10 +22,24 @@ of the fluid in a reduced dimensional space.\todo{Link to eq.}
 term)
 }
 
-\section{Controlling Shape Transitions}
+\section{Experiments}
+In the following, we showcase the different optimization scenarios, where
+we try out different aspects of controlling eigenfluids. The first couple of
+examples are "traditional" optimization scenarios, where "traditional" implies
+finding individual solutions to problems via a gradient descent optimization.
+Moving further, we look for generalized solutions to a set of problems by
+training \acp{NN}.
+
+\subsection{Finding Initial Velocity}
+Our baseline optimization scenario is finding an initial basis coefficient
+vector $\vb{w}^0$ for an eigenfluid simulation with $N=16$ basis fields, such
+that when simulated for $t$ time steps, the reconstructed 
+
+\subsection{Controlling Shape Transitions}
 \label{section:controlling-shape-transitions}
 \todo{Formulate problem, loss function, etc here}
-\subsection*{Sampling}
+
+\subsubsection*{Sampling}
 \todo{Write about sampling strategies of points, how shapes are defined, etc.}
 \subsection{Initial Velocity}
 \todo{Move some parts of this under main
