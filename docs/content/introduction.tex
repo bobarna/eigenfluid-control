@@ -11,16 +11,28 @@ Laying out the motivation, previous work and overall structure of the paper.
 \subsubsection*{Eulerian Techniques}
 Eulerian, i.e. grid-based fluid simulation techniques are currently employed in
 most solutions. 
-\todo{cite Stable Fluids as base method? What other stuff to mention?}
+
+\todo{cite Stable Fluids as base method? What other papers to mention?}
 
 \subsubsection*{Reduced Order Modeling of Fluids}
-\todo{Write about Reduced Order Modeling (ROM) in general}
-\todo{Previous work on finding Koopman operators for a linear embedding}
-\todo{\url{https://github.com/wiewel/LatentSpaceSubdivision}}
-\todo{\url{https://github.com/byungsook/deep-fluids}}
+Dimension reduction-based techniques have been applied to fluid simulation in
+multiple previous works. 
+
+\todo{Add some basic ROM papers next to these recent ones?}
+
+Recently, \cite{LatentSpaceSubdivision} predicted the evolution of fluid flow
+via training a convolutional neural network (CNN) for spatial compression, with
+another network predicting the temporal evolution in this compressed subspace.
+The main novelty of \cite{LatentSpaceSubdivision} was the subdivision of the
+latent space into subparts, allowing interpretability, as well as external
+control of quantities such as velocity and density of the fluid.
+
+\cite{Wiewel2019LatentSP} demonstrated that functions of an evolving physics
+system can be predicted within the latent spaces of neural networks. Their
+efficient encoder-decoder architecture predicted pressure fields, yielding two
+orders of magnitudes faster simulation times than a traditional pressure solver.
 
 \subsubsection*{Eigenfluids}
-
 \cite{dewitt} introduced a computationally efficient fluid simulation technique
 to the computer graphics community. Rather than using an Eulerian grid or
 Lagrangian particles, they represent velocity and vorticity using a basis of
@@ -30,17 +42,27 @@ becomes a matter of evolving basis coefficients in the space spanned by
 these eigenfunctions, resulting in a speed-up characteristic of reduced-order
 methods.
 
-Multiple follow-up papers proposed improvements to the technique.
-
-\todo{list improvements of scalable eigenfluids, etc...}
+Following up on the work of \cite{dewitt}, multiple papers proposed improvements
+to the use of Laplacian eigenfunctions for the simulation of incompressible
+fluid flow. \cite{ModelReductionFluidSim} extended the technique to handle
+arbitrarily-shaped domains. \cite{EigenfluidCompression} used Discrete Cosine
+Transform (DCT) on the eigenfunctions for compression.
+\cite{scalable-eigenfluids} improved scalability of the technique, and modified
+the method to handle further types of boundary conditions.
 
 \subsection{Differentiable Solvers}
+Differentiable solvers have shown tremendous success lately for optimization
+problems via gradient descent, including training neural nework agents.
+(\cite{holl2019pdecontrol}, \cite{difftaichi}, \cite{warp2022})
+
+\todo{\cite{holl2019pdecontrol}, \cite{difftaichi}, \cite{warp2022} are
+frameworks, strictly speaking (although they all respectively contain relevan
+diff. physics examples.}
+
 \cite{holl2019pdecontrol} address grid-based solvers, noting them as
 particularly appropriate for dense, volumetric phenomena. They put forth
-\textit{PhiFlow}, an open-source simulation toolkit build for optimization and
+$\Phi_{Flow}$, an open-source simulation toolkit built for optimization and
 machine learning applications, written mostly in Python.
-
-\todo{Write more about \cite{holl2019pdecontrol}.}
 
 \subsubsection*{Physics-based Deep Learning}
 Integrating physical solvers in training-based methods have been shown to
@@ -49,8 +71,7 @@ outperform previously used learning approaches.(\cite{solver-in-the-loop})
 Drawing on a wide breadth of current research, \cite{pbdl} give an overview of
 deep learning methods in the context of physical simulations. 
 
-\todo{Elaborate this more. Maybe later on, when we see our own results.}
-
+\todo{Maybe elaborate on this a bit more?}
 
 \section{Structure}
 \todo{Short description of each chapter. (Once chapters are actually written.)}

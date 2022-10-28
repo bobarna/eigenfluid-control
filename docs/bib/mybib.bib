@@ -1,3 +1,59 @@
+@article{ModelReductionFluidSim,
+author = {Liu, Beibei and Mason, Gemma and Hodgson, Julian and Tong, Yiying and Desbrun, Mathieu},
+title = {Model-Reduced Variational Fluid Simulation},
+year = {2015},
+issue_date = {November 2015},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {34},
+number = {6},
+issn = {0730-0301},
+url = {https://doi.org/10.1145/2816795.2818130},
+doi = {10.1145/2816795.2818130},
+abstract = {We present a model-reduced variational Eulerian integrator for incompressible fluids, which combines the efficiency gains of dimension reduction, the qualitative robustness of coarse spatial and temporal resolutions of geometric integrators, and the simplicity of sub-grid accurate boundary conditions on regular grids to deal with arbitrarily-shaped domains. At the core of our contributions is a functional map approach to fluid simulation for which scalar- and vector-valued eigenfunctions of the Laplacian operator can be easily used as reduced bases. Using a variational integrator in time to preserve liveliness and a simple, yet accurate embedding of the fluid domain onto a Cartesian grid, our model-reduced fluid simulator can achieve realistic animations in significantly less computational time than full-scale non-dissipative methods but without the numerical viscosity from which current reduced methods suffer. We also demonstrate the versatility of our approach by showing how it easily extends to magnetohydrodynamics and turbulence modeling in 2D, 3D and curved domains.},
+journal = {ACM Trans. Graph.},
+month = {nov},
+articleno = {244},
+numpages = {12},
+keywords = {model reduction, eulerian simulation, energy preservation, computational fluid dynamics, sub-grid-resolution geometry}
+}
+
+@article{Wiewel2019LatentSP,
+  title={Latent Space Physics: Towards Learning the Temporal Evolution of Fluid Flow},
+  author={Steffen Wiewel and Moritz Becher and Nils Th{\"u}rey},
+  journal={Computer Graphics Forum},
+  year={2019},
+  volume={38}
+}
+
+@inproceedings{LatentSpaceSubdivision,
+author = {Wiewel, S. and Kim, B. and Azevedo, V. C. and Solenthaler, B. and Thuerey, N.},
+title = {Latent Space Subdivision: Stable and Controllable Time Predictions for Fluid Flow},
+year = {2020},
+publisher = {Eurographics Association},
+address = {Goslar, DEU},
+url = {https://doi.org/10.1111/cgf.14097},
+doi = {10.1111/cgf.14097},
+abstract = {We propose an end-to-end trained neural network architecture to robustly predict the complex dynamics of fluid flows with high temporal stability. We focus on single-phase smoke simulations in 2D and 3D based on the incompressible Navier-Stokes (NS) equations, which are relevant for a wide range of practical problems. To achieve stable predictions for long-term flow sequences with linear execution times, a convolutional neural network (CNN) is trained for spatial compression in combination with a temporal prediction network that consists of stacked Long Short-Term Memory (LSTM) layers. Our core contribution is a novel latent space subdivision (LSS) to separate the respective input quantities into individual parts of the encoded latent space domain. As a result, this allows to distinctively alter the encoded quantities without interfering with the remaining latent space values and hence maximizes external control. By selectively overwriting parts of the predicted latent space points, our proposed method is capable to robustly predict long-term sequences of complex physics problems, like the flow of fluids. In addition, we highlight the benefits of a recurrent training on the latent space creation, which is performed by the spatial compression network. Furthermore, we thoroughly evaluate and discuss several different components of our method.},
+booktitle = {Proceedings of the ACM SIGGRAPH/Eurographics Symposium on Computer Animation},
+articleno = {2},
+numpages = {11},
+location = {Virtual Event, Canada},
+series = {SCA '20}
+}
+
+@inproceedings {EigenfluidCompression,
+booktitle = {Eurographics/ ACM SIGGRAPH Symposium on Computer Animation},
+editor = {Ladislav Kavan and Chris Wojtan},
+title = {{Compressing Fluid Subspaces}},
+author = {Jones, Aaron Demby and Sen, Pradeep and Kim, Theodore},
+year = {2016},
+publisher = {The Eurographics Association},
+ISSN = {1727-5288},
+ISBN = {978-3-03868-009-3},
+DOI = {10.2312/sca.20161225}
+}
+
 @misc{warp2022,
 title= {Warp: A High-performance Python Framework for GPU Simulation and Graphics},
 author = {Miles Macklin},
