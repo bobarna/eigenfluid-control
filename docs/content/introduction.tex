@@ -1,7 +1,8 @@
 \chapter{\bevezetes}
 
-In this chapter, we briefly discuss previous work, and the overall structure
-of our paper. 
+In this chapter, we briefly discuss previous research that served as inspiration
+as well as a base for our current work. We also give an overview of the overall
+structure of our thesis. 
 
 \todo{Write about our motivation here? (Also see note at the end of the chapter:
 should we mention our contribution here?)}
@@ -11,12 +12,15 @@ should we mention our contribution here?)}
 Most simulation methods are based on either an Eulerian (i.e.  grid-based), or
 Lagrangian (i.e. particle-based) representation of the fluid.  For an overview
 of fluid simulation techniques in computer graphics, see \cite{FluidNotes} and
-\cite{BridsonFluid}.  Eulerian simulation techniques are currently employed in
-most solutions. For comparison with reduced order techniques, we also use
-grid-based techniques in our work, for the most part as described by
+\cite{BridsonFluid}. 
+
+For advecting marker density in our fluid, as well as a comparative "baseline"
+simulation, we will use Eulerian simulation techniques, mostly as described by
 \cite{StableFluids}.
 
-\todo{Is it okay to keep this part so short?}
+\todo{Is it okay to keep this part so short? mention that \cite{StableFluids}
+introduced the Semi-Lagrangian step that we also use for advection, or that's
+unnecessary?}
 
 \subsubsection*{Reduced Order Modeling of Fluids}
 Dimension reduction-based techniques have been applied to fluid simulation in
@@ -34,15 +38,18 @@ the subdivision of the learned latent space, allowing interpretability, as well
 as external control of quantities such as velocity and density of the fluid.
 
 \subsubsection*{Eigenfluids}
-Instead of \textit{learning} a reduced-order representation, another option is to
-analytically derive the dimension reduction, and its time evolution.
+Instead of \textit{learning} a reduced-order representation, another option is
+to analytically derive the dimension reduction, and its time evolution.
 \cite{dewitt} introduced a computationally efficient fluid simulation technique
 to the computer graphics community. Rather than using an Eulerian grid or
 Lagrangian particles, they represent velocity and vorticity using a basis of
-global functions defined over the entire simulation domain. They propose the use
-of Laplacian eigenfunctions. Following their method, the fluid simulation
-becomes a matter of evolving basis coefficients in the space spanned by these
-eigenfunctions, resulting in a speed-up characteristic of reduced-order methods.
+global functions defined over the entire simulation domain. The fluid velocity
+is reconstructed as a linear combination of these bases.
+
+They propose the use of Laplacian eigenfunctions as these global functions.
+Following their method, the fluid simulation becomes a matter of evolving basis
+coefficients in the space spanned by these eigenfunctions, resulting in
+a speed-up characteristic of reduced-order methods. 
 
 Following up on the work of \cite{dewitt}, multiple papers proposed improvements
 to the use of Laplacian eigenfunctions for the simulation of incompressible
@@ -50,7 +57,7 @@ fluid flow. \cite{ModelReductionFluidSim} extended the technique to handle
 arbitrarily-shaped domains. \cite{EigenfluidCompression} used Discrete Cosine
 Transform (DCT) on the eigenfunctions for compression.
 \cite{scalable-eigenfluids} improved scalability of the technique, and modified
-the method to handle further types of boundary conditions.
+the method to handle different types of boundary conditions.
 \cite{scalable-eigenfluids} refers to the fluid simulation technique using
 Laplacian eigenfunctions as \textit{eigenfluids}, which we will also adhere to
 in the following.
@@ -60,12 +67,12 @@ lowercase, such as "grid-based" or "particle-based".}
 
 \subsection{Differentiable Solvers}
 Differentiable solvers have shown tremendous success lately for optimization
-problems via gradient descent, including training neural nework agents
+problems, including training neural nework agents
 (\cite{holl2019pdecontrol}, \cite{difftaichi}, \cite{warp2022}).
 
 \todo{\cite{holl2019pdecontrol}, \cite{difftaichi}, \cite{warp2022} are
 frameworks, strictly speaking (although they all respectively contain relevant
-diff. physics examples. Is that OK?}
+diff. physics examples). Is that OK?}
 
 \cite{holl2019pdecontrol} address grid-based solvers, noting them as
 particularly appropriate for dense, volumetric phenomena. They put forth
@@ -78,7 +85,7 @@ interest in neural network algorithms is a relatively new phenomenon. This is
 especially true for the use of learning-based methods in physical and numerical
 simulations, which is a rapidly developing area of current research. Recently,
 integrating physical solvers in such methods have been shown to outperform
-previously used learning approaches.(\cite{solver-in-the-loop})
+previously used learning approaches (\cite{solver-in-the-loop}).
 
 Drawing on a wide breadth of current research, \cite{pbdl} give an overview of
 deep learning methods in the context of physical simulations. 
@@ -88,5 +95,5 @@ deep learning methods in the context of physical simulations.
 \section{Structure}
 \todo{Short description of each chapter. (Once chapters are actually written.)}
 
-\todo{Write about our contribution here: using physics-based gradients of
-a reduced-order simulation technique to solve optimization problems?}
+\todo{Should we write about our contribution here? ($\approx$using physics-based gradients of
+a reduced-order simulation technique to solve optimization problems)}

@@ -18,7 +18,7 @@ $\vb{x} \in \mathbb{R}^n$ is considered a column-matrix, i.e. $\mathbb{R}^n
 = \mathbb{R}^{n \times 1}$. This also means that $\vb{x}^T$ (the transpose of
 $\vb{x}$) is a row-matrix.
 
-We denote the scalar components of a vector $\vb{x}\in \mathbb{R}^{n}$ $(x_1,
+We denote the scalar components of a vector $\vb{x}\in \mathbb{R}^{n}$ as $(x_1,
 x_2, \dots, x_n)^T$. When $\vb{x}$ denotes a position in 3D or 2D space, we also
 use $\vb{x} = (x,y,z)^T$, and $\vb{x} = (x,y)^T$, respectively.
 
@@ -29,7 +29,7 @@ A function $f(x_1, \dots, x_n)$ is a scalar-valued function $\mathbb{R}^n \to
 \mathbb{R}$.  When $\vb{f}: \mathbb{R}^n \to \mathbb{R}^m$ is a vector field, we
 will denote it as 
 
-$$\vb{f}(\vb{x}) = \vb{f}(x_1,\dots, x_n)=
+$$\vb{f}(\vb{x}) = \vb{f}(x_1,\dots, x_n) =
 (f_1(\vb{x}), \dots, f_m(\vb{x}))^T$$
 
 In keeping with the conventions of fluid mechanics literature, we use the letter
@@ -52,18 +52,24 @@ It can be helpful to think of the gradient operator as a symbolic
 vector, e.g. in three dimensions:
 $$\grad = \left(\pdv{x}, \pdv{y}, \pdv{z}\right).$$ 
 
-We can also take gradient of vector-valued functions, which results in a matrix.
-When $\vb{f}(x_1,\dots x_n) = (f_1, \dots, f_n)^T$, i.e. $\vb{f}: \mathbb{R}^n \to
-\mathbb{R}^n$, mapping the $n$ dimensional Euclidean space onto itself, it is
-often called the \textit{Jacobian (matrix)} of $\vb{f}$:
+Taking the gradient of vector-valued functions results in a matrix of all its
+first-order partial derivates, called the \textit{Jacobian (matrix)}. With
+$\vb{f}: \mathbb{R}^n \to \mathbb{R}^m$, its Jacobian takes the form:
 
-$$\grad \vb{f} = \mqty[\grad{f_1}\\\grad{f_2}\\\vdots\\\grad f_n]^T = 
+\begin{equation}\label{eq:jacobian-matrix}
+\grad \vb{f} = \vb{J}(\vb{f}) = \vb{J}_{\vb{f}}=
+\mqty[\grad{f_1}\\\grad{f_2}\\\vdots\\\grad f_n]^T = 
 \mqty[
 \pdv{f_1}{x_1} & \pdv{f_1}{x_2} & \dots & \pdv{f_1}{x_n}\\
 \pdv{f_2}{x_1} & \pdv{f_2}{x_2} & \dots & \pdv{f_2}{x_n}\\
-\vdots         &                & \ddots & \vdots \\
-\pdv{f_n}{x_1} & \pdv{f_n}{x_2} & \dots & \pdv{f_n}{x_n}
-].$$
+\vdots         &    \vdots      & \ddots & \vdots \\
+\pdv{f_m}{x_1} & \pdv{f_m}{x_2} & \dots & \pdv{f_m}{x_n}
+].
+\end{equation}
+
+When $\vb{f}(x_1,\dots x_n) = (f_1, \dots, f_n)^T$, i.e. $\vb{f}: \mathbb{R}^n
+\to \mathbb{R}^n$, mapping the $n$ dimensional Euclidean space onto itself,
+its determinant is called the \textit{Jacobian determinant}.
 
 \subsection*{Divergence}
 The divergence operator measures how much the values of a vector field are
@@ -73,7 +79,7 @@ $$\div{\vb{u}(x,y,z)} = \div(u(\vb{x}), v(\vb{x}), w(\vb{x}))^T =
 \pdv{u}{x}+\pdv{v}{y}+\pdv{w}{z}.$$
 
 Note that the input is a vector, and the output is a scalar, i.e. $\vb{u}:
-\mathbb{R}^3 \to \mathbb{R}^3, \div{\vb{u}}: \mathbb{R}^3\to\mathbb{R}$).
+\mathbb{R}^3 \to \mathbb{R}^3, \div{\vb{u}}: \mathbb{R}^3\to\mathbb{R}$.
 Heuristically, in the case of a fluid velocity field $\vb{u}$, this translates
 to a measure of whether a given point acts as a source, or a sink, i.e. whether
 particles are created or lost in that infinitesimal region. (Later on, we will
@@ -83,7 +89,7 @@ come back to the notion of a divergence-free fluid.)
 The curl operator measures how much a vector field is rotating around any point. 
 In three dimensions, it is given by the vector
 $$\curl{\vb{u}(x,y,z) = 
-    \mqty(\pdv*{x} \\ \pdv*{y} \\ \pdv*{z}) \cross 
+    \mqty(\pdv*{x} \\ \pdv*{y} \\  \pdv*{z})^T \cross 
     \mqty(u(x,y,z) \\ v(x,y,z) \\ w(x,y,z))
 = \mqty|
     \vb{i}   & \vb{j}   & \vb{k}   \\
@@ -110,7 +116,7 @@ $$\dv{\vb{u}}{t} = \pdv{\vb{u}}{t} + \qty(\vb{u}\vdot\grad)\vb{u} ,$$
 
 a special case of the total derivative. As $x, y, z$ describe the spatial
 position of a particle traveling through space over time, they depend on time
-$t$ themselves (i.e.  $\vb{u}(t, x(t), y(t), z(t))$). Utilizing the chain rule,
+$t$ themselves, i.e. $\vb{u}(t, x(t), y(t), z(t))$. Utilizing the chain rule,
 we can arrive on the above definition by taking the total derivative of
 $\vb{u}(t, x(t), y(t), z(t))$, and rearranging the terms:
 
@@ -153,18 +159,19 @@ and in two dimensions,
 $$ \grad \vdot \grad f = \pdv[2]{f}{x} + \pdv[2]{f}{y}.$$
 
 Taking the divergence of the gradient corresponds to an averaging of how much
-a value at a given position differs from it's neighborhood. As an example, we
+a value at a given position differs from its neighborhood. As an example, we
 can look at a non-static scalar field, with a rate of change proportional to
-its' Laplacian with proportionality $\alpha$:
+its Laplacian with proportionality $\alpha$:
 
 $$
     \pdv{\Phi}{t} = \alpha \div^2\Phi,
 $$
 
 which is the well-known heat equation, and governs diffusion of the field. It is
-essentially a smoothing operation that results in every . Using heat as an
-analogy, hot and cold spots diffuse throughout the field, resulting in a more
-uniform distribution of the heat in the field.
+essentially a smoothing operation that results in an averaging of values at
+every point in space. Using heat as an analogy, hot and cold spots diffuse
+throughout the field, resulting in a more uniform distribution of the heat in
+the field, eventually reaching a uniform distribution of heat.
 
 \subsection*{Vector Laplacian}
 \label{section:vector-laplacian}
@@ -199,11 +206,11 @@ Laplacian of each component:
     \label{eq:laplacian}
 \end{equation}
 
-We can see that these are equivalent by writing out $\text{grad}(\text{div}(f))
-- \text{curl}(f)$ explicitly:
+We can see that these are equivalent by writing out
+$\text{grad}(\text{div}(\vb{f})) - \text{curl}(\vb{f})$ explicitly:
 
-\begin{equation}
-    \grad(\div{f}) - \curl(\curl{f}) =
+\begin{equation}\label{eq:graddiv-identity}
+    \grad(\div{\vb{f}}) - \curl(\curl{\vb{f}}) =
     \mqty[
         \pdv[2]{f_1}{x} + 
         \cancel{\pdv[2]{f_2}{x}{y}} + 
@@ -242,7 +249,7 @@ It can be shown that for any smooth function $\vb{u}$,
 \begin{align*}
     \numberthis
     \label{eq:diff-identity}
-    \div(\curl{\vb{u}}) &\equiv 0 \\
+    \div(\curl{\vb{u}}) &\equiv 0, \\
     \curl(\grad{\vb{u}}) &\equiv 0.
 \end{align*}
 
@@ -263,25 +270,64 @@ flows, where we would like to make our velocity field $\vb{u}$ divergence-free
 (i.e. no particles should be lost or created). Simulation techniques often
 decompose an intermediate fluid field $\vb{u}^{t+1}$ into a divergence-free
 part, and interpreting $p$ as the pressure that is keeping the fluid flow
-divergence-free, usually throwing it away the values of $p$ immediately.
+divergence-free, usually throwing away the values of $p$ immediately.
 
-Another useful identity that will come up later on (\todo{ref. section-...}) is
+Rearranging equation~\eqref{eq:graddiv-identity}, we can derive another useful
+identity that will come up later in section~(\todo{ref}):
 $$\curl(\curl{\vb{u}}) \equiv \grad(\div{\vb{u}}) - \div{\grad{\vb{u}}}.$$
 
 \section{Optimization}\label{section:optimization}
-We address optimization scenarios where the target is to minimize a function
-with respect to one of its inputs:
+Iterative optimization algorithms look for a solution by iteratively applying
+some update step $\Delta$ to some starting parameter $\vb{x}_0$, giving an
+estimation of how to approach some optimal parameter $\vb{x}^*$, with the goal
+to continuously lower the error as defined by a loss function $L$.  We address
+optimization scenarios where the target is to minimize a scalar-valued loss
+function $L(\vb{x}): \mathbb{R}^N \to \mathbb{R}$  with respect to one of its
+inputs:
 
+$$\label{eq:optimization-target}
+\arg\min_{\vb{x}} L(\vb{x}) = \vb{x}^*.$$
 
-\todo{Loss Function}
+Among the vast number of established optimization algorithms, \acf{GD} is the
+most basic and straightforward. Making use of the Jacobian matrix as defined in
+\eqref{eq:jacobian-matrix}, it gives us an update step $\Delta$ given
+a parameter $\vb{x}$, consisting of the transposed Jacobian matrix of $\vb{f}$
+scaled by a scalar \textit{learning rate} $\lambda$. Repeatedly applying the
+update step $\Delta(\vb{x}) = -\lambda J^T(\vb{x})$, the steps of a \acf{GD}
+optimization can be written out as:
 
-\todo{Gradient Descent, basic, straightforward, first-order accurate method}
+\begin{align*}\label{eq:gd-steps}\numberthis
+    \vb{x}_0  & \\
+    \vb{x}_{1} &= \vb{x}_0 - \lambda\Delta \equiv \vb{x}_0 - \lambda
+        J_{L}^T(\vb{x}_0) \equiv \vb{x}_0 - \lambda \grad{L}^T(\vb{x}_0) \\
+    \vdots&\\
+    \vb{x}_t &= \vb{x}_{t-1} - \lambda J_L^T(\vb{x}_{t-1})\\
+    \vb{x}^* &= \vb{x}_t - \lambda J_L^T(\vb{x}_t),
+\end{align*}
 
-\todo{Mention other optimization methods (second-order accurate), Newton's
-method, etc...}
+which is exactly what we will be utilizing in our first couple of optimization
+scenarios in chapter~\todo{Reference chapter}. Note that as our loss is
+scalar-valued, the transposed Jacobian matrix of $L$ has the same dimensionality
+as the input $\vb{x}$, i.e. $J_{L}^T \in \mathbb{R}^{N\times 1};$ $\vb{x} \in
+\mathbb{R}^{N\times 1}$, making them both a column vector of size $N$, which
+means that they can indeed be added together. 
 
-\todo{Refer to Hessian, and also write that the Laplacian is
-$\text{trace}(\text{Hessian})$?}
+We can also think about these optimization steps as continuously moving towards
+some locally observed lowest point in the error landscape. The gradient
+$\grad{L}$ is giving us the direction of steepest \textit{ascent}, which means
+that the opposite direction, $-\grad{L}$ will be the direction of the steepest
+\textit{descent} locally, guiding us towards some (potentially only local) error
+minimum.
+
+\todo{I will also refer back to these equations. Is it too redundant here to
+mention that we will be using these steps for our results? I would also like to
+highlight that this actually makes sense to write about from the perspective of
+our thesis.}
+
+\todo{Mentioning other optimization methods, such as Newton's method, and making
+a connection with them via how they all approximate the Hessian matrix
+differently, would have us introduce many other topics. For the same reason,
+I don't plan on expanding upon Adam. Is this OK?}
 
 \subsection*{Neural Networks}
 The goal of \acf{DL} is to approximate an unknown function 
@@ -309,10 +355,10 @@ norm):
     \arg\min_{\boldsymbol\theta} 
         L_2\big(\vb{f}(\vb{x}, \boldsymbol\theta), \vb{y}^* \big) 
     = \arg\min_{\boldsymbol\theta} 
-        \left| \vb{f}(\vb{x}, \boldsymbol\theta) - \vb{y}^* \right|_2^2.
+        \lvert \vb{f}(\vb{x}, \boldsymbol\theta) - \vb{y}^* \rvert_2^2.
 \end{equation}
 
-As already discussed in section~\ref{section:optimization}, we can use the
+As discussed in section~\ref{section:optimization}, we can use the
 gradients of the loss function $L$ with respect to the weights
 $\boldsymbol{\theta}$ (i.e. $\pdv*{L}{\boldsymbol\theta}$) to solve
 equation~\eqref{eq:NN-min}, yielding the optimal $\boldsymbol{\theta}$
@@ -321,17 +367,21 @@ optimizer, such as Adam (\cite{adam}).
 
 In the case of a fully-connected \ac{NN}, we can write its $i^{th}$ layer as 
 
-$$\vb{o}^i = \sigma(\vb{W}_i \vb{o}^{i-1} + b_i),$$
+\begin{equation}
+    \vb{o}^i = \sigma\left(\vb{W}_i \vb{o}^{i-1} + b_i\right),
+\end{equation}
 
 where $\vb{o}^i$ is the output of the $i^{th}$ layer, $\sigma$ is a non-linear
 activation function, such as the rectified linear unit (ReLU) function, and
 $\vb{W}_i$ and $b_i$ are the weight matrix and the bias of layer $i$,
-respectively. We call every $\vb{W}_i$ and $b_i$ the parameters of the \ac{NN},
-and collect their values in $\boldsymbol\theta$.
+respectively. We call $\vb{W}_i$ and $b_i$ the parameters of the \ac{NN},
+and collect their values from all layers in $\boldsymbol\theta$.
+
+\todo{Should we write about backpropagation here, or that's only an
+implementation practicality to be mentioned only later on?}
 
 \todo{Would it look better to not write everything in bold (losing the notion of
 all of these being vector-valued), i.e.
 $$\arg\min_{\theta} L_2\big(f(x, \theta), y^*\big)\text{?}$$
 }
 
-\todo{Is this section about NNs too wordy?}
