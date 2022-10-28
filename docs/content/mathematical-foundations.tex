@@ -268,7 +268,10 @@ divergence-free, usually throwing it away the values of $p$ immediately.
 Another useful identity that will come up later on (\todo{ref. section-...}) is
 $$\curl(\curl{\vb{u}}) \equiv \grad(\div{\vb{u}}) - \div{\grad{\vb{u}}}.$$
 
-\section{Optimization}
+\section{Optimization}\label{section:optimization}
+We address optimization scenarios where the target is to minimize a function
+with respect to one of its inputs:
+
 
 \todo{Loss Function}
 
@@ -281,7 +284,54 @@ method, etc...}
 $\text{trace}(\text{Hessian})$?}
 
 \subsection*{Neural Networks}
+The goal of \acf{DL} is to approximate an unknown function 
 
-\todo{NN notation as function $f(\vb{x}, \theta)$}
+$$\vb{f}^*(\vb{x}) = \vb{y}^*,$$
 
-\todo{Fully Connected NNs as dot products + activation functions}
+where $\vb{y}^*$ denotes \textit{ground truth} solutions. $\vb{f}^*(\vb{x})$ is
+approximated by a \acf{NN} representation 
+
+$$\vb{f}(\vb{x}, \boldsymbol\theta) = \vb{y},$$
+
+where $\boldsymbol{\theta}$ is a vector of \textit{weights}, influencing the output of
+the \ac{NN}. \ac{DL} is about finding $\boldsymbol{\theta}$ parameters such
+that the outputs of the \ac{NN} match the $\vb{y}^*$ outputs of the original
+function $\vb{f}^*$ as closely as possible, as measured by some scalar-valued
+loss function $L$:
+
+$$\arg\min_{\boldsymbol\theta} L\big(\vb{f}(\vb{x}, \boldsymbol\theta), \vb{y}^*
+    \big).$$
+
+In the simplest case, using a mean-square error (also known as $L_2$
+norm):
+
+\begin{equation}\label{eq:NN-min}
+    \arg\min_{\boldsymbol\theta} 
+        L_2\big(\vb{f}(\vb{x}, \boldsymbol\theta), \vb{y}^* \big) 
+    = \arg\min_{\boldsymbol\theta} 
+        \left| \vb{f}(\vb{x}, \boldsymbol\theta) - \vb{y}^* \right|_2^2.
+\end{equation}
+
+As already discussed in section~\ref{section:optimization}, we can use the
+gradients of the loss function $L$ with respect to the weights
+$\boldsymbol{\theta}$ (i.e. $\pdv*{L}{\boldsymbol\theta}$) to solve
+equation~\eqref{eq:NN-min}, yielding the optimal $\boldsymbol{\theta}$
+parameters. We optimize, i.e. \textit{train} our \ac{NN} with a \acf{SGD}
+optimizer, such as Adam (\cite{adam}).
+
+In the case of a fully-connected \ac{NN}, we can write its $i^{th}$ layer as 
+
+$$\vb{o}^i = \sigma(\vb{W}_i \vb{o}^{i-1} + b_i),$$
+
+where $\vb{o}^i$ is the output of the $i^{th}$ layer, $\sigma$ is a non-linear
+activation function, such as the rectified linear unit (ReLU) function, and
+$\vb{W}_i$ and $b_i$ are the weight matrix and the bias of layer $i$,
+respectively. We call every $\vb{W}_i$ and $b_i$ the parameters of the \ac{NN},
+and collect their values in $\boldsymbol\theta$.
+
+\todo{Would it look better to not write everything in bold (losing the notion of
+all of these being vector-valued), i.e.
+$$\arg\min_{\theta} L_2\big(f(x, \theta), y^*\big)\text{?}$$
+}
+
+\todo{Is this section about NNs too wordy?}
