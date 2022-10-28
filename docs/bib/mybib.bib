@@ -1,3 +1,19 @@
+@inproceedings{StableFluids,
+author = {Stam, Jos},
+title = {Stable Fluids},
+year = {1999},
+isbn = {0201485605},
+publisher = {ACM Press/Addison-Wesley Publishing Co.},
+address = {USA},
+url = {https://doi.org/10.1145/311535.311548},
+doi = {10.1145/311535.311548},
+booktitle = {Proceedings of the 26th Annual Conference on Computer Graphics and Interactive Techniques},
+pages = {121–128},
+numpages = {8},
+keywords = {interactive modeling, Navier-Stokes, stable solvers, animation of fluids, implicit elliptic PDE solvers, gaseous phenomena, advected textures},
+series = {SIGGRAPH '99}
+}
+
 @article{ModelReductionFluidSim,
 author = {Liu, Beibei and Mason, Gemma and Hodgson, Julian and Tong, Yiying and Desbrun, Mathieu},
 title = {Model-Reduced Variational Fluid Simulation},
@@ -10,7 +26,24 @@ number = {6},
 issn = {0730-0301},
 url = {https://doi.org/10.1145/2816795.2818130},
 doi = {10.1145/2816795.2818130},
-abstract = {We present a model-reduced variational Eulerian integrator for incompressible fluids, which combines the efficiency gains of dimension reduction, the qualitative robustness of coarse spatial and temporal resolutions of geometric integrators, and the simplicity of sub-grid accurate boundary conditions on regular grids to deal with arbitrarily-shaped domains. At the core of our contributions is a functional map approach to fluid simulation for which scalar- and vector-valued eigenfunctions of the Laplacian operator can be easily used as reduced bases. Using a variational integrator in time to preserve liveliness and a simple, yet accurate embedding of the fluid domain onto a Cartesian grid, our model-reduced fluid simulator can achieve realistic animations in significantly less computational time than full-scale non-dissipative methods but without the numerical viscosity from which current reduced methods suffer. We also demonstrate the versatility of our approach by showing how it easily extends to magnetohydrodynamics and turbulence modeling in 2D, 3D and curved domains.},
+abstract = {We present a model-reduced variational Eulerian integrator for
+            incompressible fluids, which combines the efficiency gains of
+            dimension reduction, the qualitative robustness of coarse spatial
+            and temporal resolutions of geometric integrators, and the
+            simplicity of sub-grid accurate boundary conditions on regular grids
+            to deal with arbitrarily-shaped domains. At the core of our
+            contributions is a functional map approach to fluid simulation for
+            which scalar- and vector-valued eigenfunctions of the Laplacian
+            operator can be easily used as reduced bases. Using a variational
+            integrator in time to preserve liveliness and a simple, yet accurate
+            embedding of the fluid domain onto a Cartesian grid, our
+            model-reduced fluid simulator can achieve realistic animations in
+            significantly less computational time than full-scale
+            non-dissipative methods but without the numerical viscosity from
+            which current reduced methods suffer. We also demonstrate the
+            versatility of our approach by showing how it easily extends to
+            magnetohydrodynamics and turbulence modeling in 2D, 3D and curved
+            domains.},
 journal = {ACM Trans. Graph.},
 month = {nov},
 articleno = {244},
@@ -93,7 +126,19 @@ publisher = {Association for Computing Machinery},
 address = {New York, NY, USA},
 url = {https://doi.org/10.1145/1281500.1281681},
 doi = {10.1145/1281500.1281681},
-abstract = {Animating fluids like water, smoke, and fire by physics-based simulation is increasingly important in visual effects and is starting to make an impact in real-time games. This course goes from the basics of 3D fluid flow to the state of the art in graphics. We will begin with an intuitive explanation of the important concepts in fluid simulation, and as we progress demonstrate how to implement an effective smoke and water simulation system, complete with irregular curved boundaries and surface tension. The last half of the course will cover advanced topics such as fire and explosions, adaptive grid methods, real-time-capable algorithms together with the latest technology in hardware acceleration, and non-Newtonian fluids like sand. Intuition and implementation details will be underscored throughout.},
+abstract = {Animating fluids like water, smoke, and fire by physics-based
+            simulation is increasingly important in visual effects and is
+            starting to make an impact in real-time games. This course goes from
+            the basics of 3D fluid flow to the state of the art in graphics. We
+            will begin with an intuitive explanation of the important concepts
+            in fluid simulation, and as we progress demonstrate how to implement
+            an effective smoke and water simulation system, complete with
+            irregular curved boundaries and surface tension. The last half of
+            the course will cover advanced topics such as fire and explosions,
+            adaptive grid methods, real-time-capable algorithms together with
+            the latest technology in hardware acceleration, and non-Newtonian
+            fluids like sand. Intuition and implementation details will be
+            underscored throughout.},
 booktitle = {ACM SIGGRAPH 2007 Courses},
 pages = {1–81},
 numpages = {81},
@@ -224,3 +269,31 @@ volume = {22},
 journal = {Physics of Plasmas},
 doi = {10.1063/1.4907901}
 }
+
+@article{backprop,
+    abstract = {We describe a new learning procedure, back-propagation, for
+                networks of neurone-like units. The procedure repeatedly adjusts
+                the weights of the connections in the network so as to minimize
+                a measure of the difference between the actual output vector of
+                the net and the desired output vector. As a result of the weight
+                adjustments, internal `hidden'units which are not part of the
+                input or output come to represent important features of the task
+                domain, and the regularities in the task are captured by the
+                interactions of these units. The ability to create useful new
+                features distinguishes back-propagation from earlier, simpler
+                methods such as the perceptron-convergence procedure1.},
+	author = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
+	date = {1986/10/01},
+	date-added = {2022-10-28 16:08:28 +0200},
+	date-modified = {2022-10-28 16:08:28 +0200},
+	doi = {10.1038/323533a0},
+	id = {Rumelhart1986},
+	isbn = {1476-4687},
+	journal = {Nature},
+	number = {6088},
+	pages = {533--536},
+	title = {Learning representations by back-propagating errors},
+	url = {https://doi.org/10.1038/323533a0},
+	volume = {323},
+	year = {1986},
+	bdsk-url-1 = {https://doi.org/10.1038/323533a0}}

@@ -179,27 +179,62 @@ section}
 
 The vector Laplacian of a vector field $\vb{f}$ is defined as
 
-$$\underbrace{\Delta \vb{f}}_{\text{vector Laplacian}} = 
-\underbrace{\grad(\div{\vb{f}})}_{\text{gradient of the divergence}} - 
-\underbrace{\curl(\curl{\vb{f}})}_{\text{curl of curl = curl}^2} =
-    \text{grad(div(f))} - \underbrace{\text{curl(curl(f))}}_{\text{curl}^2(f)}$$
+$$\underbrace{\Delta \vb{f}}_{\text{vector Laplacian}}
+= \underbrace{\grad(\div{\vb{f}})}_{\text{gradient of the divergence}}
+- \underbrace{\curl(\curl{\vb{f}})}_{\text{curl of curl} = \text{curl}^2}
+= \text{grad}(\text{div}(f))
+- \underbrace{\text{curl}(\text{curl}(f))}_{\text{curl}^2(f)}$$
 
 In Cartesian coordinates, the vector Laplacian simplifies to taking the
 Laplacian of each component:
 
 \begin{equation}
     \Delta\vb{f}(x, y, z) = (\grad\vdot\grad)\vb{f} = 
-    \mqty(\Delta f_1 \\ \Delta f_2 \\ \Delta f_3) =
-    \mqty(
+    \mqty[ \Delta f_1 \\ \Delta f_2 \\ \Delta f_3 ] =
+    \mqty[
         \pdv[2]{f_1}{x} + \pdv[2]{f_1}{y} + \pdv[2]{f_1}{z}\\
         \pdv[2]{f_2}{x} + \pdv[2]{f_2}{y} + \pdv[2]{f_2}{z}\\
         \pdv[2]{f_3}{x} + \pdv[2]{f_3}{y} + \pdv[2]{f_3}{z}
-    ).
+    ].
+    \label{eq:laplacian}
 \end{equation}
 
-\todo{rá lehet mutatni, hogy a grad(div f) az tartalmazza ezeket, de m;g
-a kereszt-második-deriváltakat is, amit a curl(curl f) fomrában is írhatunk, és
-így igaz a fenti képlet. }
+We can see that these are equivalent by writing out $\text{grad}(\text{div}(f))
+- \text{curl}(f)$ explicitly:
+
+\begin{equation}
+    \grad(\div{f}) - \curl(\curl{f}) =
+    \mqty[
+        \pdv[2]{f_1}{x} + 
+        \cancel{\pdv[2]{f_2}{x}{y}} + 
+        \cancel{\pdv[2]{f_3}{x}{z}}
+        \\
+        \cancel{\pdv[2]{f_1}{y}{x}} + 
+        \pdv[2]{f_2}{y} + 
+        \cancel{\pdv[2]{f_3}{y}{z}}
+        \\
+        \cancel{\pdv[2]{f_1}{z}{x}} +
+        \cancel{\pdv[2]{f_2}{z}{y}} + 
+        \pdv[2]{f_3}{z}
+    ] -
+    \mqty[
+        \cancel{\pdv[2]{f_2}{x}{y}} - 
+        \pdv[2]{f_1}{y} - 
+        (\pdv[2]{f_1}{z} - \cancel{\pdv[2]{f_3}{x}{z}})
+        \\
+        \cancel{\pdv[2]{f_3}{y}{z}} - 
+        \pdv[2]{f_2}{z} - 
+        ({\pdv[2]{f_2}{x}} - \cancel{\pdv[2]{f_1}{y}{x}})
+        \\
+        \cancel{\pdv[2]{f_1}{z}{x}} - 
+        \pdv[2]{f_3}{x} - 
+        (\pdv[2]{f_3}{y} - \cancel{\pdv[2]{f_2}{z}{y}})
+    ],
+\end{equation}
+
+where the mixed second order partial derivatives cancel each other out, giving
+us equation~\eqref{eq:laplacian}.
+
 
 \subsection*{Differential Identities}
 
@@ -230,6 +265,7 @@ decompose an intermediate fluid field $\vb{u}^{t+1}$ into a divergence-free
 part, and interpreting $p$ as the pressure that is keeping the fluid flow
 divergence-free, usually throwing it away the values of $p$ immediately.
 
-Another useful identity that will come up (\todo{Link to Eigenfluid simulation
-part, where this comes up?}) later on is
+Another useful identity that will come up later on (\todo{ref. section-...}) is
 $$\curl(\curl{\vb{u}}) \equiv \grad(\div{\vb{u}}) - \div{\grad{\vb{u}}}.$$
+
+
