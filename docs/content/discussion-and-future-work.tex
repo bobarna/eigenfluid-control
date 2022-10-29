@@ -1,12 +1,31 @@
 \chapter{Discussion and Future Work}
 
+\todo{Write discussion, assess what we achieved.}
 
-\todo{
-\begin{itemize}
-    \item 3D 
-    \item incorporating improvements to the Eigenluids simulation from
-        e.g.\cite{scalable-eigenfluids}.
-    \item Better NN training + architecture
-    \item Better point sampling 
-\end{itemize}
-}
+\subsection*{Generalizing to 3D}
+All of the introduced method generalize to 3D in a very straightforward way. As
+shown by \cite{scalable-eigenfluids}, the laplacian Eigenfluids technique is
+a viable simulation for three dimensional incompressible fluid flow. The
+exponential increase of simulation variables is a problem not only in forward
+simulations, but especially when computing gradient for optimizing. 
+
+\subsection*{General Improvements to the NN}
+After introducing a simple training process, and purposefully keeping our
+architecture simple, a number of improvements from the continuously expanding
+literature on \ac{DL} and \ac{AI} techniques could be incorporated to improve
+our solution.
+
+\subsection*{Improving the Loss Function}
+The loss function for the shape transition problem could also be improved in
+a number of ways. In our solution, we estimate the trajectory as a linear
+interpolation between start and end positions. \
+
+\subsection*{Point Sampling}
+In general, estimating functions by sampling discrete points fits into a vast
+body of existing literature. The sampling strategies introduced in
+section~\ref{section:sampling} could be expanded upon so that advecting the
+discrete sample points approximates the natural advection trajectory of the
+initial shape as defined by a scalar marker density function.
+
+\todo{Improve upon nyakatekertség of the above.}
+

@@ -15,7 +15,6 @@ fluid as a grid, we reconstruct the velocity field only at discrete points in
 space, while simulating the dynamics of the fluid in a reduced dimensional
 space.\todo{Link to eq.}
 
-\section{Our Experiments}
 In the following, we showcase different optimization scenarios, where we try out
 different aspects of controlling eigenfluids via \acf{DP} gradients. (See
 section~\ref{dp-loss}.)
@@ -28,7 +27,7 @@ generalized solutions to a set of problems by training \acfp{NN}.
 We implemented all of our experiments using $\Phi_{Flow}$
 (\cite{holl2019pdecontrol}).
 
-\subsection{Matching Velocities}\label{section:matching-velocities}
+\section{Matching Velocities}\label{section:matching-velocities}
 To verify the feasibility of our technique before moving on to more involved
 setups, our most straightforward optimziation scenario is finding an initial
 basis coefficient vector $\vb{w}_0 \in \mathbb{R}^N$ for an eigenfluid
@@ -136,7 +135,7 @@ be tested in more advanced scenarios.
   \label{fig:matching-velocities}
 \end{figure}
 
-\subsection{Controlling Shape Transitions}
+\section{Controlling Shape Transitions}
 \label{section:controlling-shape-transitions}
 In the following, we showcase an optimization scenario, with the target of
 controlling the transition between two marker shapes in a fluid simulation
@@ -196,13 +195,13 @@ points $\vb{p}$ in the velocity field reconstructed from $\vb{w}$. We
 use a simple mean-square error (also known as $L_2$ norm) for measuring the error.
 \end{itemize}
 
-\subsubsection*{Sampling}
+\subsection*{Sampling}
 \todo{We take a quick detour to discuss some sampling strategies we tried to
 optimally approximate 2D shapes.}
 
 \todo{Write about sampling strategies of points, how shapes are defined, etc.}
 
-\subsubsection{Initial Velocity}
+\subsection{Initial Velocity}
 
 The main difficulty of this non-linear optimization problem lies in that we have
 no control over the natural flow of the fluid besides supplying an initial
@@ -223,13 +222,14 @@ $$\vb{w}_{\text{better}} = \vb{w} - \lambda
 }{
     \partial \vb{w}
 }$$
-\subsubsection{Control Force Estimation}
+\subsection{Control Force Estimation}
 \todo{Write this section.}
 
-\subsubsection{Neural Network Training}
+\subsection{Neural Network Training}
 \todo{Write about fully connected architecture...}
 
-First, we overfit the \ac{NN} to single training sample. We plot the results of
+\subsection*{Overfitting to a single training sample}
+We overfit the \ac{NN} to single training sample. We plot the results of
 the time evolution on figure~\ref{fig:NN-overfit}. We observe that a reduced
 degress of freedom can yield comparable, or even better results with the same
 setup, and training time. 
@@ -246,7 +246,36 @@ setup, and training time.
     \includegraphics[width=\textwidth]{figures/nn-training/NN_N36_triangle_overfit_horizontal.png}
     \caption{$N=36$ basis fields}
   \end{subfigure}
-  \caption{Time evolutions of simulating an overfitted CFE NN to a single shape
-  transition}
+  \caption{Time evolution of simulating two overfitted \ac{CFE} \acp{NN} to
+  a single shape transition. Using $O=30$ overlapping, $U=40$ unique, and $T=5$
+  trivial sample points.}
   \label{fig:NN-overfit}
+\end{figure}
+
+\subsection*{Training}
+We generate $2000$ samples, using $1800$ for training, and $200$ for validation.
+Using $N=16$ basis fields, we train a \ac{NN} for the same \ac{CFE} problem as
+detailed above. 
+
+We generate further data the \ac{NN} has not seen during training to further
+test generalization. 
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/nn-final/trained_trajectories_horizontal.png}
+    \caption{Randomly sampled trajectories from the \textbf{training} data.}
+  \end{subfigure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/nn-final/test_trajectories_horizontal.png}
+    \caption{Randomly sampled trajectories from the previously unseen, randomly
+    generated \textbf{test} set.}
+  \end{subfigure}
+  \caption{Randomly sampled time evolution of controlled shape transition
+  tasks. Using $N=16$ basis fields, sampling the smokes on a $32\times 32$ grid,
+  approximating them with $O=30$ overlapping, $U=40$ unique and $T=5$ trivial
+  sample points, through $16$ timesteps $t=[0\dots15]$.}
+  \label{fig:NN-shape-transition}
 \end{figure}
