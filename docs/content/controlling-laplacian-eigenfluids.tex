@@ -1,18 +1,18 @@
 \chapter{Controlling Laplacian Eigenfluids}
 Many real world applications require us to optimize for some parameters of
-a physics-based problem. A toy problem would be to optimize for some initial
+a physics-based problem. A toy example would be to optimize for some initial
 angle and velocity of a projectile to hit some target \todo{Refer back to the
 learning to throw example}. As a more involved example, \cite{MinDrag} address
 finding the best shape to minimize drag. These kinds of inverse problems have
 been around for quite some time in engineering applications.
 
-Building on all of the previously introduced ideas, we now introduce our
-investigation into the use of eigenfluids in fluid control problems, making use
-of their explicit closed form description of a velocity field (\todo{link to
-equation}) to derive gradients used for optimization. Our main proposition is to
-achieve reduced-order modeling-like speed-increase: in lieu of representing the
-fluid as a grid, we reconstruct the velocity field only at discrete points in
-space, while simulating the dynamics of the fluid in a reduced dimensional
+Building on all of the previous ideas, we now introduce our investigation into
+the use of eigenfluids in fluid control problems, making use of their explicit
+closed form description of a velocity field (\todo{link to equation}) to derive
+gradients used for optimization. Our main proposition is to achieve
+reduced-order modeling-like speed increase: in lieu of representing the fluid on
+a grid, we reconstruct the velocity field only at discrete points in space,
+while simulating the dynamics of the fluid in a reduced dimensional
 space.\todo{Link to eq.}
 
 In the following, we showcase different optimization scenarios, where we try out
@@ -49,7 +49,7 @@ where $\mathcal{P}^t(\vb{w}) = \mathcal{P} \circ \mathcal{P} \dots \circ
 For the optimization, we initialize a $\vb{w}_{init} \in \mathbb{R}^N$
 vector with random numbers (from a normal/Gaussian distribution), and run the
 eigenfluid simulation for $t$ timesteps, after which, we measure the error as
-given by equation~\eqref{eq:match-vel-loss}. Relying on backpropagation to
+given by loss function \eqref{eq:match-vel-loss}. Relying on backpropagation to
 derive the necessary gradients, we use the \ac{GD} optimization method as
 introduced in equations~\eqref{eq:gd-steps} to iteratively find a vector
 $\vb{w}_{optim}$, yielding a low scalar loss $L(\vb{w}_{optim})$.
@@ -71,14 +71,14 @@ under $1.0$, while $200$ steps further decreased it to under $4*10^{-4}$, with
 each further step still continuously decreasing the error. 
 
 Naturally, this very basic method has its limits.  Optimizing for initial
-coefficients based on that when reconstructed after $100$ steps of a non-linear
-simulation, reconstructed on a $32\times32$ grid, they should match a given
-velocity field proved to be a substantially harder problem, as even a relatively
-small error can accumulate into major deviations over these longer timesteps,
-resulting in much less stable gradients.  With using the same learning rate, the
+coefficients based solely on that when reconstructed on a $32\times32$ grid
+after $100$ steps of a non-linear simulation, they should match a given velocity
+field, proved to be a substantially harder problem, as even a relatively small
+error can accumulate into major deviations over these longer timesteps,
+resulting in much less stable gradients. With using the same learning rate, the
 optimization diverged almost instantly. With some tuning of the learning rate
 $\lambda$ in the range of $[10^{-4}, 10^{-8}]$, we were able to get the loss
-below $0.14$. (Starting from an initial loss of $320$ from the random
+below $0.14$.  (Starting from an initial loss of $320$ from the random
 initialization.) 
 
 We visualize the results of these two scenarios in
@@ -143,8 +143,8 @@ setup.  The work of \cite{holl2019pdecontrol} formulated this problem in an
 Eulerian representation, with explicitly simulating the shapes as scalar marker
 densities being advected by the velocity field of the simulated fluid. 
 
-Playing to the strength of the eigenfluids method, our experiment makes use of
-its explicit formulation of the fluid velocity $\vb{u}$ as described in
+Playing to the strength of the eigenfluids method, our method makes use of
+an explicit formulation of the fluid velocity $\vb{u}$ as described in
 section~\todo{ref section}. We stay independent of a grid resolution, and
 approximate the 2D shapes via a set of sample points. We reconstruct the
 velocity field only partially at these discrete set of points as needed for the
@@ -176,10 +176,8 @@ We explore three different possibilities for addressing this problem.
 Before moving on to each of these tasks, we will first go through the common
 ground between the above three problems.
 
-
-\todo{Finish section based on the notes below...}
+\todo{Finish writing the below problem statement.}
 \begin{itemize}
-  \item $N=16$ basis fields
   \item the reconstructed velocity field will advect a set of initial points
 $\vb{p}_0 = [p^0_0\dots p^i_0]$ to line up with target positions 
 $\vb{p}_{t} = [p_t^0\dots p_t^i]$
@@ -203,9 +201,7 @@ optimally approximate 2D shapes.}
 
 \subsection{Initial Velocity}
 
-The main difficulty of this non-linear optimization problem lies in that we have
-no control over the natural flow of the fluid besides supplying an initial
-$\vb{w}_0$ vector.
+\todo{Finish this section}
 
 Making use of the differentiability of our physical simulator $\mathcal{P}$, and
 the multivariable chain rule for deriving the gradient of the above
@@ -222,6 +218,11 @@ $$\vb{w}_{\text{better}} = \vb{w} - \lambda
 }{
     \partial \vb{w}
 }$$
+
+The main difficulty of this non-linear optimization problem lies in that we have
+no control over the natural flow of the fluid besides supplying an initial
+$\vb{w}_0$ vector.
+
 \subsection{Control Force Estimation}
 \todo{Write this section.}
 
@@ -229,7 +230,7 @@ $$\vb{w}_{\text{better}} = \vb{w} - \lambda
 \todo{Write about fully connected architecture...}
 
 \subsection*{Overfitting to a single training sample}
-We overfit the \ac{NN} to single training sample. We plot the results of
+We overfit the \ac{NN} to a single training sample. We plot the results of
 the time evolution on figure~\ref{fig:NN-overfit}. We observe that a reduced
 degress of freedom can yield comparable, or even better results with the same
 setup, and training time. 
@@ -247,8 +248,8 @@ setup, and training time.
     \caption{$N=36$ basis fields}
   \end{subfigure}
   \caption{Time evolution of simulating two overfitted \ac{CFE} \acp{NN} to
-  a single shape transition. Using $O=30$ overlapping, $U=40$ unique, and $T=5$
-  trivial sample points.}
+  a single shape transition for $16$ timesteps $t=[0\dots15]$. Using $O=30$
+overlapping, $U=40$ unique, and $T=5$  trivial sample points.}
   \label{fig:NN-overfit}
 \end{figure}
 
