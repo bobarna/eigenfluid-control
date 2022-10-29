@@ -74,16 +74,10 @@ method would become computationally expensive, because a full trajectory needs
 to be computed for each optimizable parameter.
 
 \cite{holl2019pdecontrol} address this issue via the use of differentiable
-solvers, solving the adjoint problem \todo{cite?} via analytic derivatives.
-Differentiable solvers can efficiently compute the derivatives with respect to
-any of the inputs $\pdv*{\vb{u}(t_{i+1})}{\vb{u}(t_i)}$ and
-$\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$.
-
-Recently, multiple have been developed oriented towards differentiable
-physics-based simulations. (\cite{difftaichi},
-\cite{holl2019pdecontrol},\cite{warp2022} ) 
-
-\todo{ Write here that we're using PhiFlow?  }
+solvers, backpropagating through the chain of operations via analytic
+derivatives.  Differentiable solvers can efficiently compute the derivatives
+with respect to any of the inputs $\pdv*{\vb{u}(t_{i+1})}{\vb{u}(t_i)}$ and
+$\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$. 
 
 \todo{Mention that we tried out the others too?}
 

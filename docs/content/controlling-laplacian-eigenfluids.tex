@@ -15,14 +15,6 @@ speed-increase: in lieu of representing the fluid as a grid, we reconstruct the
 velocity field only at discrete points in space, while simulating the dynamics
 of the fluid in a reduced dimensional space.\todo{Link to eq.}
 
-\todo{Reformulate problem as model reduction? 
-\url{http://physicsbaseddeeplearning.com/others-timeseries.html}
-}
-
-\todo{Is this end-to-end training? (I think it is, but let's read up a bit on
-the term.) 
-}
-
 \section{Our Experiments}
 In the following, we showcase different optimization scenarios, where we try out
 different aspects of controlling eigenfluids via \acf{DP} gradients. (See
@@ -33,15 +25,78 @@ The first couple of examples are "traditional" optimization scenarios. By
 descent optimization. Moving further, we look for generalized solutions to a set
 of problems by training \acfp{NN}.
 
+We implemented all of our experiments in $\Phi_{Flow}$
+by \cite{holl2019pdecontrol}.
+
 \subsection{Finding Initial Velocities}
 To verify feasibility before moving on to more involved setups, our most
 straightforward optimziation scenario is to find an initial basis coefficient
 vector $\vb{w}_0 \in \mathbb{R}^N$ for an eigenfluid simulation using $N=16$
 basis fields, such that when simulated for $t$ time steps, the reconstructed
-$\text{Reconstruct}(\vb{w}_t) = \vb{u}_t$ velocity field will match up some
-precalculated $\vb{u}^*$ velocity field.
+$\text{Reconstruct}(\vb{w}_t) = \vb{u}_t$ velocity field will match some
+precalculated $\vb{u}^*$ target velocity field.
 
-This is a good time to also introduce some notation 
+We initialized the coefficients to random numbers, and ran the eigenfluid
+simulation for $t$ timesteps.
+
+Around $100$ steps of \ac{GD} optimization with $\lambda=10^{-3}$ got the loss
+under $1.0$, $200$ steps to under $4*10^{-4}$, and each further step was still
+continuously decreasing the error. 
+
+\begin{figure}
+  \label{fig:finding-initial-velocities}
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/finding-initial-velocities/t_16_coefficients.png}
+    \caption{$\vb{w}_{init}$, $\vb{w}_{optim}$, and
+    $\vb{w}^*$, optimizing for velocity field after $16$ timesteps}
+  \end{subfigure}\par\medskip
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/finding-initial-velocities/t_16_velocities.png}
+    \caption{Target $\vb{u}^*$, and $\vb{u}^{16}$, reconstructed from
+      $\mathcal{P}^{16}(\vb{w}_{optim})$\\}
+  \end{subfigure}\par\medskip
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/finding-initial-velocities/t_100_coefficients.png}
+    \caption{Initial basis coefficients $\vb{w}_{init}$, $\vb{w}_{optim}$, and
+    $\vb{w}^*$, optimizing for velocity field after $100$ timesteps\\}
+  \end{subfigure}\par\medskip
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/finding-initial-velocities/t_100_velocities.png}
+    \caption{Target $\vb{u}^*$, and $\vb{u}^{100}$, reconstructed from
+      $\mathcal{P}^{100}(\vb{w}_{optim})$}
+  \end{subfigure}
+  \caption{Results of optimizing for an initial $\vb{w}_0$ basis coefficient
+  vector that matches a target velocity field $\vb{u}^*$ when reconstructed
+  after simulating for $t$ time steps.}
+\end{figure}
+
+Naturally, this very basic method has its limits. Trying to find the same
+coefficients based on a simulated velocity field after $t=100$ timesteps proved
+to be a substantially harder problem, as even a relatively small error can
+accumulate into major deviations over these longer timesteps, resulting in much
+less stable gradients.  With using the same learning rate, the optimization
+diverged almost instantly. With some manual tuning of the learning rate
+$\lambda$, we were able to get the loss below $0.14$. (Starting from an initial
+loss of $320$ from the random initialization.) 
+
+We visualize the results of these two scenarios in
+Figure~\ref{fig:finding-initial-velocities}. It is interesting to observe that
+even though the optimization had absolutely no knowledge of $\vb{w}^*$, only
+a comparison with a precomputed $\vb{u^*}$ velocity field at timestep $100$, the
+optimized $\vb{w}_{optim}$ vector already starts to look similar to $\vb{w}^*$.
+Keep in mind that this is not guaranteed at all, as highlighted with the
+\todo{link to learning to throw example}. 
+
+Although there are a number of ways to tweak this setup, from these results, it
+is already evident from these scenarios that the flow of gradients working,
+and is ready to be tested in more advanced scenarios.
+
+\subsubsection*{Matching a Grid-based Fluid Simulation}
 
 \subsection{Controlling Shape Transitions}
 \label{section:controlling-shape-transitions}
@@ -49,7 +104,8 @@ This is a good time to also introduce some notation
 
 \subsubsection*{Sampling}
 \todo{Write about sampling strategies of points, how shapes are defined, etc.}
-\subsection{Initial Velocity}
+
+\subsubsection{Initial Velocity}
 \todo{Move some parts of this under main
 Section~\ref{section:controlling-shape-transitions}}
 
@@ -81,12 +137,8 @@ $\mathcal{P}^t$ function composition, we can derive its gradient with respect to
 the initial coefficients:
 $$\frac{\partial \mathcal{P}^t(\vb{w},\vb{p})}{\partial \vb{w}}.$$
 
-\todo{Where to put Gradient Descent part? Maybe later? Or put NN training here?}
-\todo{Should we add an optimization chapter? (Maybe that's too much right now)}
-
 Finally, we can simply iterate a gradient descent optimizer with learning
 rate $\mu$ to find a (good enough) solution for our above minimization problem:
-
 
 $$\vb{w}_{\text{better}} = \vb{w} - \mu
 \frac{
@@ -95,9 +147,10 @@ $$\vb{w}_{\text{better}} = \vb{w} - \mu
     \partial \vb{w}
 }$$
 
-\subsection{Control Force Estimation}
+\subsubsection{Control Force Estimation}
 \todo{Write only about problem statement + optimization part for optimizing
 for $f \in \mathbb{R}^{t \times N}$ force vector.}
-\subsection{Neural Network Training}
 \todo{Move this section a bit up in the hierarchy? Where?}
 \todo{Write about generalizing the CFE to arbitrary shapes via training a NN.}
+
+\subsubsection{Neural Network Training}
