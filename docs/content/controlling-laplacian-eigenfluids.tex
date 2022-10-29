@@ -196,9 +196,7 @@ points $\vb{p}$ in the velocity field reconstructed from $\vb{w}$. We
 use a simple mean-square error (also known as $L_2$ norm) for measuring the error.
 \end{itemize}
 
-
 \subsubsection*{Sampling}
-
 \todo{We take a quick detour to discuss some sampling strategies we tried to
 optimally approximate 2D shapes.}
 
@@ -229,12 +227,26 @@ $$\vb{w}_{\text{better}} = \vb{w} - \lambda
 \todo{Write this section.}
 
 \subsubsection{Neural Network Training}
-\todo{Write this section.}
+\todo{Write about fully connected architecture...}
+
+First, we overfit the \ac{NN} to single training sample. We plot the results of
+the time evolution on figure~\ref{fig:NN-overfit}. We observe that a reduced
+degress of freedom can yield comparable, or even better results with the same
+setup, and training time. 
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{figures/nn-training/NN_N36_triangle_overfit_horizontal.png}
-  \caption{Time evolution of simulating an overfitted CFE NN to a single shape
-  transition. $N=36$ basis fields.}
-  \label{fig:NN-36-overfit}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/nn-training/NN_N16_triangle_overfit_horizontal.png}
+    \caption{$N=16$ basis fields}
+  \end{subfigure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/nn-training/NN_N36_triangle_overfit_horizontal.png}
+    \caption{$N=36$ basis fields}
+  \end{subfigure}
+  \caption{Time evolutions of simulating an overfitted CFE NN to a single shape
+  transition}
+  \label{fig:NN-overfit}
 \end{figure}
