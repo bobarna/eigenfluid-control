@@ -3,29 +3,29 @@ Many real world applications require us to optimize for some parameters of
 a physics-based problem. A toy problem would be to optimize for some initial
 angle and velocity of a projectile to hit some target \todo{Refer back to the
 learning to throw example}. As a more involved example, \cite{MinDrag} address
-finding the best shape of a vehicle to minimize its drag. These kinds of
-inverse problems have been around for quite some time in engineering
-applications.
+finding the best shape to minimize drag. These kinds of inverse problems have
+been around for quite some time in engineering applications.
 
 Building on all of the previously introduced ideas, we now introduce our
 investigation into the use of eigenfluids in fluid control problems, making use
 of their explicit closed form description of a velocity field (\todo{link to
-equation}). Our main proposition is to achieve reduced-order modeling-like
-speed-increase: in lieu of representing the fluid as a grid, we reconstruct the
-velocity field only at discrete points in space, while simulating the dynamics
-of the fluid in a reduced dimensional space.\todo{Link to eq.}
+equation}) to derive gradients used for optimization. Our main proposition is to
+achieve reduced-order modeling-like speed-increase: in lieu of representing the
+fluid as a grid, we reconstruct the velocity field only at discrete points in
+space, while simulating the dynamics of the fluid in a reduced dimensional
+space.\todo{Link to eq.}
 
 \section{Our Experiments}
 In the following, we showcase different optimization scenarios, where we try out
 different aspects of controlling eigenfluids via \acf{DP} gradients. (See
 section~\ref{dp-loss}.)
 
-The first couple of examples are "traditional" optimization scenarios. By
+We start with examples of "traditional" optimization scenarios. By
 "traditional", we mean finding individual solutions to problems via some
 optimization technique -- in our case, \acf{GD}. Moving further, we look for
 generalized solutions to a set of problems by training \acfp{NN}.
 
-We implemented all of our experiments in $\Phi_{Flow}$
+We implemented all of our experiments using $\Phi_{Flow}$
 (\cite{holl2019pdecontrol}).
 
 \subsection{Matching Velocities}\label{section:matching-velocities}
@@ -33,13 +33,13 @@ To verify the feasibility of our technique before moving on to more involved
 setups, our most straightforward optimziation scenario is finding an initial
 basis coefficient vector $\vb{w}_0 \in \mathbb{R}^N$ for an eigenfluid
 simulation using $N=16$ basis fields, such that when simulated for $t$ time
-steps, the reconstructed $\text{reconstruct}(\vb{w}_t) = \vb{u}_t$ velocity
+steps, the reconstructed $\text{Reconstruct}(\vb{w}_t) = \vb{u}_t$ velocity
 field will match some precalculated $\vb{u}^*: [0,\pi]\times[0,\pi] \to
 \mathbb{R}^2$ target velocity field:
 
 \begin{equation}\label{eq:match-vel-loss}
   L(\vb{w}) = \left|
-  \text{reconstruct}(\mathcal{P}^{t}(\vb{w})) - \vb{u}^*
+  \text{Reconstruct}(\mathcal{P}^{t}(\vb{w})) - \vb{u}^*
   \right|_2^2,
 \end{equation}
 
@@ -50,15 +50,15 @@ where $\mathcal{P}^t(\vb{w}) = \mathcal{P} \circ \mathcal{P} \dots \circ
 For the optimization, we initialize a $\vb{w}_{init} \in \mathbb{R}^N$
 vector with random numbers (from a normal/Gaussian distribution), and run the
 eigenfluid simulation for $t$ timesteps, after which, we measure the error as
-given by equation~\eqref{eq:match-vel-loss}, and relying on backpropagation to
+given by equation~\eqref{eq:match-vel-loss}. Relying on backpropagation to
 derive the necessary gradients, we use the \ac{GD} optimization method as
 introduced in equations~\eqref{eq:gd-steps} to iteratively find a vector
 $\vb{w}_{optim}$, yielding a low scalar loss $L(\vb{w}_{optim})$.
 
 To be able to make some further evaluation of the end results possible, we step
-an eigenfluids solver for time $t$ to precalculate the target $\vb{u}^*$
+an eigenfluid solver for time $t$ to precalculate the target $\vb{u}^*$
 velocity field, sampled on a $32\times32$ grid. Although we call its initial
-basis coefficient vector $\vb{w}^*$, note that the optimization has absolutely
+base coefficient vector $\vb{w}^*$, note that the optimization has absolutely
 zero knowledge of this, as it sees only the $32\times32\times2$ velocity values
 of $\vb{u}^*$. Also, these values could have been precalculated from any other
 kind of fluid simulation as well, or even just initialized randomly.
@@ -72,15 +72,15 @@ under $1.0$, while $200$ steps further decreased it to under $4*10^{-4}$, with
 each further step still continuously decreasing the error. 
 
 Naturally, this very basic method has its limits.  Optimizing for initial
-coefficients based only on that when reconstructed after $100$ steps of
-a non-linear simulation, and reconstructed on a $32\times32$ grid, they should
-match a given velocity field proved to be a substantially harder problem, as
-even a relatively small error can accumulate into major deviations over these
-longer timesteps, resulting in much less stable gradients.  With using the same
-learning rate, the optimization diverged almost instantly. With some tuning of
-the learning rate $\lambda$ in the range of $[10^{-4}, 10^{-8}]$, we were able
-to get the loss below $0.14$. (Starting from an initial loss of $320$ from the
-random initialization.) 
+coefficients based on that when reconstructed after $100$ steps of a non-linear
+simulation, reconstructed on a $32\times32$ grid, they should match a given
+velocity field proved to be a substantially harder problem, as even a relatively
+small error can accumulate into major deviations over these longer timesteps,
+resulting in much less stable gradients.  With using the same learning rate, the
+optimization diverged almost instantly. With some tuning of the learning rate
+$\lambda$ in the range of $[10^{-4}, 10^{-8}]$, we were able to get the loss
+below $0.14$. (Starting from an initial loss of $320$ from the random
+initialization.) 
 
 We visualize the results of these two scenarios in
 Figure~\ref{fig:matching-velocities} . It is interesting to observe that even
@@ -88,7 +88,12 @@ though the optimization had absolutely no knowledge of $\vb{w}^*$, only
 a comparison with a precomputed $\vb{u^*}$ velocity field at timestep $100$, the
 optimized $\vb{w}_{optim}$ vector already starts to look similar to $\vb{w}^*$.
 Keep in mind that this is not guaranteed at all, as highlighted with the
-\todo{link to learning to throw example}. 
+\todo{link to learning to throw example}. In some other cases of running this
+optimization setup, we also observed $\vb{w}_{optim}$s that are completely
+different from $\vb{w}^*$. Due to the physical constraints of the eigenfluids
+simulation, in these cases the optimization could not change any of the $16$
+values of $\vb{w}_{optim}$ locally in a way that would further reduce the loss
+below some small number, and was stuck in a local minima of the parameter space.
 
 Although there are a number of ways to tweak this setup, we can already verify
 from these results that  the flow of the gradients is working, and is ready to
@@ -134,16 +139,16 @@ be tested in more advanced scenarios.
 \subsection{Controlling Shape Transitions}
 \label{section:controlling-shape-transitions}
 In the following, we showcase an optimization scenario, with the target of
-controlling the transition of two shapes in a fluid simulation setup.  The work
-of \cite{holl2019pdecontrol} formulated this problem in an Eulerian
-representation, with marker densities being advected by the simulated velocity
-field of the fluid. 
+controlling the transition between two marker shapes in a fluid simulation
+setup.  The work of \cite{holl2019pdecontrol} formulated this problem in an
+Eulerian representation, with explicitly simulating the shapes as scalar marker
+densities being advected by the velocity field of the simulated fluid. 
 
 Playing to the strength of the eigenfluids method, our experiment makes use of
 its explicit formulation of the fluid velocity $\vb{u}$ as described in
-section~\todo{ref section}. We stay independent of any grid resolution, and
-approximating the 2D shapes via a set of sample points, we reconstruct the
-velocity field only partially at a discrete set of points as needed for the
+section~\todo{ref section}. We stay independent of a grid resolution, and
+approximate the 2D shapes via a set of sample points. We reconstruct the
+velocity field only partially at these discrete set of points as needed for the
 advection of these particles. This results in both a faster fluid simulation as
 well as optimization as compared to fully simulating an $N\times N$ grid,
 advecting a marker density, and backpropagating gradients of a physical
@@ -151,21 +156,22 @@ simulation with much more degrees of freedom.
 
 We explore three different possibilities for addressing this problem. 
 \begin{itemize}
-  \item First, in a similar vein to the problem statemnt in
+  \item First, in a similar vein to the problem statement in
     section~\ref{section:matching-velocities}, we are looking for an initial
     coefficient vector $\vb{w}_0$ of an eigenfluids simulation, such that when
     simulated for $t$ time steps, the reconstructed velocity field will advect
     some initial points to the desired positions.
   \item Second, we optimize for some force vector $\vb{f}\in \mathbb{R}^{t\times
-    N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as external force to an
-    eigenfluid simulation, it will yield the desired outcome.
+    N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as external force to each
+    timestep of an eigenfluid simulation, it will yield the desired outcome.
   \item Third, we generalize the problem to looking for a function that exerts
-    the necessary control force at time $t$, so that particles currently at
-    positions $\vb{p}_t$ will end up at target positions $\vb{p}_{t+t}$ at the
+    the necessary control force at time $t$, such that particles currently at
+    positions $\vb{p}_t$ will end up at target positions $\vb{p}_{t+1}$ at the
     next timestep. We will formulate this third task as a \acf{NN}
-    agent in the form $\vb{f}(\vb{p_t}, \vb{p_{t+1}}, \vb{w}_{t}, \vb{\theta})$,
+    agent in the form $\vb{f}(\vb{p_t}, \vb{p_{t+1}}, \vb{w}_{t},
+    \boldsymbol\theta)$,
     also passing in the current basis coefficient vector $\vb{w}_t$, and
-    optimizing for its parameters $\theta$ to yield the desired outcome.
+    optimizing for its parameters $\boldsymbol\theta$ to yield the desired outcome.
 \end{itemize}
 
 Before moving on to each of these tasks, we will first go through the common
