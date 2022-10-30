@@ -42,7 +42,7 @@ Instead of \textit{learning} a reduced-order representation, another option is
 to analytically derive the dimension reduction, and its time evolution.
 \cite{dewitt} introduced a computationally efficient fluid simulation technique
 to the computer graphics community. Rather than using an Eulerian grid or
-Lagrangian particles, they represent velocity and vorticity using a basis of
+Lagrangian particles, they represent \todo{velocity and vorticity} using a basis of
 global functions defined over the entire simulation domain. The fluid velocity
 is reconstructed as a linear combination of these bases.
 
@@ -59,8 +59,8 @@ Transform (DCT) on the eigenfunctions for compression.
 \cite{scalable-eigenfluids} improved scalability of the technique, and modified
 the method to handle different types of boundary conditions.
 \cite{scalable-eigenfluids} refers to the fluid simulation technique using
-Laplacian eigenfunctions as \textit{eigenfluids}, which we will also adhere to
-in the following.
+Laplacian eigenfunctions as \textit{eigenfluids}, which we also adhere to in the
+following.
 
 \todo{They actually write "Eigenfluid" (uppercase), but I like it better as
 lowercase, such as "grid-based" or "particle-based".}
@@ -69,10 +69,6 @@ lowercase, such as "grid-based" or "particle-based".}
 Differentiable solvers have shown tremendous success lately for optimization
 problems, including training neural nework agents
 (\cite{holl2019pdecontrol}, \cite{difftaichi}, \cite{warp2022}).
-
-\todo{\cite{holl2019pdecontrol}, \cite{difftaichi}, \cite{warp2022} are
-frameworks, strictly speaking (although they all respectively contain relevant
-diff. physics examples). Is that OK?}
 
 \cite{holl2019pdecontrol} address grid-based solvers, noting them as
 particularly appropriate for dense, volumetric phenomena. They put forth

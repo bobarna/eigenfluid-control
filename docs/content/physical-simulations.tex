@@ -79,7 +79,9 @@ derivatives.  Differentiable solvers can efficiently compute the derivatives
 with respect to any of the inputs $\pdv*{\vb{u}(t_{i+1})}{\vb{u}(t_i)}$ and
 $\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$. 
 
-\todo{Mention that we tried out the others too?}
+\todo{Refer to frameworks already mentioned in section 1.1.2 Differentiable
+Solvers. We tried out difftaichi, wasp, and phiflow, then implemented everything
+with phiflow. Maybe mention this maybe later on?}
 
 For a basic comparison of the characteristics of supervised and differentiable
 physics approaches, see Figure~\ref{fig:learning-to-throw}.
@@ -89,15 +91,17 @@ physics approaches, see Figure~\ref{fig:learning-to-throw}.
 \subsection{Loss Functions for Differentiable Physics}
 \label{dp-loss}
 \todo{Write about inductive physical bias}
-\todo{Observation loss at end step should match target observation.
-  Give only a high-level overview here? (And hatch it out more in the problem
-  statement part later on?)
-}
+
+\todo{Observation loss at end step should match target observation.}
+
+\todo{Give only a high-level (mathematical) overview, and hatch it out more in
+the problem statement part later on.}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/throwing_results}
-  \caption{Learning to throw. 
+  \includegraphics[width=\textwidth]{figures/throwing_results}
+  \caption{\todo{Rewrite this.}
+    Learning to throw. 
     An example, showcasing an important difference between supervised and
     differentiable physics approaches. Both the supervised and the
     differentiable physics network approximate the function
@@ -117,10 +121,8 @@ physics approaches, see Figure~\ref{fig:learning-to-throw}.
     possible right answers), the supervised model is further thrown off, and
     will give values in-between. This means that even if we increase the
     training data, our supervised model can never learn this problem properly.
-    \todo{Should this be shorter?}
-    \todo{How to link to this source:
-      \url{https://tum-pbs.github.io/PhiFlow/Learn_to_Throw_Tutorial.html}?
-      (It's one of the demos from phiflow)}
-    }   
+    (Recreated from
+    \url{https://github.com/tum-pbs/PhiFlow/blob/develop/docs/Learn_to_Throw_Tutorial.ipynb})
+  }
     \label{fig:learning-to-throw}
 \end{figure}

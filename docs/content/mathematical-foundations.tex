@@ -23,7 +23,7 @@ x_2, \dots, x_n)^T$. When $\vb{x}$ denotes a position in 3D or 2D space, we also
 use $\vb{x} = (x,y,z)^T$, and $\vb{x} = (x,y)^T$, respectively.
 
 Bold uppercase letters denote matrices: $\vb{A}\in \mathbb{R}^{n \times m}$, and
-its elements are indexed with $\vb{A}_{i,j}$
+its elements are indexed with $\vb{A}_{i,j}$.
 
 A function $f(x_1, \dots, x_n)$ is a scalar-valued function $\mathbb{R}^n \to
 \mathbb{R}$.  When $\vb{f}: \mathbb{R}^n \to \mathbb{R}^m$ is a vector field, we
@@ -245,7 +245,7 @@ us equation~\eqref{eq:laplacian}.
 
 \subsection*{Differential Identities}
 
-It can be shown that for any smooth function $\vb{u}$, 
+It can be shown \todo{cite} that for any smooth function $\vb{u}$, 
 \begin{align*}
     \numberthis
     \label{eq:diff-identity}
@@ -319,15 +319,7 @@ that the opposite direction, $-\grad{L}$ will be the direction of the steepest
 \textit{descent} locally, guiding us towards some (potentially only local) error
 minimum.
 
-\todo{I will also refer back to these equations. Is it too redundant here to
-mention that we will be using these steps for our results? I would also like to
-highlight that this actually makes sense to write about from the perspective of
-our thesis.}
-
-\todo{Mentioning other optimization methods, such as Newton's method, and making
-a connection with them via how they all approximate the Hessian matrix
-differently, would have us introduce many other topics. For the same reason,
-I don't plan on expanding upon Adam. Is this OK?}
+\todo{Mention that we will use these later on in section ... .}
 
 \subsection{Neural Networks}
 The goal of \acf{DL} is to approximate an unknown function 
@@ -377,11 +369,7 @@ $\vb{W}_i$ and $b_i$ are the weight matrix and the bias of layer $i$,
 respectively. We call $\vb{W}_i$ and $b_i$ the parameters of the \ac{NN},
 and collect their values from all layers in $\boldsymbol\theta$.
 
-\todo{Should we write about backpropagation here, or that's only an
-implementation practicality to be mentioned only later on?}
+\todo{Comment on that DL is just about training a NN with many layers.}
 
-\todo{Would it look better to not write everything in bold (losing the notion of
-all of these being vector-valued), i.e.
-$$\arg\min_{\theta} L_2\big(f(x, \theta), y^*\big)\text{?}$$
-}
+\todo{Write about backpropagation here.}
 
