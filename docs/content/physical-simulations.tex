@@ -90,39 +90,51 @@ physics approaches, see Figure~\ref{fig:learning-to-throw}.
 
 \subsection{Loss Functions for Differentiable Physics}
 \label{dp-loss}
-\todo{Write about inductive physical bias}
-
 \todo{Observation loss at end step should match target observation.}
 
 \todo{Give only a high-level (mathematical) overview, and hatch it out more in
 the problem statement part later on.}
 
+\subsection{Comparison with Supervised Learning}
+
+\todo{Write about inductive physical bias}
+
+Figure~\ref{fig:learning-to-throw} shows us the results of a comparison between
+teaching the same network with the same objective function, the only difference
+being teaching in a supervised and a \ac{DP} manner.  Both the supervised and
+the differentiable physics network approximate the function
+$f^{-1}(\vb{x_{final}}): \mathbb{R} \mapsto \mathbb{R}^4$, which is the inverse
+of the function $f(\vb{x}, \vb{y}, \vb{v}, \vb{\alpha})$, mapping the final
+position $\vb{x_{final}}$ of an object being thrown from position $(\vb{x},
+\vb{y})$, with velocity $\vb{v}$ and angle $\vb{\alpha}$. The same network
+architecture is used, with the weights initialized to the same initial values.
+Both networks have seen the same number of training examples, and are using an
+$L_2$ norm between the point of impact resulting from the predicted initial
+values and the intended position. It is evident that the DP network is able to
+get orders of magnitude closer than the supervised network, which has no
+knowledge of the underlying physical system, and it's best guess is to
+interpolate between the closest data it has seen during training, which results
+in a coarse approximation. Also, as the result space to this problem is not
+unimodal (i.e. it has multiple possible right answers), the supervised model is
+further thrown off, and will give values that are an average of examples seen
+during training. This means that even if we increase the training data, the
+supervised model can never learn this problem properly.  
+\todo{Finalize this description, and refer to where this comes up in our
+experiments.}
+
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figures/throwing_results}
-  \caption{\todo{Rewrite this.}
-    Learning to throw. 
-    An example, showcasing an important difference between supervised and
-    differentiable physics approaches. Both the supervised and the
-    differentiable physics network approximate the function
-    $f^{-1}(\vb{x_{final}}): \mathbb{R} \mapsto \mathbb{R}^4$, which is the
-    inverse of the function $f(\vb{x}, \vb{y}, \vb{v}, \vb{\alpha})$, mapping
-    the final position $\vb{x_{final}}$ of an object being thrown from position
-    $(\vb{x}, \vb{y})$, with velocity $\vb{v}$ and angle $\vb{\alpha}$. The same
-    network architecture is used, with the weights initialized to the same
-    initial values. Both networks have seen the same number of training
-    examples, and are using an $L_2$ norm between the point of impact resulting
-    from the predicted initial values and the intended position. It is evident
-    that the DP network is able to get orders of magnitude closer than the
-    supervised network, which has no knowledge of the underlying physical
-    system, and it's best guess is to interpolate between the closest data it
-    has seen during training, which results in a coarse approximation. Also, as
-    the result space to this problem is not unimodal (e.g. it has multiple
-    possible right answers), the supervised model is further thrown off, and
-    will give values in-between. This means that even if we increase the
-    training data, our supervised model can never learn this problem properly.
-    (Recreated from
-    \url{https://github.com/tum-pbs/PhiFlow/blob/develop/docs/Learn_to_Throw_Tutorial.ipynb})
+  \caption{Learning to throw. The goal is to give an initial velocity $v$, angle
+    $\alpha$, and position $\vb{x}$ for a projectile, that hits a target at the
+    ground floor when simulated.  The supervised network is outperformed by the
+    \ac{DP} approach, as it always hits closer to the target by orders of
+    magnitude than its supervised counterpart.  The only difference between the
+    two agents being the way they derive their gradients from the same $L_2$
+    error: while the \ac{DP} network gains an understanding of the underlying
+    physical system via gradients of the simulation, the supervised network only
+    sees examples of input-output pairs, where multimodality becomes an inherent
+    problem.  (Figure recreated after [\cite{LearnToThrow}].)
   }
     \label{fig:learning-to-throw}
 \end{figure}
