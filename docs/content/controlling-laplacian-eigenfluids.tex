@@ -1,4 +1,5 @@
 \chapter{Controlling Laplacian Eigenfluids}
+\label{chapter:controlling-laplacian-eigenfluids}
 Many real world applications require us to optimize for some parameters of
 a physics-based problem. A toy example would be to optimize for some initial
 angle and velocity of a projectile to hit some target \todo{Refer back to the
@@ -312,7 +313,7 @@ a triangle and a circle shape.
 \todo{Would it make sense to write any of these as an Algorithm? (Maybe in
 a parallel universe, haha.)}
 
-\subsection{Initial Velocity}
+\subsection{Initial Velocity}\label{section:initial-velocity}
 
 \todo{Finish this section}
 $$
@@ -339,7 +340,7 @@ The main difficulty of this non-linear optimization problem lies in that we have
 no control over the natural flow of the fluid besides supplying an initial
 $\vb{w}_0$ vector.
 
-\subsection{Control Force Estimation}
+\subsection{Control Force Estimation}\label{section:cfe}
 In this scenario, we are optimizing for a force vector $\vb{f} \in
 \mathbb{R}^{t\times N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as
 external force to each timestep of an eigenfluid, some initial positions
@@ -382,7 +383,7 @@ Results of the optimization are shown in figure~\ref{fig:f_optim}
   \label{fig:f_optim}
 \end{figure}
 
-\subsection{Neural Network Training}
+\subsection{Neural Network Training}\label{section:nn-training}
 \todo{Write about fully connected architecture...}
 
 Figure~\ref{fig:nn-architecture} gives an overview of our \ac{NN} architecture.

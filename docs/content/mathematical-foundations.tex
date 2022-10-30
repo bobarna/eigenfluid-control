@@ -120,7 +120,7 @@ $t$ themselves, i.e. $\vb{u}(t, x(t), y(t), z(t))$. Utilizing the chain rule,
 we can arrive on the above definition by taking the total derivative of
 $\vb{u}(t, x(t), y(t), z(t))$, and rearranging the terms:
 
-\begin{alignat*}{2}
+\begin{alignat*}{2}\label{eq:material-derivative}
     \dv{\vb{u}}{t} &= \pdv{\vb{u}}{t}\dv{t}{t} 
                     + \pdv{\vb{u}}{x}\dv{x}{t} 
                     + \pdv{\vb{u}}{y}\dv{y}{t} 
@@ -319,7 +319,11 @@ that the opposite direction, $-\grad{L}$ will be the direction of the steepest
 \textit{descent} locally, guiding us towards some (potentially only local) error
 minimum.
 
-\todo{Mention that we will use these later on in section ... .}
+We show examples of utilizing the \ac{GD} steps as written in
+\eqref{eq:gd-steps} for minimizing the error between a simulated and target
+state of physical simulations in
+sections~\ref{section:matching-velocities},\ref{section:initial-velocity}, and
+\ref{section:cfe}.
 
 \subsection{Neural Networks}
 The goal of \acf{DL} is to approximate an unknown function 
@@ -359,7 +363,7 @@ optimizer, such as Adam (\cite{adam}).
 
 In the case of a fully-connected \ac{NN}, we can write its $i^{th}$ layer as 
 
-\begin{equation}
+\begin{equation}\label{nn-single-layer-math}
     \vb{o}^i = \sigma\left(\vb{W}_i \vb{o}^{i-1} + b_i\right),
 \end{equation}
 
@@ -377,13 +381,75 @@ paradigm of \acf{ML}. Finally, \acf{AI} is the broadest term used to classify
 any and all techniques that aim to create a form of (human-like) intelligence in
 computers.
 
-\todo{refer back to chain rule in mathematical foundations section}
+In the context of \ac{DL}, it is helpful to think of the derivative as
+\textit{function sensitivity}, denoting how a small change in an input variable
+changes the output of the function.  For finding the $\boldsymbol\theta$
+parameters of a \ac{NN}, this is exactly what we need: how to tweak
+$\boldsymbol{\theta}$ to reduce the output of a loss function
+$L(\vb{x},\vb{\theta})$.
 
-As introduced in section~\todo{ref to backprop section in mathematical
-foundations}, backpropagation lets us derive derivates of function compositions.
+As we already showed in equation~\eqref{eq:material-derivative}, the chain rule
+gives us the derivatives of composite functions. For a multivariable function
+$f: \mathbb{R}^2 \to \mathbb{R}$, it can be summarized as:
+\begin{align}
+    \dv{}{t}f(x(t), y(t)) &=  \pdv{f}{x}\pdv{x}{t} + \pdv{f}{y}\pdv{y}{t}\\
+    \intertext{and expressed with vector notation}
+    =\pdv{}{t}f \circ \vb{x}(t) &= \pdv{}{t}f(\vb{x}(t)) = \grad{f} \cdot \vb{x}(t)
+\end{align}
 
+As we will use it in section~\ref{section:nn-training}, a fully-connected
+\ac{NN}, can be written as a function composition of layers and activation
+functions $\sigma$. In the case of a simple fully-connected \ac{NN} with layer
+weights $\vb{W}_i$ and $\text{ReLU}(\vb{x})= \text{max}(0, \vb{x})$ activation
+functions, this becomes:
 
+\begin{align*}\label{eq:nn-layers-math}\numberthis
+    \qq*{linear function:} 
+    f(\vb{x}, \boldsymbol{\theta}) &= \vb{W}\vb{x} 
+    \\
+    \qq*{2 layers:} 
+    f(\vb{x}, \boldsymbol{\theta}) &= 
+    \vb{W}_2\text{max}(\vb{0}, \vb{W}_1\vb{x})
+    \\
+    \qq*{3 layers:} 
+    f(\vb{x}, \boldsymbol{\theta}) &=
+    \vb{W}_3\text{max}(\vb{0}, \vb{W}_2\text{max}(\vb{0}, \vb{W}_1\vb{x})) 
+    \\
+    \qq*{4 layers:} 
+    f(\vb{x}, \boldsymbol{\theta}) &= \vb{W}_4 \text{max}(\vb{0},
+    \vb{W}_3\text{max}(\vb{W}_2\text{max}(\vb{0}, \vb{W}_1\vb{x})))
+    \\
+   \dots
+\end{align*}
 
+Note that, as in equation~\eqref{nn-single-layer-math}, there is an additional
+$+b_i$ scalar addition at each layer that we did not write out in
+\eqref{eq:nn-layers-math} for clarity.
+
+Given some target values $\vb{y}^*$, also known as \textit{ground truth data},
+we can use a scalar (also known as \textit{regression}) loss to measure the
+error of the predictions of the \ac{NN}:
+\begin{align}
+    \qq*{L1 loss} &L(\vb{x},\vb{y}^*, \boldsymbol\theta) =
+        \frac{1}{N} \sum_i^N 
+        \norm{\vb{f}(\vb{x}, \boldsymbol\theta) - \vb{y}^*}_1
+    \\\label{eq:l2}
+    \qq*{MSE (or $L_2^2$) loss} &L(\vb{x}, \vb{y}^*, \boldsymbol\theta) =
+        \frac{1}{N} \sum_i^N 
+        \norm{\vb{f}(\vb{x}, \boldsymbol\theta) - \vb{y}^*}_2^2,
+\end{align}
+
+where the \acf{MSE} is the squared $L_2$ loss. The $L_2$ norm of a vector is its
+length in Euclidean space. In 3D: $L_2(\vb{x}) = \sqrt{x^2 + y^2 + z^2}$, and we
+will also denote it later on as $\abs{\cdot}_2^2$.
+
+In the context of \acf{PBDL}, it is especially important to understand the flow
+of gradients, as in the next chapter, we will integrate differentiable physical
+simulations into this learning setup.
+
+Regarding nomenclature, in classical literature, \textit{adjoint method} and
+\textit{reverse mode differentiation} are equivalent names for backpropagation
+technique.
 
 
 
