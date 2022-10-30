@@ -1,2 +1,14 @@
 % Number aligned equations together instead of having a separate number for each
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+% For the NN architecture diagram
+\DeclareMathOperator{\ReLU}{ReLU}
+\DeclareMathOperator{\Softmax}{softmax}
+ 
+\definecolor{conv}{HTML}{FFA500}
+\definecolor{relu}{HTML}{ADD8E6}
+
+\usetikzlibrary{positioning}
+
+\tikzset{conv/.style={black,draw=black,fill=conv,rectangle,minimum height=1cm}}
+\tikzset{relu/.style={black,draw=black,fill=relu,circle,minimum size=0.1cm}}

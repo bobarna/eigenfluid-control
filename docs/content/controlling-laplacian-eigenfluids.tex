@@ -345,15 +345,26 @@ In this scenario, we are optimizing for a force vector $\vb{f} \in
 external force to each timestep of an eigenfluid, some initial positions
 $\vb{p}_0$ will be advected to target positions $\vb{p}_t$ after $t$ timesteps:
 
-$$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{})
-  - \vb{p}_t\right|_2^2$$
+$$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})
+  - \vb{p}_t\right|_2^2,$$
+
+  where $\mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f}) = \mathcal{P} \circ \dots
+  \circ \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})$ denotes simulating the
+  physical system for $t$ time steps, applying 
+
+  \todo{change $\left|...\right|_2^2$ to $\norm{...}_2^2$ everywhere?}
+
+\todo{MSE is $L_2$ squared, make sure that this checks out throughout the text.}
+
+Results of the optimization are shown in figure~\ref{fig:f_optim}
 
 \begin{figure}
   \centering
   \begin{subfigure}{\textwidth}
     \centering
     \includegraphics[width=0.3\textwidth]{figures/f-optim/blue_start_red_target.png}
-    \caption{Initial (blue), and target (red) sample points.}
+    \caption{Initial (blue), and target (red) sample points. ($O=1$, $U=1$,
+    $T=5$)}
   \end{subfigure}\\
   \begin{subfigure}{\textwidth}
     \centering
@@ -366,12 +377,17 @@ $$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{})
     \caption{Smoke advection for qualitative comparison, reconstructed on
     a $100\times 100$ grid.}
   \end{subfigure}\par\medskip
-  \caption{Force optimization results.}
+  \caption{Force optimization results with $16$ timesteps, and using $N=16$
+  basis fields.}
   \label{fig:f_optim}
 \end{figure}
 
 \subsection{Neural Network Training}
 \todo{Write about fully connected architecture...}
+
+Figure~\ref{nn-architecture} gives an overview of our \ac{NN} architecture.
+
+\input{figures/nn-architecture.tex}
 
 \subsection*{Overfitting to a single training sample}
 We overfit the \ac{NN} to a single training sample. We plot the results of

@@ -1,0 +1,42 @@
+\begin{figure}[h]
+  \centering
+  \hspace*{-0.75cm}
+  \begin{tikzpicture}
+    \node (x) at (0,0) {\small$[\vb{p}_0, \vb{p}_t,\vb{w}]$};
+ 
+    \node[conv,rotate=90,minimum width=4.5cm] (l0) at (2,0) 
+      {\small Linear + ReLU};
+
+    \node[conv,rotate=90,minimum width=4.5cm] (l1) at (4.0, 0)
+      {\small Linear + ReLU};
+
+    \node[conv,rotate=90,minimum width=4.5cm] (l2) at (6.0, 0)
+      {\small Linear + ReLU};
+
+    \node[conv,rotate=90,minimum width=4.5cm] (l3) at (8.0, 0)
+      {\small Linear + ReLU};
+
+    \node[conv,rotate=90,minimum width=4.5cm] (l4) at (10.0, 0)
+      {\small Linear + ReLU};
+
+    \node[conv,rotate=90,minimum width=4.5cm] (l5) at (12.0, 0)
+      {\small Linear + ReLU};
+    
+      \node (f) at (13.5,0) {\small$\vb{f}$};
+    
+      \draw[->] (x) -- (l0);
+    \draw[->] (l0) -- (l1) node[pos=0.5,sloped,above] {$512$};
+    \draw[->] (l1) -- (l2) node[pos=0.5,sloped,above] {$256$};
+    \draw[->] (l2) -- (l3) node[pos=0.5,sloped,above] {$128$};
+    \draw[->] (l3) -- (l4) node[pos=0.5,sloped,above] {$64$};
+    \draw[->] (l4) -- (l5) node[pos=0.5,sloped,above] {$32$};
+    \draw[->] (l5) -- (f) node[pos=0.5,sloped,above] {$16$};
+    
+  \end{tikzpicture}
+  \vskip 6px
+  \caption{The CFE NN transforms the input vector of size $2\cdot2(O+U+T)+N$
+  into a force vector $\vb{f}$ that can be added to the $\vb{w}$ coefficients as
+external force. The output size of each layer matches the input size of the
+following layer, and a ReLU non-linearity is applied after each layer.}
+  \label{fig:architecture}
+\end{figure}
