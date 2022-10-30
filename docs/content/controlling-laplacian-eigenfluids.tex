@@ -32,13 +32,13 @@ To verify the feasibility of our technique before moving on to more involved
 setups, our most straightforward optimziation scenario is finding an initial
 basis coefficient vector $\vb{w}_0 \in \mathbb{R}^N$ for an eigenfluid
 simulation using $N=16$ basis fields, such that when simulated for $t$ time
-steps, the reconstructed $\text{Reconstruct}(\vb{w}_t) = \vb{u}_t$ velocity
+steps, the reconstructed $\mathcal{R}\vb{w}_t = \vb{u}_t$ velocity
 field will match some precalculated $\vb{u}^*: [0,\pi]\times[0,\pi] \to
 \mathbb{R}^2$ target velocity field:
 
 \begin{equation}\label{eq:match-vel-loss}
   L(\vb{w}) = \left|
-  \text{Reconstruct}(\mathcal{P}^{t}(\vb{w})) - \vb{u}^*
+  \mathcal{R}\mathcal{P}^{t}(\vb{w}) - \vb{u}^*
   \right|_2^2,
 \end{equation}
 
@@ -139,7 +139,11 @@ be tested in more advanced scenarios.
 \label{section:controlling-shape-transitions}
 In the following, we showcase an optimization scenario, with the target of
 controlling the transition between two marker shapes in a fluid simulation
-setup.  The work of \cite{holl2019pdecontrol} formulated this problem in an
+setup. 
+\footnote{Note that we use the terms \textit{smoke}, \textit{marker},
+\textit{density}, and \textit{scalar valued density/marker function}
+interchangeably throughout the text.}
+The work of \cite{holl2019pdecontrol} formulated this problem in an
 Eulerian representation, with explicitly simulating the shapes as scalar marker
 densities being advected by the velocity field of the simulated fluid. 
 
@@ -147,62 +151,171 @@ Playing to the strength of the eigenfluids method, our method makes use of
 an explicit formulation of the fluid velocity $\vb{u}$ as described in
 section~\todo{ref section}. We stay independent of a grid resolution, and
 approximate the 2D shapes via a set of sample points. We reconstruct the
-velocity field only partially at these discrete set of points as needed for the
+velocity field only partially at these discrete points as needed for the
 advection of these particles. This results in both a faster fluid simulation as
 well as optimization as compared to fully simulating an $N\times N$ grid,
 advecting a marker density, and backpropagating gradients of a physical
 simulation with much more degrees of freedom.
 
-We explore three different possibilities for addressing this problem. 
+We formulate three different control problems, each with a different mean to
+exert control over the fluid simulation.
 \begin{itemize}
   \item First, in a similar vein to the problem statement in
     section~\ref{section:matching-velocities}, we are looking for an initial
     coefficient vector $\vb{w}_0$ of an eigenfluids simulation, such that when
-    simulated for $t$ time steps, the reconstructed velocity field will advect
-    some initial points to the desired positions.
+    simulated for $t$ time steps, the reconstructed velocity field advects some
+    initial points to the desired positions.
   \item Second, we optimize for some force vector $\vb{f}\in \mathbb{R}^{t\times
     N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as external force to each
     timestep of an eigenfluid simulation, it will yield the desired outcome.
-  \item Third, we generalize the problem to looking for a function that exerts
+  \item Finally, we generalize the problem to looking for a function that exerts
     the necessary control force at time $t$, such that particles currently at
     positions $\vb{p}_t$ will end up at target positions $\vb{p}_{t+1}$ at the
-    next timestep. We will formulate this third task as a \acf{NN}
-    agent in the form $\vb{f}(\vb{p_t}, \vb{p_{t+1}}, \vb{w}_{t},
-    \boldsymbol\theta)$,
-    also passing in the current basis coefficient vector $\vb{w}_t$, and
-    optimizing for its parameters $\boldsymbol\theta$ to yield the desired outcome.
+    next timestep. We will formulate this third task as a \acf{NN} agent in the
+    form $\vb{f}(\vb{p_t}, \vb{p_{t+1}}, \vb{w}_{t}, \boldsymbol\theta)$, also
+    passing in the current basis coefficient vector $\vb{w}_t$, and optimizing
+    for its parameters $\boldsymbol\theta$ to yield the desired outcome.
 \end{itemize}
 
-Before moving on to each of these tasks, we will first go through the common
-ground between the above three problems.
+In each of these tasks, a velocity field $\vb{u} = \mathcal{R}\vb{w}$ advects
+a set of initial points $\vb{p}_0 = \left[\vb{p}_0^0,\dots, \vb{p}_0^i\right]$
+to line up with target positions $\vb{p}_t = \left[\vb{p}_t^0, \dots,
+\vb{p}_t^i\right]$.  We formulate this as 
 
-\todo{Finish writing the below problem statement.}
-\begin{itemize}
-  \item the reconstructed velocity field will advect a set of initial points
-$\vb{p}_0 = [p^0_0\dots p^i_0]$ to line up with target positions 
-$\vb{p}_{t} = [p_t^0\dots p_t^i]$
-  \item We can write this optimization problem as 
-$$\arg\min_{\vb{w}} \text{Loss}(\vb{w}, \vb{p}^0, \vb{p}^t)
-= \arg\min_{\vb{w}} \left| \mathcal{P}^{t}(\vb{p}^0, \vb{w})
-- \vb{p}^t\right|_2^2 = \arg\min_{\vb{w}}
-\sum_{i}\left|\mathcal{P}^{t}(p^0_i, \vb{w}) - p^t_i\right|_2^2, $$
+\begin{equation}
+  L(\vb{w}, \vb{p}_0, \vb{p}_t)
+  = \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}) - \vb{p}_t\right|_2^2 
+  = \sum_{i}\left|\mathcal{P}^{t}(p_0^i, \vb{w}) - p_t^i\right|_2^2, 
+\end{equation}
+
 where $\mathcal{P}^t(\vb{w}, \vb{p}) = \underbrace{\mathcal{P} \circ
-\mathcal{P} \dots \circ \mathcal{P}(\vb{w}, \vb{p})}_{t \text{ times}}$
-denotes the physical simulation of base coefficients $\vb{w}$ and 
-points $\vb{p}$ in the velocity field reconstructed from $\vb{w}$. We
-use a simple mean-square error (also known as $L_2$ norm) for measuring the error.
-\end{itemize}
+\mathcal{P}\circ \dots \circ \mathcal{P}(\vb{w}, \vb{p})}_{t \text{ times}}$
+denotes the physical simulation of base coefficients $\vb{w}$ and points
+$\vb{p}$ in $\vb{u} = \mathcal{R}\vb{w}$, the velocity field reconstructed from
+$\vb{w}$.  We use a simple mean-square error (also known as squared $L_2$ norm)
+for measuring the error.
 
 \subsection*{Sampling}
-\todo{We take a quick detour to discuss some sampling strategies we tried to
-optimally approximate 2D shapes.}
+Advection of some scalar quantity in a fluid is an abstract problem that
+describes many real-world phenomena. We can think of the transport of some ink
+dropped into water, clouds in the air, or some buoyant smoke rising. Phenomena
+such as these can be modeled as a density function $\psi(\vb{x})$ defined over
+the simulation domain $D$. In a fluid with velocity $\vb{u}$, and $\div{\vb{u}}
+= 0$ (i.e. the fluid is incompressible), the advection is governed by the
+equation
 
-\todo{Write about sampling strategies of points, how shapes are defined, etc.}
+$$\pdv{\psi}{t} + \vb{u}\cdot \grad{\psi} = 0.$$
+
+In Eulerian fluid simulation methods as described by \cite{StableFluids}, both
+$\vb{u}$ and $\vb{\psi}$ are sampled on grids, numerically approximating the
+evolution of the field quantities. Instead, our method proposes sampling the
+density function at discrete particle positions, thus rephrasing the process in
+a Lagrangian way.
+
+In the context of Laplacian eigenfluids, a Lagrangian viewpoint is especially
+inviting, as the explicit description of the fluid velocity $\vb{u}$ \todo{Refer
+to equation} allows us to reconstruct $\vb{u}$ only partially, while keeping the
+simulation of the fluid dynamics in a reduced dimensional space. In a forward
+physics simulation, this can already lead to substantial speed-ups, but this
+formulation seems especially promising when the backpropagation of variables is
+desired, such as the optimization scenarios introduced herein.
+
+A straightforward way to define a shape is
+\begin{equation}\label{eq:binary-shape-function}
+\psi(\vb{x}) = 
+\begin{cases}
+  1, & \qq*{inside the shape}\\
+  0, & \text{outside the shape}.\\
+\end{cases}
+\end{equation}
+Sampled on an $N \times N$ grid, this is equivalent to a binary image with
+a resolution of $N \times N$. Moreover, when sampled on a grid, and advected,
+it is straightforward to interpret the resulting grid and its values as
+a grayscale image with values $[0,\dots,1]$.
+
+Often used in 3D scanning, reconstruction and scene understanding problems,
+a \acf{SDF} can be defined as the distance to the surface (in 2D, the edge) of
+an object, with positive values outside, and negative values inside. In our
+implementation, we define our shapes as \acp{SDF}. For example, a circle with
+radius $r$ and center $\vb{o} = (o_x, o_y)^T$ is defined as
+
+$$\text{SDF}_{\text{circle}}(\vb{x, \vb{o}, r}) 
+  = \abs{\vb{x}-\vb{o}} - r
+  = \sqrt{(x-o_x)^2 + (y-o_y^2)} - r.$$
+
+For simulating (and visualizing) the advection dynamics of these shapes, we
+transform the SDFs to a binary form as in
+equation~\eqref{eq:binary-shape-function}.
+
+As we neither want to lose too much information about our original function, nor
+want to keep track of an unnecessary number of points, the feasibility of this
+method necessitates an efficient sampling of $\psi(\vb{x})$. We use a simple
+rejection-based sampling technique. Transforming the shapes to fit inside the
+unit rectangle $[0,1]\times[0,1]$, we generate random points
+$\vb{p}_\text{sample}\in [0,1]\times[0,1]$, rejecting them if they lie outside
+the shape.
+
+As we consider shape transitions given start and target shapes $S_\text{0}$ and
+$S_\text{t}$, it is important to take into consideration the connection between
+these shapes. To balance finding spatial correspondences between the shapes,
+while still approximating their unique shapes, we sample $O$ overlapping, and
+$U$ unique points. For the overlapping points, we accept only
+$\vb{p}_\text{sample} \in S_\text{0} \cup S_\text{t}$, i.e. we reject points
+that are not inside both shapes (transforming both shapes to fit inside the unit
+square for the sampling). For the unique points we sample a different set of
+points for each shape. 
+
+To generate low-discrepancy, quasi-random 2D coordinates, we use a Halton
+sequence (\cite{halton}), giving deterministic coordinates, given coprimes $p$
+and $q$. Using one set of primes for sampling $O$ overlapping points, and
+another set of primes for sampling $U$ unique points can give us further
+overlapping points, as the proposed (but potentially rejected) sequence of
+points will be the same for both shapes.
+
+We further generate $T=5$ trivial points that are hand-picked to best resemble
+the given shape, as well as line up between different shapes. We choose these to
+be the center, upper right, upper left, lower left, and lower right corners of
+the shape. 
+
+In conclusion, our final set of $\vb{p}_0$ initial, and $\vb{p}_t$ target sample
+positions are given by concatenating the $O$ overlapping, $U$ unique, and $T$
+trivial points for each shape, resulting in two set of sample points $\vb{p}_0,
+\vb{p}_t \in \mathbb{R}^{O+U+T}$.
+
+Figure~\ref{fig:sampling} shows the result of our sampling strategy for
+a triangle and a circle shape.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/sampling/points.png}
+    \caption{The $O=30$ overlapping (blue), $U=30$ unique (green), and $T=5$
+    trivial (red) points for each shape.}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    % \includegraphics[width=\textwidth]{figures/sampling/smokes.png}
+    \includegraphics[width=\textwidth]{figures/sampling/smokes_no_bar.png}
+    \caption{Sample points plotted over $\psi_\text{triangle}
+    + \psi_\text{circle}$.}
+  \end{subfigure}\par\medskip
+  \caption{Sampling strategy for transitioning from a triangle to a circle.
+  Halton series with base $(2,7)$ and $(3,11)$ were used to generate the
+  overlapping and unique positions, respectively.}
+  \label{fig:sampling}
+\end{figure}
+
+\todo{Would it make sense to write any of these as an Algorithm? (Maybe in
+a parallel universe, haha.)}
 
 \subsection{Initial Velocity}
 
 \todo{Finish this section}
-
+$$
+\arg\min_{\vb{w}} \left| \mathcal{P}^{t}(\vb{p}^0, \vb{w})
+  - \vb{p}^t\right|_2^2
+  $$
 Making use of the differentiability of our physical simulator $\mathcal{P}$, and
 the multivariable chain rule for deriving the gradient of the above
 $\mathcal{P}^t$ function composition, we can derive its gradient with respect to
