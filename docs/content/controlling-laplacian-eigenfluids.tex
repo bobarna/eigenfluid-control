@@ -340,7 +340,35 @@ no control over the natural flow of the fluid besides supplying an initial
 $\vb{w}_0$ vector.
 
 \subsection{Control Force Estimation}
-\todo{Write this section.}
+In this scenario, we are optimizing for a force vector $\vb{f} \in
+\mathbb{R}^{t\times N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as
+external force to each timestep of an eigenfluid, some initial positions
+$\vb{p}_0$ will be advected to target positions $\vb{p}_t$ after $t$ timesteps:
+
+$$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{})
+  - \vb{p}_t\right|_2^2$$
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.3\textwidth]{figures/f-optim/blue_start_red_target.png}
+    \caption{Initial (blue), and target (red) sample points.}
+  \end{subfigure}\\
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/f-optim/trajectory_horizontal.png}
+    \caption{Optimized trajectory of the sample points.}
+  \end{subfigure}\par\medskip
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/f-optim/smoke_trajectory_horizontal.png}
+    \caption{Smoke advection for qualitative comparison, reconstructed on
+    a $100\times 100$ grid.}
+  \end{subfigure}\par\medskip
+  \caption{Force optimization results.}
+  \label{fig:f_optim}
+\end{figure}
 
 \subsection{Neural Network Training}
 \todo{Write about fully connected architecture...}
