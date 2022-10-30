@@ -7,22 +7,87 @@ ourselves to discussing Eulerian methods, and also introduce the Laplacian
 Eigenfunction method (\cite{dewitt}).
 
 The dynamics of fluids are governed by the Navier-Stokes Equations:
-\begin{equation}
-    \label{eq:NSE}
-    \begin{aligned}
-        \pdv{\vb{u}}{t} = -\vb{u}\cdot\grad{\vb{u}} + 
-        \nu \grad\cdot\grad \vb{u} - \grad{p} + \vb{f}
-    \end{aligned}
+\begin{equation}\label{eq:NSE}
+    \pdv{\vb{u}}{t} + (\vb{u}\cdot\grad)\vb{u}
+    = -\frac{1}{\rho}\grad{p} + \nu\grad^2\vb{u} + \vb{f},
 \end{equation}
 
-\todo{Write about simulating the NS equations, from an Eulerian simulation
-perspective
-- We are also advecting some marker density (add equation for that too)}
+where $\vb{u}$ is the velocity of the fluid, $\rho$ is the density, $p$ is the
+scalar pressure field, $\nu$ is the viscosity constant, and $\vb{f}$ denotes
+external forces. For incompressible fluids, the divergence-freeness also has to
+hold, i.e. $\div{\vb{u}} = 0$
+
+Even though equation~\eqref{eq:NSE} already describes the evolution of the fluid
+as a \acf{PDE}, it is too complex for simply stepping it forward in time with
+Euler steps. Instead, a technique called \textit{operator splitting} is applied
+for numerical simulations, where each term is treated individually, and their
+effect is combined together to fully approximate the original equation. We give
+a short overview of each term to get a general understanding of fluid
+simulation, first treating the problem in an Eulerian way (i.e.  sampling
+$\vb{u}$ on a grid), building up our way towards the Laplacian Eigenfunction
+method discussed in section~\ref{section:laplacian-eigenfluids}.  For a more
+complete overview of established fluid simulation techniques, see
+\cite{FluidNotes} and \cite{BridsonFluid}.
+
+Equation~\eqref{eq:NSE} is usually split by separating out the advection part,
+the external force part, and the pressure/incompressibility part. When viscosity
+is important, that can also be separated. This means, we work out methods for
+solving these simpler equations:
+\begin{align*}
+    \dv{q}{t} &= 0              \qq{(advection)}\\
+    \pdv{\vb{u}}{t} &= \vb{p}   \qq{(external forces)}\\
+    \pdv{\vb{u}}{t} + \frac{1}{\rho}\grad p &= 0 \\
+    \qq{such that}\div{\vb{u}} &= 0.
+                                \qq{(pressure, enforcing incompressibility)}
+\end{align*}
+
+A generic quantity $q$ is used in the advection equation, because as we also
+show later on in our experiments, we may be interested in advecting other field
+quantities than just the velocity $\vb{u}$. For the advection part, we develop
+an algorithm called $\text{Advect}(\vb{u}, \Delta t, q)$: it advects quantity
+$q$ through the velocity field $\vb{u}$ for a time interval $\Delta t$. 
+
+For the external forces, any traditional numerical integration approach, such as
+forward Euler can be used: $\vb{u}^{t+1} = \vb{u}^t + \Delta t \vb{f}$.
+
+For calculating the pressure, an algorithm $\text{Project}(\Delta t, \vb{u})$
+calculates and applies just the right amount of pressure to the velocity field
+to make it divergence-free, and also enforce any solid wall boundary
+conditions. The term "project" comes from the fact that the algorithm
+essentially projects $\vb{u}$ to the closest divergence-free velocity field, and
+interpreting the difference between these two fields as a pressure resulting
+from "particles" being too close together. 
+
+The order in which these algorithms are being applied matters a lot, as the
+advection must be done on a divergence-free field, which means the output of
+$Project$. Putting all of these together, we arrive at a basic fluid simulation
+algorithm:
+
+\begin{algorithmic}
+    \State $\vb{u}^0 \gets \text{an initial divergence-free velocity field}$
+    \For{$t = 0, 1, 2 \dots $}
+        \State $\Delta t 
+            \gets \text{a suitable timestep to go from $t_n$ to $t_{n+1}$}$
+        \State $\widetilde{\vb{u}} 
+            \gets \text{Advect}(\vb{u}^n,\Delta t, \vb{u}^n)$
+        \State $\widetilde{\vb{u}} 
+            \gets \widetilde{\vb{u}}^n + \Delta t \vb{f}$
+        \State $\vb{u}^{n+1}
+            \gets \text{Project}(\vb{u}^n,\Delta t, \vb{u}^n)$
+            \EndFor \Comment{$[\vb{u}^0, \dots, \vb{u}^t]$ is the simulated
+            fluid flow for $t$ timesteps.}
+\end{algorithmic}
+
+
+
+
 \section{The Laplacian Eigenfunction Method}
+\label{section:laplacian-eigenfluids}
 \subsection{Preliminaries}
 \todo{Write Preliminaries}
 We now summarize the method of using Laplacian eigenfunctions for fluid
 simulation, introduced by \citet{dewitt}.
+
 
 \subsection*{Laplacian Eigenfunctions as Basis Fields}
 We express the velocity field $\vb{u}$ of a fluid on a domain $D$ as
