@@ -78,28 +78,41 @@ algorithm:
             fluid flow for $t$ timesteps.}
 \end{algorithmic}
 
+\todo{Semi-Lagrangian Advection. It is trivial in a Lagrangian setting...}
 
+\todo{For our smoke simulation examples, we are using a MacCormak advection
+scheme that uses a forward as well as a backward lookup to estimate and correct
+the error of the semi-langrangian advection.}
 
+\todo{Making fluids incompressible via pressure projection: $\vb{u}^{n+1}
+= \vb{u} - \Delta t \frac{1}{\rho} \grad p$, with $\div{\vb{u}^{n+1}} = 0$. Look
+up, and include which one we are using.}
+
+\todo{Projecting a velocity field involvess solving for the pressure, and
+subtracting its spatial gradient.}
 
 \section{The Laplacian Eigenfunction Method}
 \label{section:laplacian-eigenfluids}
-\subsection{Preliminaries}
-\todo{Write Preliminaries}
-We now summarize the method of using Laplacian eigenfunctions for fluid
-simulation, introduced by \citet{dewitt}.
+\cite{dewitt} introduced the method of using Laplacian eigenfunctions for fluid
+simulation. \cite{scalable-eigenfluids} addressed scalability and generalization
+issues, and referred to the technique as eigenfluids. 
 
+The main idea is to express the velocity field $\vb{u}(\vb{x})$ via the linear
+combination of $N$ global functions:
 
-\subsection*{Laplacian Eigenfunctions as Basis Fields}
-We express the velocity field $\vb{u}$ of a fluid on a domain $D$ as
 $$\vb{u}(\vb{x})=\sum_i^N w_i \Phi_i(\vb{x}),$$
+
 where the $N$ scalar elements of $\vb{w}$ are called basis coefficients, and
 ${\Phi_i}$ are basis functions.
 
 As our basis functions, we choose the eigenfunctions of the vector Laplacian
-operator (see Section~\ref{section:vector-laplacian}). If we further require our
-basis fields $\Phi_{\vb{k}}$ to be divergence-free, and to satisfy a free slip
-boundary condition, $\Phi_{\vb{k}}$ is fully characterized by
+operator $\Delta = \grad^2 = \text{grad}(\text{div}) - \text{curl}^2$, which
+further simplifies to $\grad^2 = -\text{curl}^2$ for divergence-free fields (see
+section~\ref{section:vector-laplacian}). 
 
+Besides being eigenfunctions of the vector Laplacian operator, if we further
+require our basis fields $\Phi_{\vb{k}}$ to be divergence-free, and to satisfy
+a free-slip boundary condition, our basis functions are fully characterized by
 \begin{align*}
 \nabla^2 \Phi_{\textbf{k}} &= \lambda_{\textbf{k}}\Phi_{\textbf{k}} \\
 \nabla \cdot \Phi_{\textbf{k}} &= 0 \\
@@ -107,35 +120,104 @@ boundary condition, $\Phi_{\vb{k}}$ is fully characterized by
 \end{align*}
 where $\textbf{n}$ is the normal vector at the boundary $\partial D$.
 
-Thus, on the two dimensional $D \in [0, \pi] \times [0, \pi]$ square domain, the
-two scalar components of the $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
-\Phi_{\vb{k},y})$ functions take the form 
-
-\begin{align*}
-\Phi_{\textbf{k},x}(x, y) &= -\lambda_k^{-1} 
+Closed-form expressions of $\Phi_{\vb{k}}$ exist on the two dimensional $D \in
+[0, \pi] \times [0, \pi]$ square domain. \todo{cite} Notating the two scalar
+components in the x and y directions $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
+\Phi_{\vb{k},y})$, we can write them as
+\begin{align}
+    \Phi_{\textbf{k},x}(x, y) &= \frac{-1}{\mu_{\vb{k}}}
     ( k_2 \sin(k_1 x) \cos(k_2 y) ) \\
-\Phi_{\textbf{k},y}(x, y) &= -\lambda_k^{-1}
-    ( -k_1 \cos(k_1 x) \sin(k_2 y) ).
-\end{align*}
+    \Phi_{\textbf{k},y}(x, y) &= \frac{1}{\mu_{k}}
+    ( -k_1 \cos(k_1 x) \sin(k_2 y) ),
+\end{align}
 
-$\textbf{k} = (k_1, k_2) \in \mathbb{Z}^2$ is known as the *vector wave
-number*, with eigenvalue $\lambda_k = -(k_1^2 + k_2^2)$. 
-The function is scaled by the negative inverse of its eigenvalue, 
-$-\lambda_k^{-1} = 1/(k_1^2 + k_2^2)$.
+where $\vb{k} = (k_1, k_2) \in \mathbb{Z}^2$ is the \textit{vector wave number},
+$\lambda_{\vb{k}} = -(k_1^2 + k_2^2)$ is the eigenvalue, and $\mu_{\vb{k}}
+= -\lambda_{\vb{k}} = k_1^2 + k_2^2$ is a normalization parameter.
+\cite{scalable-eigenfluids} use $\mu_{\vb{k}} = \sqrt{-\lambda} = \sqrt{k_1^2
++ k_2^2}$ for normalization, but we keep the non-squared version, as we did not
+notice any subtantial difference between the two during implementation.
+
+As an example, $\Phi_{4,3}(x,y)$ is visualized on figure~\ref{fig:phi-example}.
+In appendix~\ref{appendix:first_16}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=\textwidth]{figures/eigenfluids/k_4_3_vel.png}
+    \caption{Velocity field $\Phi_{4,3}$.}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=\textwidth]{figures/eigenfluids/k_4_3_curl_bar.png}
+    \caption{Curl field $\curl{\Phi_{4,3}}$.}
+  \end{subfigure}\par\medskip
+  \caption{Visualizing $\Phi_{4,3}$ sampled on a $20 \times 20$ grid in
+  our simulation domain $D = [0,\pi] \times [0,\pi]$.}
+  \label{fig:phi-example}
+\end{figure}
+
+\subsection*{Vorticity Basis Fields}
+Taking the curl of the velocity basis fields $\Phi_{\vb{k}}$ gives us the
+vorticity fields (as introduced in section~\ref{section:curl}):
+\begin{align*}
+    \phi_{\vb{k}} &= \curl{\Phi_{\vb{k}}} 
+    =  \pdv{\Phi_{\vb{k},y}}{x} - \pdv{\Phi_{\vb{k},x}}{y}\\
+&= -\mu_{\vb{k}} k_1 \sin(k_2 y) k_1(-sin(k_1 x)) - \mu_{\vb{k}} k_2 \sin(k_1 x)
+    k_2 (-sin(k_2 y))\\
+&= \mu_{\vb{k}} sin(k_1 x) sin(k_2 y)(k_1^2+k_2^2) = sin(k_1 x) sin(k_2 y)
+\end{align*}
+Interpreting this as the third component of a 3D vector,
+$$\phi_{\vb{k}} = \curl{\Phi_{\vb{k}}} 
+= \mqty(0 \\ 0 \\ \sin(k_1 x) \sin(k_2 y)).$$
+
+\todo{We defined the curl in the mathematical foundations chapter as being
+scalar. We have to mention it there that the 2D curl can also be defined a 3D
+vector, with the 3rd component being the only non-negative value.}
 
 \subsection*{Dynamics}
 \todo{Write this section}
 The vorticity formulation of the Navier-Stokes equation is
 \begin{equation}\label{eq:NSE-vorticity}
-    \dot{\bf{\omega}} = \text{Adv}(\bf{u}, \bf{\omega}) + \nu \Delta\bf{\omega}
-    + \text{curl}(\bf{f})
+    \dot{\bf{\omega}} = \text{Advect}(\bf{u}, \bf{\omega}) + \nu \Delta\bf{\omega}
+    + \text{curl}(\bf{f}),
 \end{equation}
 where $\bf{\omega} = \curl{\bf{u}}$ and $\bf{f}$ are external forces.
 
-\subsubsection*{Precomputation of the Advection Dynamics}
-\todo{}
 
+\subsection*{Advection}
+The Advect$(\Phi_i, \phi_j)$ term represents the non-linear advection of basis
+fields. We precompute these, and the vorticity basis coefficients of the results
+are stored in ``a set of $\vb{C}_k$ matrices'' (\cite{dewitt}, resulting in $N$
+number of $N \times N$ matrices), or equivalently, a ``$3^{rd}$ order advection
+tensor $\mathfrak{C}$'' (\cite{scalable-eigenfluids}).  The dimensions of
+$\vb{C}$ and $\mathfrak{C}$ are both $N \times N \times N$. We will refer to
+these precomputed advection values as $N$ $\vb{C}_k$ matrices.
+The respective works also propose different ways to precompute these values:
 
+\cite{dewitt}:
+
+\begin{equation}\label{eq:Ck-dewitt}
+\vb{C}_g[h, i] = \Big( \curl(\phi_h \cross \Phi_i)\Big)\cdot \phi_g
+\end{equation}
+
+\cite{scalable-eigenfluids} improves on \eqref{eq:Ck-dewitt} by using the method
+introduced by \cite{ModelReductionFluidSim}:
+\begin{equation}
+    \mathfrak{C}(g,h,i) = \int_D (\curl{\Phi_i})\cdot (\Phi_g \cross \Phi_h)
+    \text{d}D,
+\end{equation}
+noting improvements such as preserving the anti-symmetry of the tensor by
+construction, i.e. $\mathfrak{C}(g,h,i) = -\mathfrak{C}(h,g,i)$. We keep with
+calculating the advection coefficients in line with \eqref{eq:Ck-dewitt}, as it
+was working well enough for our purposes of differentiable physics simulation.
+
+\subsubsection*{Precalculating the Advection Matrices}
+\todo{math}
+
+\todo{I didn't come across any alternative naming convention to denote the
+advection, that is not a function named with a whole word.}
 
 
 
