@@ -1,11 +1,29 @@
 \chapter{\bevezetes}
 
+Positioned at the crossroads of physical simulation, and deep learning
+techniques, our work is inspired by current advancements in physics-based deep
+learning. We investigate the general problem of controlling simulation
+parameters to achieve target outcomes.
+
+Our novel method solves problems in fluid simulation by utilizing gradients of
+a differentiable physics simulation. More specifically, we use gradients from
+a reduced order fluid simulation technique based on eigenfunctions of the vector
+Laplacian operator. Instead of simulating the full domain, a reduced dimensional
+space is utilized, resulting in significant speed-ups. We show some of the
+possibilities arising when differentiating a Laplacian eigenfluids simulation,
+and investigate how the resulting gradients can drive optimization in different
+scenarios.
+
+\todo{The time of the simulation/optimization was actually never recorded,
+    because it was so fast. (Though the time it took was actually logged to the
+    console.) Every optimization epoch took a couple of seconds at most, and
+    even the most involved ones ended in a couple of minutes (max 10-15 seconds
+    for really long ones?)... It would be nice to insert some kind of benchmark
+    somewhere.}
+
 In this chapter, we briefly discuss previous research that served as inspiration
 as well as a base for our current work. We also give an overview of the overall
 structure of our thesis. 
-
-\todo{Write about our motivation here? (Also see note at the end of the chapter:
-should we mention our contribution here?)}
 
 \section{Previous Work}
 \subsection{Fluid Simulation}
@@ -17,10 +35,6 @@ of fluid simulation techniques in computer graphics, see \cite{FluidNotes} and
 For advecting marker density in our fluid, as well as a comparative "baseline"
 simulation, we will use Eulerian simulation techniques, mostly as described by
 \cite{StableFluids}.
-
-\todo{Is it okay to keep this part so short? mention that \cite{StableFluids}
-introduced the Semi-Lagrangian step that we also use for advection, or that's
-unnecessary?}
 
 \subsubsection*{Reduced Order Modeling of Fluids}
 Dimension reduction-based techniques have been applied to fluid simulation in
@@ -42,9 +56,9 @@ Instead of \textit{learning} a reduced-order representation, another option is
 to analytically derive the dimension reduction, and its time evolution.
 \cite{dewitt} introduced a computationally efficient fluid simulation technique
 to the computer graphics community. Rather than using an Eulerian grid or
-Lagrangian particles, they represent \todo{velocity and vorticity} using a basis of
-global functions defined over the entire simulation domain. The fluid velocity
-is reconstructed as a linear combination of these bases.
+Lagrangian particles, they represent fluid fields using a basis of global
+functions defined over the entire simulation domain. The fluid velocity is
+reconstructed as a linear combination of these bases.
 
 They propose the use of Laplacian eigenfunctions as these global functions.
 Following their method, the fluid simulation becomes a matter of evolving basis
@@ -61,9 +75,6 @@ the method to handle different types of boundary conditions.
 \cite{scalable-eigenfluids} refers to the fluid simulation technique using
 Laplacian eigenfunctions as \textit{eigenfluids}, which we also adhere to in the
 following.
-
-\todo{They actually write "Eigenfluid" (uppercase), but I like it better as
-lowercase, such as "grid-based" or "particle-based".}
 
 \subsection{Differentiable Solvers}
 Differentiable solvers have shown tremendous success lately for optimization
@@ -86,10 +97,24 @@ previously used learning approaches (\cite{solver-in-the-loop}).
 Drawing on a wide breadth of current research, \cite{pbdl} give an overview of
 deep learning methods in the context of physical simulations. 
 
-\todo{Maybe elaborate on this a bit more?}
-
 \section{Structure}
-\todo{Short description of each chapter. (Once chapters are actually written.)}
+In chapter~\ref{sec:mathematicalFoundations}, we give an overview of
+mathematical foundations, introducing notation used throughout the text, as well
+as discuss  preliminaries we base later chapters on. 
 
-\todo{Should we write about our contribution here? ($\approx$using physics-based gradients of
-a reduced-order simulation technique to solve optimization problems)}
+In chapter~\ref{chapter:physical-simulations}, the basics of physical
+simulations are introduced. Building on the multivariable calculus introduced in
+chapter~\ref{sec:mathematicalFoundations}, the concept of differentiable physics
+simulation is introduced. 
+
+Diving deeper into a more specific area of physical simulations,
+chapter~\ref{chapter:fluid-simulation} gives a deep dive into fluid simulation
+techniques, discussing the Laplacian eigenfluids method more in-depth in
+section~\ref{section:laplacian-eigenfluids}. 
+
+Finally, as a culmination of all that came before,
+chapter~\ref{chapter:controlling-laplacian-eigenfluids} describes our proposed
+method of Controlling Laplacian Eigenfluids. 
+
+We close our work with a short discussion and possible future directions in
+chapter~\ref{chapter:discussion}.

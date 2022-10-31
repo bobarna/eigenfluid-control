@@ -1,4 +1,4 @@
-\chapter{Fluid Simulation}
+\chapter{Fluid Simulation}\label{chapter:fluid-simulation}
 Simulating convincing fluid dynamics is a continuing challenge of computer
 graphics, especially when considering real-time applications. There are multiple
 established ways to simulate fluids, the most widespread being Eulerian (i.e.
@@ -102,8 +102,8 @@ combination of $N$ global functions:
 
 $$\vb{u}(\vb{x})=\sum_i^N w_i \Phi_i(\vb{x}),$$
 
-where the $N$ scalar elements of $\vb{w}$ are called basis coefficients, and
-${\Phi_i}$ are basis functions.
+where the elements of $\vb{w} = [w_0, \dots, w_N]$, are called \textit{basis
+coefficients}, and ${\Phi_i}$ are \textit{basis functions}.
 
 As our basis functions, we choose the eigenfunctions of the vector Laplacian
 operator $\Delta = \grad^2 = \text{grad}(\text{div}) - \text{curl}^2$, which
@@ -118,28 +118,29 @@ a free-slip boundary condition, our basis functions are fully characterized by
 \nabla \cdot \Phi_{\textbf{k}} &= 0 \\
 \Phi_{\textbf{k}} \cdot \textbf{n} &= 0 \text{ at } \partial D,
 \end{align*}
-where $\textbf{n}$ is the normal vector at the boundary $\partial D$.
+where $\textbf{n}$ is the normal vector at boundary $\partial D$.
 
 Closed-form expressions of $\Phi_{\vb{k}}$ exist on the two dimensional $D \in
 [0, \pi] \times [0, \pi]$ square domain. \todo{cite} Notating the two scalar
 components in the x and y directions $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
 \Phi_{\vb{k},y})$, we can write them as
-\begin{align}
-    \Phi_{\textbf{k},x}(x, y) &= \frac{-1}{\mu_{\vb{k}}}
+\begin{align*}\label{eq:explicit-u}\numberthis
+    \Phi_{\vb{k},x}(x, y) &= \eta_{\vb{k}}
     ( k_2 \sin(k_1 x) \cos(k_2 y) ) \\
-    \Phi_{\textbf{k},y}(x, y) &= \frac{1}{\mu_{k}}
+    \Phi_{\vb{k},y}(x, y) &= -\eta_{\vb{k}}
     ( -k_1 \cos(k_1 x) \sin(k_2 y) ),
-\end{align}
+\end{align*}
 
 where $\vb{k} = (k_1, k_2) \in \mathbb{Z}^2$ is the \textit{vector wave number},
-$\lambda_{\vb{k}} = -(k_1^2 + k_2^2)$ is the eigenvalue, and $\mu_{\vb{k}}
-= -\lambda_{\vb{k}} = k_1^2 + k_2^2$ is a normalization parameter.
-\cite{scalable-eigenfluids} use $\mu_{\vb{k}} = \sqrt{-\lambda} = \sqrt{k_1^2
-+ k_2^2}$ for normalization, but we keep the non-squared version, as we did not
-notice any subtantial difference between the two during implementation.
+$\lambda_{\vb{k}} = -(k_1^2 + k_2^2)$ is the eigenvalue, and $\eta_{\vb{k}}
+= \frac{1}{-\lambda_{\vb{k}}} = \frac{1}{k_1^2 + k_2^2}$ is a normalization
+parameter.  \cite{scalable-eigenfluids} use $\frac{1}{\sqrt{-\lambda}}
+= \frac{1}{\sqrt{k_1^2 + k_2^2}}$ for normalization, but we keep the non-root
+version, as we did not notice any subtantial difference between the two during
+implementation.
 
 As an example, $\Phi_{4,3}(x,y)$ is visualized on figure~\ref{fig:phi-example}.
-In appendix~\ref{appendix:first_16}
+In appendix~\ref{appendix:first_16}, we also plot the first $16$ basis fields.
 
 \begin{figure}
   \centering
@@ -151,7 +152,7 @@ In appendix~\ref{appendix:first_16}
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[height=\textwidth]{figures/eigenfluids/k_4_3_curl_bar.png}
-    \caption{Curl field $\curl{\Phi_{4,3}}$.}
+    \caption{Curl field $\curl{\Phi_{4,3}} = \phi_{4,3}$.}
   \end{subfigure}\par\medskip
   \caption{Visualizing $\Phi_{4,3}$ sampled on a $20 \times 20$ grid in
   our simulation domain $D = [0,\pi] \times [0,\pi]$.}
@@ -177,14 +178,15 @@ scalar. We have to mention it there that the 2D curl can also be defined a 3D
 vector, with the 3rd component being the only non-negative value.}
 
 \subsection*{Dynamics}
+
 \todo{Write this section}
+
 The vorticity formulation of the Navier-Stokes equation is
 \begin{equation}\label{eq:NSE-vorticity}
     \dot{\bf{\omega}} = \text{Advect}(\bf{u}, \bf{\omega}) + \nu \Delta\bf{\omega}
     + \text{curl}(\bf{f}),
 \end{equation}
 where $\bf{\omega} = \curl{\bf{u}}$ and $\bf{f}$ are external forces.
-
 
 \subsection*{Advection}
 The Advect$(\Phi_i, \phi_j)$ term represents the non-linear advection of basis
@@ -214,7 +216,41 @@ calculating the advection coefficients in line with \eqref{eq:Ck-dewitt}, as it
 was working well enough for our purposes of differentiable physics simulation.
 
 \subsubsection*{Precalculating the Advection Matrices}
-\todo{math}
+For finding the structure coefficients of the $\vb{C}_k$ matrices, we can start
+from writing out the advection operator $\text{Advect}(\Phi_i, \phi_j)
+= \curl(\phi_j \cross \Phi_i)$ as
+\begin{align*}
+\curl(\phi_j \cross \Phi_i) = \Big(
+    &\frac{1}{\lambda_i}i_1j_2cos(i_1x)cos(j_2y)sin(j_1x)sin(i_2y)\\
+    &-\frac{1}{\lambda_i}i_2j_1cos(j_1x)cos(i_2y)sin(i_1x)sin(j_2y)
+\Big).
+\end{align*}
+
+\todo{See appendix for math details?}
+
+The trigonometric identity $cos(\alpha)sin(\beta)
+= \frac{1}{2}sin(\alpha+\beta)-\frac{1}{2}\sin(\alpha-\beta)$ enables factoring
+to a suitable expression which is in the span of ${\phi_k}$:
+\begin{align*}
+\text{Advect}(\Phi_i,\phi_j)= \frac{1}{4\lambda_{i}}
+    \Big[&(i_1 j_2 - i_2 j_1)\phi_{i_1+j_1, i_2+j_2}\\
+     &-(i_1 j_2 + i_2 j_1)\phi_{i_1+j_1, i_2+j_2}\\
+     &+(i_1 j_2 + i_2 j_1)\phi_{i_1-j_1, i_2+j_2}\\
+     &-(i_1 j_2 - i_2 j_1)\phi_{i_1-j_1, i_2-j_2}\Big]\\
+\end{align*}
+The resulting coefficients are
+\begin{align*}
+    \vb{C}_{i_1+j_1,i_2+j_2}[i,j] &= -\frac{1}{4(i_1^2 + i_2^2)}(i_1j_2-i_2j_1)\\
+    \vb{C}_{i_1+j_1,i_2-j_2}[i,j] &= -\frac{1}{4(i_1^2 + i_2^2)}(i_1j_2+i_2j_1)\\
+    \vb{C}_{i_1-j_1,i_2+j_2}[i,j] &= -\frac{1}{4(i_1^2 + i_2^2)}(i_1j_2+i_2j_1)\\
+    \vb{C}_{i_1-j_1,i_2-j_2}[i,j] &= -\frac{1}{4(i_1^2 + i_2^2)}(i_1j_2-i_2j_1).\\
+\end{align*}
+
+\textbf{Note:} We are using $\vb{k} = (k_x, k_y) = (k_1, k_2)$. A single
+(non-vector) $k$ is also used for indexing over all of the basis fields --
+a slight, but very useful abuse of notation, stemming from the fact that
+a suitable remapping from vector wave lengths $(k_1, k_2)$ to positive integers
+is necessary in an implementation.
 
 \todo{I didn't come across any alternative naming convention to denote the
 advection, that is not a function named with a whole word.}
