@@ -344,7 +344,7 @@ no control over the natural flow of the fluid besides supplying an initial
 $\vb{w}_0$ vector.
 
 \subsection{Control Force Estimation}\label{section:cfe}
-In this scenario, we are optimizing for a force vector $\vb{f} \in
+In this scenario, we optimize for a force vector $\vb{f} \in
 \mathbb{R}^{t\times N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as
 external force to each timestep of an eigenfluid, some initial positions
 $\vb{p}_0$ will be advected to target positions $\vb{p}_t$ after $t$ timesteps:
@@ -387,7 +387,7 @@ Results of the optimization are shown in figure~\ref{fig:f_optim}
 \end{figure}
 
 \subsection{Neural Network Training}\label{section:nn-training}
-\todo{Finish this intro to NN. What else to write about?}
+\todo{Formulate the NN as a function, write what we are optimizing for.}
 
 Figure~\ref{fig:nn-architecture} gives an overview of our \ac{NN} architecture.
 
@@ -399,8 +399,8 @@ equation~\eqref{eq:nn-layers-math}.
 \input{figures/nn-architecture.tex}
 
 \subsection*{Overfitting to a single training sample}
-We overfit the \ac{NN} to a single training sample. We plot the results of
-the time evolution on figure~\ref{fig:NN-overfit}. We observe that a reduced
+We overfit the \ac{NN} to a single training sample. Plotting the results of
+the time evolution on figure~\ref{fig:NN-overfit}, we observe that a reduced
 degress of freedom can yield comparable, or even better results with the same
 setup, and training time. 
 
@@ -424,8 +424,8 @@ overlapping, $U=40$ unique, and $T=5$  trivial sample points.}
 
 \subsection*{Training}
 We generate $2000$ samples, using $1800$ for training, and $200$ for validation.
-Using $N=16$ basis fields, we train a \ac{NN} for the same \ac{CFE} problem as
-detailed above. 
+Using $N=16$ basis fields, we train a \ac{NN} for the same control force
+estimation problem as detailed above. 
 
 We generate further data the \ac{NN} has not seen during training to further
 test generalization. 
