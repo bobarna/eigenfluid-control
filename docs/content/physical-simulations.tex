@@ -26,17 +26,60 @@ where $\mathcal{P}$ models the physical behavior of the system, and $\vb{y}(t)$
 denotes an (optional) external force factor. 
 
 \subsection{Numerical Methods}
-Analytic solutions (i.e. closed-form expressions) can be found usually only for
-very simple \acfp{PDE}. 
+Analytic solutions (i.e. closed-form expressions) can be found only for a very
+small subset of \acfp{PDE}. The main idea behind numerical methods is to
+discretize an equation, reducing a continuous equation (such as \ref{eq:pde}) to
+a finite number of unknowns. We discretize the temporal dimension by introducing
+a step time $\Delta t$. For spatial dimensions, a typical solution is discretizing
+on by assigning values to grid cells or particles: we call these Eulerian, and
+Lagrangian perspective, respectively.
 
-\todo{Write only about things that come up later on:}
+As we introduce only a small subset of numerical methods, we refer to
+\cite{Baraff1997PhysicallyBM} to give an introduction to numerically
+approximating \acfp{PDE} from a computer graphics perspective for use in
+physically based modeling. They discuss the respective shortcomings of the
+techniques in a visual way.
+
+Euler's method (introduced back in 1768) starts with an initial value, and steps
+along the tangent of the function. Given a first order \acf{ODE} 
+$$\dv{x(t)}{t} = f(x,y)$$ describing the derivative of a function $x(t) = y$,
+and starting with an initial condition $x_0$, $y_0$, and step size
+$\Delta t$ at time $t_0$,
+an Euler step 
+$$y_1 = y_0 + \Delta t f(x_0, y_0)$$
+gives the $y_1$ estimation for $x(t_0 + \Delta t)$. With this, we can compute
+$f(x_1, y_1)$ and so on, giving us an estimated trajectory for $x(t)$. Note that
+$y_n \neq x(t_0 + n \Delta t)$, as the function $x(t)$ is unknown. 
+
+Euler's method gives us a first order approximation of the function. The
+\textit{midpoint method} achieves second order accuracy by evaluating the
+derivative at an intermediate half step:
+\begin{align*}\label{eq:midpoint}
+  \tilde{y} &= y_0 + \frac{\Delta t}{2} f(x_0, y_0) \\
+  y_1 &= y_0 + \Delta t f(x_0+ \Delta t /2, \tilde{y}).
+\end{align*}
+
+The midpoint is actually a $2^{nd}$ order \acf{RK} method. The \ac{RK}
+family of integrators can be used to construct integrators of arbitrary order.
+In practice, the $4^{th}$ order \ac{RK} gives a good compromise between accuracy
+and computation cost:
+\begin{align*}
+  k_1 &= f(x_0, y_0) 
+      &\qq*{(compute a first estimate of the slope)}\\
+  k_2 &= f(x_0+\Delta t/2, y_0+\Delta t / 2 k_1) 
+      &\qq*{(predict the tangent at midpoint)}\\
+  k_3 &= f(x_0+\Delta t/2, y_0+\Delta t / 2 k_2) 
+      &\qq*{(correct the estimate)}\\
+  k_4 &= f(x_0+\Delta t, y_0+\Delta t k_3) 
+      &\qq*{(predict slope with full step)}\\
+  y_0 &= y_0 + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4) 
+      &\qq*{(finally, perform step with weighted slopes).}
+\end{align*}
+
+Choosing a good $\Delta t$ is very important for these explicit integration
+techniques to prevent instability problems, and give reasonable accuracy. 
+
 \todo{
-  Numerical Integration:
-  \begin{itemize}
-    \item Euler Step
-    \item Midpoint
-    \item RK4
-  \end{itemize}
   Finite Differences:
   \begin{itemize}
     \item Replace domain by a finite number of discrete points.
@@ -53,7 +96,6 @@ very simple \acfp{PDE}.
     \item Function space is constructed by decomposing domain into a set of
       "finite elements" and defining interpolation functions for them
   \end{itemize}
-  $\to$ Finite number of unknowns
 }
 
 \section{Differentiable Physics}
