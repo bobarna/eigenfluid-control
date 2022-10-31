@@ -43,9 +43,9 @@ solving these simpler equations:
 
 A generic quantity $q$ is used in the advection equation, because as we also
 show later on in our experiments, we may be interested in advecting other field
-quantities than just the velocity $\vb{u}$. For the advection part, we develop
-an algorithm called $\text{Advect}(\vb{u}, \Delta t, q)$: it advects quantity
-$q$ through the velocity field $\vb{u}$ for a time interval $\Delta t$. 
+quantities than just the velocity $\vb{u}$. For the advection part, the
+$\text{Advect}(\vb{u}, \Delta t, q)$ algorithm is introduced: it advects
+quantity $q$ through the velocity field $\vb{u}$ for a time interval $\Delta t$. 
 
 For the external forces, any traditional numerical integration approach, such as
 forward Euler can be used: $\vb{u}^{t+1} = \vb{u}^t + \Delta t \vb{f}$.
@@ -141,8 +141,11 @@ $\lambda_{\vb{k}} = -(k_1^2 + k_2^2)$ is the eigenvalue, and $\eta_{\vb{k}}
 = \frac{1}{-\lambda_{\vb{k}}} = \frac{1}{k_1^2 + k_2^2}$ is a normalization
 parameter.  \cite{scalable-eigenfluids} use $\frac{1}{\sqrt{-\lambda}}
 = \frac{1}{\sqrt{k_1^2 + k_2^2}}$ for normalization, but we keep the non-root
-version, as we did not notice any subtantial difference between the two during
+version, as we did not observe any noticeable difference between the two during
 implementation.
+
+\todo{The above last sentence was edited. ``did not observe any noticeable
+difference between the two''}
 
 As an example, $\Phi_{4,3}(x,y)$ is visualized on figure~\ref{fig:phi-example}.
 In appendix~\ref{appendix:first_16}, we also plot the first $16$ basis fields.
@@ -217,8 +220,8 @@ introduced by \cite{ModelReductionFluidSim}:
 \end{equation}
 noting improvements such as preserving the anti-symmetry of the tensor by
 construction, i.e. $\mathfrak{C}(g,h,i) = -\mathfrak{C}(h,g,i)$. We keep with
-calculating the advection coefficients in line with \eqref{eq:Ck-dewitt}, as it
-was working well enough for our purposes of differentiable physics simulation.
+\eqref{eq:Ck-dewitt}, when calculating the advection coefficients, as it was
+working well enough for our purposes of differentiable physics simulation.
 
 \subsubsection*{Precalculating the Advection Matrices}
 For finding the structure coefficients of the $\vb{C}_k$ matrices, we can start
@@ -256,14 +259,6 @@ The resulting coefficients are
 a slight, but very useful abuse of notation, stemming from the fact that
 a suitable remapping from vector wave lengths $(k_1, k_2)$ to positive integers
 is necessary in an implementation.
-
-\todo{I didn't come across any alternative naming convention to denote the
-advection, that is not a function named with a whole word.}
-
-
-
-
-
 
 
 
