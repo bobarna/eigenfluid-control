@@ -2,19 +2,19 @@
 \label{chapter:controlling-laplacian-eigenfluids}
 Many real world applications require us to optimize for some parameters of
 a physics-based problem. A toy example would be to optimize for some initial
-angle and velocity of a projectile to hit some target \todo{Refer back to the
-learning to throw example}. As a more involved example, \cite{MinDrag} address
-finding the best shape to minimize drag. These kinds of inverse problems have
-been around for quite some time in engineering applications.
+angle and velocity of a projectile to hit some target (see
+figure~\ref{fig:learning-to-throw}). As a more involved example, \cite{MinDrag}
+address finding the best shape to minimize drag. These kinds of inverse problems
+have been around for quite some time in engineering applications.
 
 Building on all of the previous ideas, we now introduce our investigation into
 the use of eigenfluids in fluid control problems, making use of their explicit
-closed form description of a velocity field (\todo{link to equation}) to derive
-gradients used for optimization. Our main proposition is to achieve
+closed-form description of a velocity field (equation~\eqref{eq:explicit-u}) to
+derive gradients used for optimization. Our main proposition is to achieve
 reduced-order modeling-like speed increase: in lieu of representing the fluid on
 a grid, we reconstruct the velocity field only at discrete points in space,
 while simulating the dynamics of the fluid in a reduced dimensional
-space.\todo{Link to eq.}
+space as in equation~\eqref{eq:u-lin-comb}.
 
 In the following, we showcase different optimization scenarios, where we try out
 different aspects of controlling eigenfluids via \acf{DP} gradients. (See
@@ -25,8 +25,9 @@ We start with examples of "traditional" optimization scenarios. By
 optimization technique -- in our case, \acf{GD}. Moving further, we look for
 generalized solutions to a set of problems by training \acfp{NN}.
 
-We implemented all of our experiments using $\Phi_{Flow}$
-(\cite{holl2019pdecontrol}).
+After trying out multiple recent frameworks aimed at differentiable simulations
+(\cite{warp2022}, \cite{difftaichi}), we implemented all of our experiments
+using $\Phi_{Flow}$ (\cite{holl2019pdecontrol}).
 
 \section{Matching Velocities}\label{section:matching-velocities}
 To verify the feasibility of our technique before moving on to more involved
@@ -91,12 +92,13 @@ though the optimization had absolutely no knowledge of $\vb{w}^*$, only
 a comparison with a precomputed $\vb{u^*}$ velocity field at timestep $100$, the
 optimized $\vb{w}_{optim}$ vector already starts to look similar to $\vb{w}^*$.
 Keep in mind that this is not guaranteed at all, as highlighted with the
-\todo{link to learning to throw example}. In some other cases of running this
-optimization setup, we also observed $\vb{w}_{optim}$s that are completely
-different from $\vb{w}^*$. Due to the physical constraints of the eigenfluids
-simulation, in these cases the optimization could not change any of the $16$
-values of $\vb{w}_{optim}$ locally in a way that would further reduce the loss
-below some small number, and was stuck in a local minima of the parameter space.
+learning to throw example on figure~\ref{fig:learning-to-throw}. In some other
+cases of running this optimization setup, we also observed $\vb{w}_{optim}$s
+that are completely different from $\vb{w}^*$. Due to the physical constraints
+of the eigenfluids simulation, in these cases the optimization could not change
+any of the $16$ values of $\vb{w}_{optim}$ locally in a way that would further
+reduce the loss below some small number, and was stuck in a local minima of the
+parameter space.
 
 Although there are a number of ways to tweak this setup, we can already verify
 from these results that  the flow of the gradients is working, and is ready to
@@ -151,9 +153,9 @@ The work of \cite{holl2019pdecontrol} formulated this problem in an
 Eulerian representation, with explicitly simulating the shapes as scalar marker
 densities being advected by the velocity field of the simulated fluid. 
 
-Playing to the strength of the eigenfluids method, our method makes use of
-an explicit formulation of the fluid velocity $\vb{u}$ as described in
-section~\todo{ref section}. We stay independent of a grid resolution, and
+Playing to the strength of the eigenfluids method, our method makes use of an
+explicit, closed-form description of the fluid velocity $\vb{u}$ as in
+equation~\eqref{eq:explicit-u}. We stay independent of a grid resolution, and
 approximate the 2D shapes via a set of sample points. We reconstruct the
 velocity field only partially at these discrete points as needed for the
 advection of these particles. This results in both a faster fluid simulation as
@@ -199,7 +201,7 @@ $\vb{p}$ in $\vb{u} = \mathcal{R}\vb{w}$, the velocity field reconstructed from
 $\vb{w}$.  We use a simple mean-square error (also known as squared $L_2$ norm)
 for measuring the error.
 
-\subsection*{Sampling}
+\subsection{Sampling}\label{section:sampling}
 Advection of some scalar quantity in a fluid is an abstract problem that
 describes many real-world phenomena. We can think of the transport of some ink
 dropped into water, clouds in the air, or some buoyant smoke rising. Phenomena
@@ -217,12 +219,13 @@ density function at discrete particle positions, thus rephrasing the process in
 a Lagrangian way.
 
 In the context of Laplacian eigenfluids, a Lagrangian viewpoint is especially
-inviting, as the explicit description of the fluid velocity $\vb{u}$ \todo{Refer
-to equation} allows us to reconstruct $\vb{u}$ only partially, while keeping the
-simulation of the fluid dynamics in a reduced dimensional space. In a forward
-physics simulation, this can already lead to substantial speed-ups, but this
-formulation seems especially promising when the backpropagation of variables is
-desired, such as the optimization scenarios introduced herein.
+inviting, as the explicit description of the fluid velocity $\vb{u}$
+(equation~\eqref{eq:explicit-u}) allows us to reconstruct $\vb{u}$ only
+partially, while keeping the simulation of the fluid dynamics in a reduced
+dimensional space. In a forward physics simulation, this can already lead to
+substantial speed-ups, but this formulation seems especially promising when the
+backpropagation of variables is desired, such as the optimization scenarios
+introduced herein.
 
 A straightforward way to define a shape is
 \begin{equation}\label{eq:binary-shape-function}
@@ -310,10 +313,10 @@ a triangle and a circle shape.
   \label{fig:sampling}
 \end{figure}
 
-\todo{Would it make sense to write any of these as an Algorithm? (Maybe in
-a parallel universe, haha.)}
+\todo{Would it make sense to write any of these as an Algorithm? It would be
+nice to refer back to them as Algorithm X later on.}
 
-\subsection{Initial Velocity}\label{section:initial-velocity}
+\subsection{Optimizing for Initial Velocity}\label{section:initial-velocity}
 
 \todo{Finish this section}
 $$
@@ -384,9 +387,14 @@ Results of the optimization are shown in figure~\ref{fig:f_optim}
 \end{figure}
 
 \subsection{Neural Network Training}\label{section:nn-training}
-\todo{Write about fully connected architecture...}
+\todo{Finish this intro to NN. What else to write about?}
 
 Figure~\ref{fig:nn-architecture} gives an overview of our \ac{NN} architecture.
+
+Each layer is contructed exactly as described in
+equation~\eqref{nn-single-layer-math} with a ReLU non-linearity, making the
+resulting concatenation of layers the same as in
+equation~\eqref{eq:nn-layers-math}.
 
 \input{figures/nn-architecture.tex}
 

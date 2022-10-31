@@ -93,6 +93,9 @@ subtracting its spatial gradient.}
 
 \section{The Laplacian Eigenfunction Method}
 \label{section:laplacian-eigenfluids}
+
+\todo{Finish writing this section.}
+
 \cite{dewitt} introduced the method of using Laplacian eigenfunctions for fluid
 simulation. \cite{scalable-eigenfluids} addressed scalability and generalization
 issues, and referred to the technique as eigenfluids. 
@@ -100,7 +103,9 @@ issues, and referred to the technique as eigenfluids.
 The main idea is to express the velocity field $\vb{u}(\vb{x})$ via the linear
 combination of $N$ global functions:
 
-$$\vb{u}(\vb{x})=\sum_i^N w_i \Phi_i(\vb{x}),$$
+\begin{equation}\ref{eq:u-lin-comb}
+\vb{u}(\vb{x})=\sum_i^N w_i \Phi_i(\vb{x}),
+\end{equation}
 
 where the elements of $\vb{w} = [w_0, \dots, w_N]$, are called \textit{basis
 coefficients}, and ${\Phi_i}$ are \textit{basis functions}.
@@ -121,8 +126,8 @@ a free-slip boundary condition, our basis functions are fully characterized by
 where $\textbf{n}$ is the normal vector at boundary $\partial D$.
 
 Closed-form expressions of $\Phi_{\vb{k}}$ exist on the two dimensional $D \in
-[0, \pi] \times [0, \pi]$ square domain. \todo{cite} Notating the two scalar
-components in the x and y directions $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
+[0, \pi] \times [0, \pi]$ square domain (\cite{chengfield}). Notating the two
+scalar components in the x and y directions $\Phi_{\vb{k}} =(\Phi_{\vb{k}, x},
 \Phi_{\vb{k},y})$, we can write them as
 \begin{align*}\label{eq:explicit-u}\numberthis
     \Phi_{\vb{k},x}(x, y) &= \eta_{\vb{k}}

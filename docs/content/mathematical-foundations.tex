@@ -180,9 +180,9 @@ result is simply the Laplacian of each component.
 
 Essentially, the vector Laplacian is what we have been building towards so far,
 as this operator is going to be the cornerstone of the eigenfluids simulation
-technique.\todo{link to section} As such, we will show some important properties
-of this operator. We will return to these in later sections.\todo{link to
-section}
+technique in section~\ref{section:laplacian-eigenfluids}. As such, we will show
+some important properties of this operator, and will return to these in later
+sections.
 
 The vector Laplacian of a vector field $\vb{f}$ is defined as
 
@@ -306,11 +306,11 @@ optimization can be written out as:
 \end{align*}
 
 which is exactly what we will be utilizing in our first couple of optimization
-scenarios in chapter~\todo{Reference chapter}. Note that as our loss is
-scalar-valued, the transposed Jacobian matrix of $L$ has the same dimensionality
-as the input $\vb{x}$, i.e. $J_{L}^T \in \mathbb{R}^{N\times 1};$ $\vb{x} \in
-\mathbb{R}^{N\times 1}$, making them both a column vector of size $N$, which
-means that they can indeed be added together. 
+scenarios in chapter~\ref{chapter:controlling-laplacian-eigenfluids}. Note that
+as our loss is scalar-valued, the transposed Jacobian matrix of $L$ has the same
+dimensionality as the input $\vb{x}$, i.e. $J_{L}^T \in \mathbb{R}^{N\times 1};$
+$\vb{x} \in \mathbb{R}^{N\times 1}$, making them both a column vector of size
+$N$, which means that they can indeed be added together. 
 
 We can also think about these optimization steps as continuously moving towards
 some locally observed lowest point in the error landscape. The gradient
