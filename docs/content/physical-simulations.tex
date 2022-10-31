@@ -128,12 +128,34 @@ $\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$.
 
 \subsection{Loss Functions for Differentiable Physics}
 \label{dp-loss}
+In the following optimization scenarios, given a model $\mathcal{M}$ of
+a physical system with initial state $\mathcal{M}^0$, and observed part
+$o(\mathcal{M})$, our goal is to match some target observation $o*$ at time $t$.
+With $\mathcal{P}$ describing the time evolution of $\mathcal{M}$, we can write
+the resulting loss function as 
+\begin{equation}\label{eq:physics-loss-general}
+  L(\mathcal{M}^0, o^*) = \abs{o\Big(\mathcal{P}^t(\mathcal{M}^0)\Big) - o^*},
+\end{equation}
+where $\abs{\cdot}$ denotes some distance metric between the observations.
 
-\todo{Observation loss at end step should match target observation.}
-\todo{Give only a high-level (mathematical) overview, and hatch it out more in
-the problem statement part later on.}
+As a toy example, in section~\ref{section:comparison-with-supervised-learning},
+$\mathcal{M}$ describes a projectile traveling in the 2D $(x,y)$ plane. Here,
+$\mathcal{P}$ describes the projectile flying through the air, colliding with
+the ground floor at $y=0$.
+
+In our experiments in chapter~\ref{chapter:controlling-laplacian-eigenfluids},
+we describe a fluid flow, with some particles $p$ advected in its velocity field
+$\vb{u}$ with $\mathcal{M}$, with $\mathcal{P}$ solving the Navier-Stokes
+equations~\ref{eq:NSE}.
+
+Phrasing equation~\ref{eq:physics-loss-general} in a general way, we highlight
+that there is a vast applicability of physics-based loss functions well beyond
+our discussion and examples. The general requirement of solving a problem with
+\ac{DP} is a differentiable solver for $\mathcal{P}$, which is often not readily
+available.
 
 \subsection{Comparison with Supervised Learning}
+\label{section:comparison-with-supervised-learning}
 Figure~\ref{fig:learning-to-throw} shows the results of a comparison between
 a supervised and \acf{DP} manner of teaching two networks for solving
 a ballistic problem. The main setting is an object being thrown from position
