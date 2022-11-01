@@ -188,7 +188,7 @@ a set of initial points $\vb{p}_0 = \left[\vb{p}_0^0,\dots, \vb{p}_0^i\right]$
 to line up with target positions $\vb{p}_t = \left[\vb{p}_t^0, \dots,
 \vb{p}_t^i\right]$.  We formulate this as 
 
-\begin{equation}
+\begin{equation}\label{eq:advecting-particles-loss}
   L(\vb{w}, \vb{p}_0, \vb{p}_t)
   = \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}) - \vb{p}_t\right|_2^2 
   = \sum_{i}\left|\mathcal{P}^{t}(p_0^i, \vb{w}) - p_t^i\right|_2^2, 
@@ -313,47 +313,114 @@ a triangle and a circle shape.
   \label{fig:sampling}
 \end{figure}
 
-\subsection{Optimizing for Initial Velocity}\label{section:initial-velocity}
+\subsection{Optimizing for Initial Velocity}\label{section:initial-velocity} 
+As introduced the problem in the beginning of the chapter (see
+equation~\ref{eq:advecting-particles-loss}), our goal is to find an initial
+velocity field $\mathcal{R}\vb{w} = \vb{u}$ that advects points $\vb{p}_0$ to
+line up with target positions $\vb{p_t}$ after $t$ steps. 
+We can write optimizing for base coefficients $\vb{w}$ as:
 
-\todo{Finish this section}
-$$
-\arg\min_{\vb{w}} \left| \mathcal{P}^{t}(\vb{p}^0, \vb{w})
-  - \vb{p}^t\right|_2^2
-  $$
+$$\arg\min_{\vb{w}} \left| \mathcal{P}^{t}(\vb{p}^0, \vb{w})
+- \vb{p}^t\right|_2^2.$$
+
 Making use of the differentiability of our physical simulator $\mathcal{P}$, and
 the multivariable chain rule for deriving the gradient of the above
-$\mathcal{P}^t$ function composition, we can derive its gradient with respect to
-the initial coefficients: $$\frac{\partial
-\mathcal{P}^t(\vb{w},\vb{p})}{\partial \vb{w}}.$$
+$\mathcal{P}^t = \mathcal{P}\circ\dots\circ\mathcal{P}$ function composition, we
+can derive its gradient with respect to the initial coefficients:
+$$\frac{\partial \mathcal{P}^t(\vb{w},\vb{p})}{\partial \vb{w}}.$$
 
-Finally, we simply iterate a \ac{GD} optimizer with learning rate $\lambda$ to
-find a (good enough) solution for our above minimization problem:
+Finally, as introduced in \eqref{eq:gd-steps}, we simply iterate a \ac{GD}
+optimizer to find a (good enough) solution for our above minimization problem:
 
 $$\vb{w}_{\text{better}} = \vb{w} - \lambda
 \frac{
-    \partial\text{Loss}(\vb{w}, \vb{p}_0, \vb{p}_t)
+    \partial L(\vb{w}, \vb{p}_0, \vb{p}_t)
 }{
     \partial \vb{w}
-}$$
+},$$
+
+where $L$ is the same as in equation~\eqref{eq:advecting-particles-loss}:
+\begin{equation*}
+  L(\vb{w}, \vb{p}_0, \vb{p}_t)
+  = \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}) - \vb{p}_t\right|_2^2.
+\end{equation*}
 
 The main difficulty of this non-linear optimization problem lies in that we have
 no control over the natural flow of the fluid besides supplying an initial
 $\vb{w}_0$ vector.
 
+We showcase two different setups in Figure~\ref{fig:points-vel-only}, with the
+details of both experiments described in Table~\ref{table:vel-optim-details}.
+
+\begin{table}[!h]
+  \caption{Details of the 2 optimization scenarios shown in
+  Figure~\ref{fig:points-vel-only}}
+  \label{table:vel-optim-details}
+  \centering
+\begin{tabular}{r|cc}
+  \multicolumn{1}{l}{}               
+  & \multicolumn{1}{|l}{\textbf{Figure~\ref{fig:points-vel-only-small}}}
+  & \multicolumn{1}{l}{\textbf{Figure~\ref{fig:points-vel-only-big}}}\\ \hline
+N                                  & 16                                     & 36                                     \\ \hline
+Sampling size for smoke simulation & 32                                     & 32                                     \\ \hline
+Eigenfluid initialization time     & 6.19 sec                               & 68.47 sec                              \\ \hline
+Time for 51 optimization steps     & 108.05 sec                             & 230.48 sec                             \\ \hline
+Initial loss                       & 2.3                                    & 2.19                                   \\ \hline
+Final loss                         & 0.08                                   & 0.09                                   \\ \hline
+Number of overlapping points $O$                                  & 0                                      & 30                                     \\ \hline
+Number of unique points $U$                                  & 0                                      & 30                                     \\ \hline
+Number of trivial points $T$                                  & 5                                      & 0                                      \\ \hline
+\end{tabular}
+\end{table}
+\begin{figure}
+  \centering
+  \begin{subfigure}{\textwidth}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+      \centering
+      \includegraphics[width=0.7\textwidth]{figures/points-velocity-only/T5/start_target.png}
+      \caption{$O=0$, $U=0$, $T=5$} 
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+      \centering
+      \includegraphics[width=0.7\textwidth]{figures/points-velocity-only/O30_U30_T0/start_target.png}
+      \caption{$O=30$, $U=30$, $T=0$}
+    \end{subfigure}
+    \caption{Initial (blue), and target (red) sample points.}
+  \end{subfigure}\\
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/points-velocity-only/T5/trajectory_horizontal.png}
+    \caption{Using $N=16$ basis fields, and the $T=5$ trivial points.}
+    \label{fig:points-vel-only-small}
+  \end{subfigure}\\
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/points-velocity-only/O30_U30_T0/trajectory_horizontal.png}
+    \caption{Using $N=36$ basis fields, and using a total of $60$ sampling
+    points.}
+    \label{fig:points-vel-only-big}
+  \end{subfigure}\\
+  \caption{Solving the shape transition problem by optimizing for an initial
+  coefficient vector $\vb{w}$ without any further control over the simulation.}
+  \label{fig:points-vel-only}
+\end{figure}
+
 \subsection{Control Force Estimation}\label{section:cfe}
-In this scenario, we optimize for a force vector $\vb{f} \in
-\mathbb{R}^{t\times N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as
-external force to each timestep of an eigenfluid, some initial positions
-$\vb{p}_0$ will be advected to target positions $\vb{p}_t$ after $t$ timesteps:
+In this scenario, we optimize for a force vector $\vb{f} \in \mathbb{R}^{t\times
+N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as external force at each
+timestep of an eigenfluid simulation, some initial positions $\vb{p}_0$ will be
+advected to target positions $\vb{p}_t$ after $t$ timesteps:
 
 $$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})
   - \vb{p}_t\right|_2^2,$$
 
-  where $\mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f}) = \mathcal{P} \circ \dots
-  \circ \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})$ denotes simulating the
-  physical system for $t$ time steps, applying 
+where $\mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f}) = \mathcal{P} \circ \dots
+\circ \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})$ denotes simulating the
+physical system for $t$ time steps, applying $\vb{f}_t$ force at each
+timestep.
 
-Results of the optimization are shown in figure~\ref{fig:f_optim}
+Results of the optimization are shown in Figure~\ref{fig:f_optim}
 
 \begin{figure}
   \centering
@@ -366,7 +433,8 @@ Results of the optimization are shown in figure~\ref{fig:f_optim}
   \begin{subfigure}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/f-optim/trajectory_horizontal.png}
-    \caption{Optimized trajectory of the sample points.}
+    \caption{Optimized trajectory of the sample points underlying the
+    optimization.}
   \end{subfigure}\par\medskip
   \begin{subfigure}{\textwidth}
     \centering
@@ -379,23 +447,45 @@ Results of the optimization are shown in figure~\ref{fig:f_optim}
   \label{fig:f_optim}
 \end{figure}
 
+\pagebreak
+\todo{Decide if a pagebreak is necessary here with the final text.}
 \subsection{Neural Network Training}\label{section:nn-training}
-\todo{Formulate the NN as a function, write what we are optimizing for.}
+We generalize the \acf{CFE} problem by defining a function
+$\vb{f}(\vb{p}_0,\vb{p}_t,\vb{w}): \mathbb{R}^{2\cdot2(O+U+T)+N}\to
+\mathbb{R}^N$, that gives a force vector $\vb{f} \in \mathbb{R}^N$ to be
+applied at the current timestep to move points $\vb{p}_0$ to $\vb{p}_t$ in the
+next timestep. Its inputs are the $(x,y)$ coordinates of $\vb{p}_0$ and
+$\vb{p}_t$, as well as the basis coefficient vector $\vb{w}$ at the current
+timestep concatenated after each other, giving $2\cdot2(O+U+T)+N$ values, where
+$O$, $U$, and $T$ denote the number of overlapping, unique, and trivial sample
+points, respectively, as introduced in section~\ref{section:sampling}.
 
-Figure~\ref{fig:nn-architecture} gives an overview of our \ac{NN} architecture.
+We approximate the \ac{CFE} function $\vb{f}$ with a Control Force Estimator
+\acf{NN} $\vb{f}(\vb{p}_0, \vb{p}_t, \vb{w}, \vb{\theta})$. 
 
 Each layer is contructed exactly as described in
-equation~\eqref{nn-single-layer-math} with a ReLU non-linearity, making the
+equation~\eqref{nn-single-layer-math} with ReLU non-linearities, making the
 resulting concatenation of layers the same as in
-equation~\eqref{eq:nn-layers-math}.
+equation~\eqref{eq:nn-layers-math}. Figure~\ref{fig:nn-architecture} gives an
+overview of our \ac{NN} architecture. 
 
 \input{figures/nn-architecture.tex}
 
+As the input size to the \ac{NN} is dependent on the specific problem, the
+number of trainable parameters also varies, and a new \ac{NN} has to be trained
+when using a different number of basis fields, or different number of total
+sample points. As an example, for $N=16$ basis fields, and $75$ sample points,
+the \ac{NN} has $337 392$ trainable parameters.
+
 \subsection*{Overfitting to a single training sample}
-We overfit the \ac{NN} to a single training sample. Plotting the results of
-the time evolution on figure~\ref{fig:NN-overfit}, we observe that a reduced
-degress of freedom can yield comparable, or even better results with the same
-setup, and training time. 
+Testing the setup, we overfit the \ac{NN} to a single training sample. Plotting
+the results of the time evolution on figure~\ref{fig:NN-overfit}, we observe
+that a reduced degress of freedom can yield comparable, or even better results
+with the same setup, and training time. 
+
+Using an Adam \cite{adam} optimizer with learning rate $10^{-3}$, the results
+shown in Figure~\ref{fig:NN-overfit} were achieved in $260$ epochs. The
+training took $53.94$ seconds.
 
 \begin{figure}
   \centering
@@ -417,24 +507,35 @@ overlapping, $U=40$ unique, and $T=5$  trivial sample points.}
 
 \subsection*{Training}
 We generate $2000$ samples, using $1800$ for training, and $200$ for validation.
-Using $N=16$ basis fields, we train a \ac{NN} for the same control force
-estimation problem as detailed above. 
+Using $N=16$ basis fields, we train the \ac{NN} for the \ac{CFE} problem
+detailed above. (See Figure~\ref{fig:NN-shape-transition-trian}.)
 
-We generate further data the \ac{NN} has not seen during training to further
-test generalization. 
+At the end of the training, we generate further data the \ac{NN} has not seen
+during training to further test generalization.
+(See Figure~\ref{fig:NN-shape-transition-test}.)
+
+Using an Adam \cite{adam} optimizer with learning rate $10^{-3}$, the results
+shown in Figure~\ref{fig:NN-shape-transition} were achieved in $260$ epochs. The
+training took $1201.74$ seconds ($20$ minutes).
+
+As we did not experience any overfitting issues during training, no additional
+regularization schemes were applied. 
 
 \begin{figure}
   \centering
   \begin{subfigure}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/nn-final/trained_trajectories_horizontal.png}
-    \caption{Randomly sampled trajectories from the \textbf{training} data.}
+    \caption{Performance after training on the \textbf{training data}. (Randomly
+    sampled.)}
+    \label{fig:NN-shape-transition-train}
   \end{subfigure}
   \begin{subfigure}{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/nn-final/test_trajectories_horizontal.png}
-    \caption{Randomly sampled trajectories from the previously unseen, randomly
-    generated \textbf{test} set.}
+    \caption{Testing on previously unseen \textbf{test data}. (Randomly
+      sampled.)}
+    \label{fig:NN-shape-transition-test}
   \end{subfigure}
   \caption{Randomly sampled time evolution of controlled shape transition
   tasks. Using $N=16$ basis fields, sampling the smokes on a $32\times 32$ grid,
