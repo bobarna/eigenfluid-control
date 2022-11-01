@@ -101,13 +101,22 @@ $$\curl{\vb{u}(x,y,z) =
 \pdv*{v}{x} - \pdv*{u}{y}
 ).$$
 
-We reduce this formula to two dimensions by taking the third component of
+We can reduce this formula to two dimensions by taking the third component of
 the expression above, as if we were looking at the three-dimensional vector
 field $(u,v,0)$. Thus, the two-dimensional curl is a scalar:
 $$\curl{\vb{u}(x,y)} = 
     \mqty(\pdv*{x} \\ \pdv*{y}) \cross 
     \mqty(u(x,y) \\ v(x,y))
     = \pdv{v}{x} - \pdv{u}{y}.$$
+
+We can also interpret this value as the third component of a three-dimensional
+vector, perpendicular to the vector field $(u,v,0)$:
+$$\curl{\vb{u}(x,y)} = 
+    \mqty(\pdv*{x} \\ \pdv*{y}) \cross 
+    \mqty(u(x,y) \\ v(x,y))
+    = 
+    \mqty(0\\0\\\pdv{v}{x} - \pdv{u}{y}).$$
+
 
 \subsection*{Material Derivative}
 For a velocity $\vb{u}(t,x,y,z) = \mqty(u \\ v \\ w)$, 
