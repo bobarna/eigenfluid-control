@@ -76,7 +76,7 @@ together, a basic fluid simulation algorithm can be written as:
         \State $\widetilde{\vb{u}} 
             \gets \widetilde{\vb{u}} + \Delta t \vb{f}$
         \State $\vb{u}^{n+1}
-        \gets \text{Project}(\widetilde{\vb{u}},\Delta t, \widetilde{\vb{u}})$
+        \gets \text{Project}(\widetilde{\vb{u}},\Delta t)$
             \EndFor \Comment{$[\vb{u}^0, \dots, \vb{u}^t]$ is the simulated
             fluid flow for $t$ time steps.}
 \end{algorithmic}
