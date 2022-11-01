@@ -30,9 +30,9 @@ Analytic solutions (i.e. closed-form expressions) can be found only for a very
 small subset of \acfp{PDE}. The main idea behind numerical methods is to
 discretize an equation, reducing a continuous equation (such as \ref{eq:pde}) to
 a finite number of unknowns. We discretize the temporal dimension by introducing
-a step time $\Delta t$. For spatial dimensions, a typical solution is discretizing
-on by assigning values to grid cells or particles: we call these Eulerian, and
-Lagrangian perspective, respectively.
+a $\Delta t$ step size. For spatial dimensions, a typical solution is
+discretization by assigning values to grid cells or particles: we call these the
+Eulerian, and the Lagrangian perspective, respectively.
 
 \subsubsection*{Numerical Integration with Explicit Schemes}
 \label{section:numerical-integration}
@@ -108,11 +108,22 @@ $\pdv*{\vb{u}(t_{i+1})}{\vb{y}(t_i)}$.
 
 \subsection{Loss Functions for Differentiable Physics}
 \label{dp-loss}
-In the following optimization scenarios, given a model $\mathcal{M}$ of
-a physical system with initial state $\mathcal{M}^0$, and observed part
-$o(\mathcal{M})$, our goal is to match some target observation $o*$ at time $t$.
-With $\mathcal{P}$ describing the time evolution of $\mathcal{M}$, we can write
-the resulting loss function as 
+In chapter~\ref{chapter:controlling-laplacian-eigenfluids}, we will introduce
+optimization scenarios, where we take a physical simulation, and by tweaking its
+parameters, our goal is to reach a target state. To measure ``reaching a target
+state'', and how good we are doing, we have to introduce a measure for the
+goodness of a solution. More specifically, this measure will be given as a loss
+function, measuring how \textit{bad} we are doing, conventionally called the
+\textit{error}. Knowing how to decrease this error lets us find a better solution.
+A gradient is something that tells us exactly this: how a change in an input
+variable (i.e. simulation parameter) changes the output (i.e. the error from the
+loss function). With this idea in the back of our mind, we first lay some
+groundwork for setting up these kinds of problems.
+
+Given a model $\mathcal{M}$ of a physical system with initial state
+$\mathcal{M}^0$, and observed part $o(\mathcal{M})$, our goal is to match some
+target observation $o^*$ at time $t$.  With $\mathcal{P}$ describing the time
+evolution of $\mathcal{M}$, we can write the resulting loss function as 
 \begin{equation}\label{eq:physics-loss-general}
   L(\mathcal{M}^0, o^*) = \abs{o\Big(\mathcal{P}^t(\mathcal{M}^0)\Big) - o^*},
 \end{equation}
@@ -124,15 +135,15 @@ $\mathcal{P}$ describes the projectile flying through the air, colliding with
 the ground floor at $y=0$.
 
 In our experiments in chapter~\ref{chapter:controlling-laplacian-eigenfluids},
-we describe a fluid flow, with some particles $p$ advected in its velocity field
-$\vb{u}$ with $\mathcal{M}$, with $\mathcal{P}$ solving the Navier-Stokes
+$\mathcal{M}$ describes some particles $\vb{p}$ advected in a fluid flowing with
+velocity $\vb{u}$, and $\mathcal{P}$ solving the Navier-Stokes
 equations~\ref{eq:NSE}.
 
-Phrasing equation~\ref{eq:physics-loss-general} in a general way, we highlight
-that there is a vast applicability of physics-based loss functions well beyond
-our discussion and examples. The general requirement of solving a problem with
-\ac{DP} is a differentiable solver for $\mathcal{P}$, which is often not readily
-available.
+Phrasing equation~\ref{eq:physics-loss-general} in a general way, our intent is
+to highlight that there is a vast applicability of physics-based loss functions
+well beyond our discussion and examples. The general requirement of solving
+a problem with \ac{DP} is a differentiable solver for $\mathcal{P}$, which is
+often not readily available.
 
 \subsection{Comparison with Supervised Learning}
 \label{section:comparison-with-supervised-learning}
