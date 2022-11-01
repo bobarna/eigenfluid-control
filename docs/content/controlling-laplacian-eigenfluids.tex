@@ -50,7 +50,7 @@ where $\mathcal{P}^t(\vb{w}) = \mathcal{P} \circ \mathcal{P} \dots \circ
 
 For the optimization, we initialize a $\vb{w}_\text{init} \in \mathbb{R}^N$
 vector with random numbers (from a normal/Gaussian distribution), and run the
-eigenfluid simulation for $t$ timesteps, after which, we measure the error as
+eigenfluid simulation for $t$ time steps, after which, we measure the error as
 given by loss function \eqref{eq:match-vel-loss}. Relying on backpropagation to
 derive the necessary gradients, we use the \ac{GD} optimization method as
 introduced in equations~\eqref{eq:gd-steps} to iteratively find a vector
@@ -67,7 +67,7 @@ well, or even just initialized randomly. Deriving $\vb{u}^*$ as the result of an
 eigenfluid simulation has the added benefit of exposing to us a solution
 $\vb{w}^*$ that we can use to compare with the solution of the optimizer.
 
-We test this setup on two scenarios, with differing the number of timesteps
+We test this setup on two scenarios, with differing the number of time steps
 simulated: first with $t=16$, and then with $t=100$.
 
 For $t=16$ simulation steps, starting from a loss of around $400$, the first
@@ -79,7 +79,7 @@ Naturally, this very basic method has its limits.  Optimizing for initial
 coefficients based solely on that when reconstructed on a $32\times32$ grid
 after $100$ steps of a non-linear simulation, they should match a given velocity
 field, proved to be a substantially harder problem, as even a relatively small
-error can accumulate into major deviations over these longer timesteps,
+error can accumulate into major deviations over these longer time steps,
 resulting in much less stable gradients. With using the same learning rate, the
 optimization diverged almost instantly. With some tuning of the learning rate
 $\lambda$ in the range of $[10^{-4}, 10^{-8}]$, we were able to get the loss
@@ -89,7 +89,7 @@ initialization.)
 We visualize the results of these two scenarios in
 Figure~\ref{fig:matching-velocities}. It is interesting to observe that even
 though the optimization had absolutely no knowledge of $\vb{w}^*$, only
-a comparison with a precomputed $\vb{u^*}$ velocity field at timestep $100$, the
+a comparison with a precomputed $\vb{u^*}$ velocity field at time step $100$, the
 optimized $\vb{w}_{optim}$ vector already starts to look similar to $\vb{w}^*$.
 Keep in mind that this is not guaranteed at all, as highlighted with the
 learning to throw example on figure~\ref{fig:learning-to-throw}. In some other
@@ -124,7 +124,7 @@ be tested in more advanced scenarios.
     \centering
     \includegraphics[width=0.9\textwidth]{figures/finding-initial-velocities/t_100_coefficients.png}
     \caption{Initial basis coefficients $\vb{w}_{init}$, $\vb{w}_{optim}$, and
-    $\vb{w}^*$, optimizing for velocity field after $100$ timesteps\\}
+    $\vb{w}^*$, optimizing for velocity field after $100$ time steps\\}
     \label{fig:100-timesteps-coeffs}
   \end{subfigure}\par\medskip
   \begin{subfigure}{\textwidth}
@@ -136,7 +136,7 @@ be tested in more advanced scenarios.
   \end{subfigure}
   \caption{Results of optimizing for an initial $\vb{w}_0$ basis coefficient
     vector that matches a target velocity field $\vb{u}^*$ when reconstructed
-    after simulating for $t$ timesteps.
+    after simulating for $t$ time steps.
   }
   \label{fig:matching-velocities}
 \end{figure}
@@ -173,11 +173,11 @@ exert control over the fluid simulation.
     initial points to the desired positions.
   \item Second, we optimize for some force vector $\vb{f}\in \mathbb{R}^{t\times
     N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as external force to each
-    timestep of an eigenfluid simulation, it yields the desired outcome.
+    time step of an eigenfluid simulation, it yields the desired outcome.
   \item Finally, we generalize the problem to looking for a function that exerts
     the necessary control force at time $t$, such that particles currently at
     positions $\vb{p}_t$ end up at target positions $\vb{p}_{t+1}$ at the
-    next timestep. We formulate this third task as a \acf{NN} model in the
+    next time step. We formulate this third task as a \acf{NN} model in the
     form $\vb{f}(\vb{p_t}, \vb{p_{t+1}}, \vb{w}_{t}, \boldsymbol\theta)$, also
     passing in the current basis coefficient vector $\vb{w}_t$, and optimizing
     for its parameters $\boldsymbol\theta$ to yield the desired outcome.
@@ -409,8 +409,8 @@ Number of trivial points $T$                                  & 5               
 \subsection{Control Force Estimation}\label{section:cfe}
 In this scenario, we optimize for a force vector $\vb{f} \in \mathbb{R}^{t\times
 N}$, such that $\vb{f}_t \in \mathbb{R}^N$ applied as external force at each
-timestep of an eigenfluid simulation, some initial positions $\vb{p}_0$ will be
-advected to target positions $\vb{p}_t$ after $t$ timesteps:
+time step of an eigenfluid simulation, some initial positions $\vb{p}_0$ will be
+advected to target positions $\vb{p}_t$ after $t$ time steps:
 
 $$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})
   - \vb{p}_t\right|_2^2,$$
@@ -418,7 +418,7 @@ $$\arg\min_{\vb{f}} \left| \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})
 where $\mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f}) = \mathcal{P} \circ \dots
 \circ \mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f})$ denotes simulating the
 physical system for $t$ time steps, applying $\vb{f}_t$ force at each
-timestep.
+time step.
 
 Results of the optimization are shown in Figure~\ref{fig:f_optim}.
 
@@ -442,7 +442,7 @@ Results of the optimization are shown in Figure~\ref{fig:f_optim}.
     \caption{Smoke advection for qualitative comparison, reconstructed on
     a $100\times 100$ grid.}
   \end{subfigure}\par\medskip
-  \caption{Force optimization results with $16$ timesteps, and using $N=16$
+  \caption{Force optimization results with $16$ time steps, and using $N=16$
   basis fields.}
   \label{fig:f_optim}
 \end{figure}
@@ -452,10 +452,10 @@ Results of the optimization are shown in Figure~\ref{fig:f_optim}.
 We generalize the \acf{CFE} problem by defining a function
 $\vb{f}(\vb{p}_0,\vb{p}_t,\vb{w}): \mathbb{R}^{2\cdot2(O+U+T)+N}\to
 \mathbb{R}^N$, that gives a force vector $\vb{f} \in \mathbb{R}^N$ to be
-applied at the current timestep to move points $\vb{p}_0$ to $\vb{p}_t$ in the
-next timestep. Its inputs are the $(x,y)$ coordinates of $\vb{p}_0$ and
+applied at the current time step to move points $\vb{p}_0$ to $\vb{p}_t$ in the
+next time step. Its inputs are the $(x,y)$ coordinates of $\vb{p}_0$ and
 $\vb{p}_t$, as well as the basis coefficient vector $\vb{w}$ at the current
-timestep concatenated after each other, giving $2\cdot2(O+U+T)+N$ values, where
+time step concatenated after each other, giving $2\cdot2(O+U+T)+N$ values, where
 $O$, $U$, and $T$ denote the number of overlapping, unique, and trivial sample
 points, respectively, as introduced in section~\ref{section:sampling}.
 
@@ -499,7 +499,7 @@ training took $53.94$ seconds.
     \caption{$N=36$ basis fields}
   \end{subfigure}
   \caption{Time evolution of simulating two overfitted \ac{CFE} \acp{NN} to
-  a single shape transition for $16$ timesteps $t=[0\dots15]$. Using $O=30$
+  a single shape transition for $16$ time steps $t=[0\dots15]$. Using $O=30$
 overlapping, $U=40$ unique, and $T=5$  trivial sample points.}
   \label{fig:NN-overfit}
 \end{figure}
@@ -539,6 +539,6 @@ regularization schemes were applied.
   \caption{Randomly sampled time evolution of controlled shape transition
   tasks. Using $N=16$ basis fields, sampling the smokes on a $32\times 32$ grid,
   approximating them with $O=30$ overlapping, $U=40$ unique and $T=5$ trivial
-  sample points, through $16$ timesteps $t=[0\dots15]$.}
+  sample points, through $16$ time steps $t=[0\dots15]$.}
   \label{fig:NN-shape-transition}
 \end{figure}

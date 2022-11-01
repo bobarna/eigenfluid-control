@@ -70,7 +70,7 @@ together, a basic fluid simulation algorithm can be written as:
     \State $\vb{u}^0 \gets \text{an initial divergence-free velocity field}$
     \For{$t = 0, 1, 2 \dots $}
         \State $\Delta t 
-            \gets \text{a suitable timestep to go from $t_n$ to $t_{n+1}$}$
+            \gets \text{a suitable time step to go from $t_n$ to $t_{n+1}$}$
         \State $\widetilde{\vb{u}} 
             \gets \text{Advect}(\vb{u}^n,\Delta t, \vb{u}^n)$
         \State $\widetilde{\vb{u}} 
@@ -78,7 +78,7 @@ together, a basic fluid simulation algorithm can be written as:
         \State $\vb{u}^{n+1}
         \gets \text{Project}(\widetilde{\vb{u}},\Delta t, \widetilde{\vb{u}})$
             \EndFor \Comment{$[\vb{u}^0, \dots, \vb{u}^t]$ is the simulated
-            fluid flow for $t$ timesteps.}
+            fluid flow for $t$ time steps.}
 \end{algorithmic}
 
 \subsection*{Advect}
@@ -98,7 +98,7 @@ experiments on in chapter~\ref{chapter:controlling-laplacian-eigenfluids}.)
 
 To find a new value $q$ at some point $\vb{x}$ in space, the semi-Lagrangian
 method conceptually finds the particle, that ended up there from the previous
-timestep. As we know that the ``particle'' ended up at $\vb{x}$ from the previous
+time step. As we know that the ``particle'' ended up at $\vb{x}$ from the previous
 time step, we can trace it backwards through the velocity field to find where it
 came from, grabbing the old value of $q$ at that previous point. When simulating
 on a grid, but the start point was not on the grid, then interpolation is
@@ -118,13 +118,13 @@ In practice, it is advised to apply at least a midpoint method:
 \end{align*}
 
 Once we calculated $\vb{x}_{\text{old}}$, we can now simply grab the value of
-$q$ from the previous timestep from there, and assign it to our new position in
-the current timestep, i.e. $q^{t}(\vb{x}) = q^{t-1}(\vb{x}_{\text{old}})$.
+$q$ from the previous time step from there, and assign it to our new position in
+the current time step, i.e. $q^{t}(\vb{x}) = q^{t-1}(\vb{x}_{\text{old}})$.
 
 For our smoke simulation examples in
 chapter~\ref{chapter:controlling-laplacian-eigenfluids} , we are using
 a MacCormak advection scheme \cite{maccormack} that uses a forward as well as
-a backward lookup to estimate and correct the error of the semi-Langrangian
+a backward lookup to estimate and correct the error of the semi-Lagrangian
 advection.
 
 \section{The Laplacian Eigenfunction Method}
@@ -353,7 +353,7 @@ described as:
         \Comment{matrix-vector products for advection}
     \EndFor 
     \State $\vb{w} \mathrel{+}= \dot{\vb{w}} \Delta t$
-        \Comment{explicit euler integration step}
+        \Comment{explicit Euler integration step}
     \State $e_2 = \sum_i^N \vb{w}[i]^2$ 
         \Comment{calculate energy after time step}
     \State $\vb{w} \mathrel{*}= \sqrt{e_1 / e_2}$
