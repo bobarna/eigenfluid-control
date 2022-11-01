@@ -139,11 +139,11 @@ $\mathcal{M}$ describes some particles $\vb{p}$ advected in a fluid flowing with
 velocity $\vb{u}$, and $\mathcal{P}$ solving the Navier-Stokes
 equations~\ref{eq:NSE}.
 
-Phrasing equation~\ref{eq:physics-loss-general} in a general way, our intent is
-to highlight that there is a vast applicability of physics-based loss functions
-well beyond our discussion and examples. The general requirement of solving
-a problem with \ac{DP} is a differentiable solver for $\mathcal{P}$, which is
-often not readily available.
+By phrasing equation~\ref{eq:physics-loss-general} in a general way, our intent
+is to highlight that there is a vast applicability of physics-based loss
+functions well beyond our discussion and examples. The general requirement of
+solving a problem with \ac{DP} is a differentiable solver for $\mathcal{P}$,
+which is often not readily available.
 
 \subsection{Comparison with Supervised Learning}
 \label{section:comparison-with-supervised-learning}
@@ -207,7 +207,7 @@ use of an inductive physical bias to find solutions of an inverse problem.
     ground floor when simulated.  The supervised network is outperformed by the
     \ac{DP} approach, as it always hits closer to the target by orders of
     magnitude than its supervised counterpart.  The only difference between the
-    two agents being the way they derive their gradients from the same $L_2$
+    two models is the way they derive their gradients from the same $L_2$
     error: while the \ac{DP} network gains an understanding of the underlying
     physical system via gradients of the simulation, the supervised network only
     sees examples of input-output pairs, where multimodality becomes an inherent

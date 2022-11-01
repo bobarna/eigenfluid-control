@@ -74,9 +74,9 @@ together, a basic fluid simulation algorithm can be written as:
         \State $\widetilde{\vb{u}} 
             \gets \text{Advect}(\vb{u}^n,\Delta t, \vb{u}^n)$
         \State $\widetilde{\vb{u}} 
-            \gets \widetilde{\vb{u}}^n + \Delta t \vb{f}$
+            \gets \widetilde{\vb{u}} + \Delta t \vb{f}$
         \State $\vb{u}^{n+1}
-            \gets \text{Project}(\vb{u}^n,\Delta t, \vb{u}^n)$
+        \gets \text{Project}(\widetilde{\vb{u}},\Delta t, \widetilde{\vb{u}})$
             \EndFor \Comment{$[\vb{u}^0, \dots, \vb{u}^t]$ is the simulated
             fluid flow for $t$ timesteps.}
 \end{algorithmic}
@@ -97,7 +97,7 @@ solves $\dv{q}{t} = 0$. (Which is something we will fundamentally base our
 experiments on in chapter~\ref{chapter:controlling-laplacian-eigenfluids}.) 
 
 To find a new value $q$ at some point $\vb{x}$ in space, the semi-Lagrangian
-method conceptually finds the partically, that ended up there from the previous
+method conceptually finds the particle, that ended up there from the previous
 timestep. As we know that the ``particle'' ended up at $\vb{x}$ from the previous
 time step, we can trace it backwards through the velocity field to find where it
 came from, grabbing the old value of $q$ at that previous point. When simulating
@@ -122,9 +122,10 @@ $q$ from the previous timestep from there, and assign it to our new position in
 the current timestep, i.e. $q^{t}(\vb{x}) = q^{t-1}(\vb{x}_{\text{old}})$.
 
 For our smoke simulation examples in
-\ref{chapter:controlling-laplacian-eigenfluids} , we are using a MacCormak
-advection scheme (\cite{maccormack}) that uses a forward as well as a backward
-lookup to estimate and correct the error of the semi-Langrangian advection.
+chapter~\ref{chapter:controlling-laplacian-eigenfluids} , we are using
+a MacCormak advection scheme (\cite{maccormack}) that uses a forward as well as
+a backward lookup to estimate and correct the error of the semi-Langrangian
+advection.
 
 \section{The Laplacian Eigenfunction Method}
 \label{section:laplacian-eigenfluids}
@@ -181,7 +182,7 @@ difference between the two during implementation.
 As an example, $\Phi_{(4,3)}(x,y)$ is visualized in figure~\ref{fig:phi-example}.
 In appendix~\ref{appendix:first_16}, we also plot the first $16$ basis fields.
 
-This a good time to mention that higher wave lengths corresponding to smaller
+This is a good time to mention that higher wave lengths corresponding to smaller
 scales of vorticity has a very literal meaning in our simulation. As we choose
 to truncate the spectrum of ${\Phi_k}$ at some number $N$, the error we incur is
 well defined: we lose the ability to simulate vortices smaller than a given
@@ -219,8 +220,8 @@ gives us the vorticity basis fields:
     \phi_{\vb{k}} &= \curl{\Phi_{\vb{k}}} 
     =  \pdv{\Phi_{\vb{k},y}}{x} - \pdv{\Phi_{\vb{k},x}}{y}\\
 &= -\mu_{\vb{k}} k_1 \sin(k_2 y) k_1(-sin(k_1 x)) - \mu_{\vb{k}} k_2 \sin(k_1 x)
-    k_2 (-sin(k_2 y))\\
-&= \mu_{\vb{k}} sin(k_1 x) sin(k_2 y)(k_1^2+k_2^2) = sin(k_1 x) sin(k_2 y)
+    k_2 (-\sin(k_2 y))\\
+&= \mu_{\vb{k}} \sin(k_1 x) \sin(k_2 y)(k_1^2+k_2^2) = \sin(k_1 x) \sin(k_2 y)
 \end{align*}
 
 We can also interpret this value as the third component of a 3D vector,
@@ -244,7 +245,7 @@ The vorticity formulation of the \eqref{eq:NSE} Navier-Stokes equation is
 \begin{equation}
     \dot{\boldsymbol{\omega}} = \text{Advect}(\bf{u}, \boldsymbol{\omega}) + \nu
     \Delta\boldsymbol{\omega}
-    + \text{curl}(\bf{f}),
+    + \curl{\bf{f}},
 \label{eq:NSE-vorticity}
 \end{equation}
 where $\boldsymbol{\omega} = \curl{\bf{u}}$, and $\bf{f}$ denotes external

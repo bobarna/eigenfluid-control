@@ -177,7 +177,7 @@ exert control over the fluid simulation.
   \item Finally, we generalize the problem to looking for a function that exerts
     the necessary control force at time $t$, such that particles currently at
     positions $\vb{p}_t$ end up at target positions $\vb{p}_{t+1}$ at the
-    next timestep. We formulate this third task as a \acf{NN} agent in the
+    next timestep. We formulate this third task as a \acf{NN} model in the
     form $\vb{f}(\vb{p_t}, \vb{p_{t+1}}, \vb{w}_{t}, \boldsymbol\theta)$, also
     passing in the current basis coefficient vector $\vb{w}_t$, and optimizing
     for its parameters $\boldsymbol\theta$ to yield the desired outcome.
