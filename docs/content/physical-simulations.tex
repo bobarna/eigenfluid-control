@@ -35,6 +35,7 @@ on by assigning values to grid cells or particles: we call these Eulerian, and
 Lagrangian perspective, respectively.
 
 \subsubsection*{Numerical Integration with Explicit Schemes}
+\label{section:numerical-integration}
 As we introduce only a small subset of numerical methods, we refer to
 \cite{Baraff1997PhysicallyBM} to give an introduction to numerically
 approximating \acfp{PDE} from a computer graphics perspective for use in
@@ -77,32 +78,11 @@ and computation cost:
       &\qq*{(finally, perform step with weighted slopes).}
 \end{align*}
 
-Choosing a good $\Delta t$ is very important for these explicit integration
-techniques to prevent instability problems, and give reasonable accuracy. 
-
-\subsubsection*{Spatial Discretization}
-\todo{
-  Finite Differences:
-  \begin{itemize}
-    \item Replace domain by a finite number of discrete points.
-    \item These points are typically located on Eulerian grid.
-    \item Discretization: Central difference gives approximation of derivatives.
-  \end{itemize}
-  $\left( \pdv{q}{x}\right)_i = \frac{q_{i+1} - q_{i-1}}{2\Delta x}$
-  ($\pdv{q}{x}$ at grid point $i$) $\rightarrow$ staggered grid: 
-  $\left( \pdv{q}{x}\right)_i = \frac{q_{i+1/2} - q_{i-1/2}}{2\Delta x}$
-    Finite Elements: (Is the Eigenfluid simulation a Finite Elements method?)
-  \begin{itemize}
-    \item Replace infinite dimensional solution space by a finite dimensional
-      solution space
-    \item Function space is constructed by decomposing domain into a set of
-      "finite elements" and defining interpolation functions for them
-  \end{itemize}
-}
 
 \section{Differentiable Physics}
-Given $\vb{u}(\vb{x}, t)$, described by a \ac{PDE} as in Equation~\eqref{eq:pde}, a regular
-solver can move the system forward in time via Euler steps:
+Given $\vb{u}(\vb{x}, t)$, described by a \ac{PDE} as in
+Equation~\eqref{eq:pde}, a regular solver can move the system forward in time
+via Euler steps:
 
 \begin{equation}
 \vb{u}(\vb{x},t) = \text{Solver}\left[ \vb{u}(t_i), \vb{y}(t_i)] = 
