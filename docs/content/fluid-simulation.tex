@@ -375,13 +375,13 @@ with writing out the advection operator $\text{Advect}(\Phi_i, \phi_j)
 = \curl(\phi_j \cross \Phi_i)$ as
 \begin{align*}
 \curl(\phi_j \cross \Phi_i) = \Big(
-    &\frac{1}{\lambda_i}i_1j_2cos(i_1x)cos(j_2y)sin(j_1x)sin(i_2y)\\
-    &-\frac{1}{\lambda_i}i_2j_1cos(j_1x)cos(i_2y)sin(i_1x)sin(j_2y)
+    &\frac{1}{\lambda_i}i_1j_2\cos(i_1x)\cos(j_2y)\sin(j_1x)\sin(i_2y)\\
+    &-\frac{1}{\lambda_i}i_2j_1\cos(j_1x)\cos(i_2y)\sin(i_1x)\sin(j_2y)
 \Big).
 \end{align*}
 
-The trigonometric identity $cos(\alpha)sin(\beta)
-= \frac{1}{2}sin(\alpha+\beta)-\frac{1}{2}\sin(\alpha-\beta)$ enables factoring
+The trigonometric identity $\cos(\alpha)\sin(\beta)
+= \frac{1}{2}\sin(\alpha+\beta)-\frac{1}{2}\sin(\alpha-\beta)$ enables factoring
 to a suitable expression which is in the span of $\{\phi_k\}$:
 \begin{align*}
 \text{Advect}(\Phi_i,\phi_j)= \frac{1}{4\lambda_{i}}
