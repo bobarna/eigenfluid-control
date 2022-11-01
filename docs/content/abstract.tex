@@ -13,15 +13,30 @@ rengeteg tudományterületet érint az időjárás előrejelzéstől kezdve, já
 tervezésén át egészen a számítógépes grafikáig. Fizikai rendszereket általában
 parciális differenciálegyenletek segítségével írunk le, amiket meglévő numerikus
 módszerekkel tudunk közelíteni. A szimuláció mellett fontos feladat lehet egy
-fizikai folyamat irányítása is.  Jelen munka azt járja körbe, hogy hogyan tudjuk
-folyadékok viselkedését leírni és irányítani Laplace sajátfüggvények
-segítségével. Az explicit függvények általi leírásból megkapott deriváltakkal
-neurális hálókat tanítunk a fizikai folyamat kívánt módon történő
-befolyásolására.
+fizikai folyamat irányítása is.  
 
-\todo{Kibővíteni konkrétumokkat (mintapontok, feladatvariánsok). Az "our
-contribution" kidomborítása itt is. Egyes szám használata ("neurális hálókat
-tanítok).}
+Dolgozatom központi témája, hogy hogyan tudunk gradiens-alapú optimalizálási
+módszerek számára meglévő tudást átadni fizikai folyamatok működéséről
+a folyamat gradienseinek formájában, amik a felügyelt tanításban megszokott
+hibafüggvény értéke mellett arról is tudást adnak át az optimalizációnak
+(``ágensnek''), hogy egy adott pillanatban hozott döntése hogyan befolyásolja
+egy nemlineáris fizikai rendszer lefolyását.
+
+Több kutatási irány összekapcsolásával azt járom körbe, hogyan tudjuk folyadékok
+viselkedését leírni és irányítani egy csökkentett dimenziójú módszer
+segítségével. Sűrűségfüggvények advekcióját mintapontokkal közelítjuk, amiket
+részecskeként szimulálunk a folyadékban. A módszer előnye, hogy
+a Laplace-operátor sajátfüggvényeinek lineáris kombinációjaként leírt zárt
+alakban történő megadással a sebességmező diszkrét pontokban mintavételezhető,
+így nem csak a folyadékot, de a benne áramló anyagokat is tudjuk anélkül
+szimulálni, hogy a teljes tartományt például egy rács adatstruktúrában kellene
+számon tartani, ami a legtöbb jelenleg alkalmazott folyadékszimulációs módszer
+alapja.
+
+Dolgozatomban különböző megközelítéssel, egyre összetetteb módon modellezem
+a problémát. Először egyes esetek megoldására nyújtok megoldást gradiens alapú
+optimalizálás segítségével, majd általánosítva a problémát neurális hálókat
+tanítok be a fizikai folyamat kívánt módon történő irányítására.
 
 \vfill
 \selectenglish
