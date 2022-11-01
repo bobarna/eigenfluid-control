@@ -1,0 +1,9 @@
+N = 6**2 = 36
+SAMPLING_SIZE = 32
+Eigenfluid initialized in 68.47 seconds
+Initial loss: 2.19
+51 optimization steps: 230.48 seconds
+LR = 10**(-2), halved after 21 steps
+O = 30
+U = 30
+T = 0
