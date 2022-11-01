@@ -420,7 +420,7 @@ where $\mathcal{P}^{t}(\vb{p}_0, \vb{w}, \vb{f}) = \mathcal{P} \circ \dots
 physical system for $t$ time steps, applying $\vb{f}_t$ force at each
 timestep.
 
-Results of the optimization are shown in Figure~\ref{fig:f_optim}
+Results of the optimization are shown in Figure~\ref{fig:f_optim}.
 
 \begin{figure}
   \centering
@@ -448,7 +448,6 @@ Results of the optimization are shown in Figure~\ref{fig:f_optim}
 \end{figure}
 
 \pagebreak
-\todo{Decide if a pagebreak is necessary here with the final text.}
 \subsection{Neural Network Training}\label{section:nn-training}
 We generalize the \acf{CFE} problem by defining a function
 $\vb{f}(\vb{p}_0,\vb{p}_t,\vb{w}): \mathbb{R}^{2\cdot2(O+U+T)+N}\to
@@ -483,7 +482,7 @@ the results of the time evolution on figure~\ref{fig:NN-overfit}, we observe
 that a reduced degress of freedom can yield comparable, or even better results
 with the same setup, and training time. 
 
-Using an Adam \cite{adam} optimizer with learning rate $10^{-3}$, the results
+Using an Adam (\cite{adam}) optimizer with learning rate $10^{-3}$, the results
 shown in Figure~\ref{fig:NN-overfit} were achieved in $260$ epochs. The
 training took $53.94$ seconds.
 
