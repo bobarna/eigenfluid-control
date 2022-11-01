@@ -16,22 +16,20 @@ módszerekkel tudunk közelíteni. A szimuláció mellett fontos feladat lehet e
 fizikai folyamat irányítása is.  
 
 Dolgozatom központi témája, hogy hogyan tudunk gradiens-alapú optimalizálási
-módszerek számára meglévő tudást átadni fizikai folyamatok működéséről
-a folyamat gradienseinek formájában, amik a felügyelt tanításban megszokott
-hibafüggvény értéke mellett arról is tudást adnak át az optimalizációnak
-(``ágensnek''), hogy egy adott pillanatban hozott döntése hogyan befolyásolja
-nemlineáris fizikai rendszerek lefolyását.
+módszerek számára meglévő tudást átadni fizikai folyamatok működéséről.
+A folyamat gradiensei a felügyelt tanításban megszokott hibafüggvény értéke
+mellett arról is tudást adnak át az optimalizációnak (``ágensnek''), hogy egy
+adott pillanatban hozott döntése hogyan befolyásolja nemlineáris fizikai
+rendszerek lefolyását.
 
 Több kutatási irány összekapcsolásával azt járom körbe, hogyan tudjuk folyadékok
 viselkedését leírni és irányítani egy csökkentett dimenziójú módszer
-segítségével. Sűrűségfüggvények advekcióját mintapontokkal közelítjuk, amiket
-részecskeként szimulálunk a folyadék sebességmezőjében. A módszer előnye, hogy
-a Laplace-operátor sajátfüggvényeinek lineáris kombinációjaként leírt zárt
-alakban történő megadással a sebességmező diszkrét pontokban mintavételezhető,
-így nem csak a folyadékot, de a benne áramló anyagokat is tudjuk anélkül
-szimulálni, hogy a teljes tartományt például egy rács adatstruktúrában kellene
-számon tartani, ami a legtöbb jelenleg alkalmazott folyadékszimulációs módszer
-alapja.
+segítségével. Sűrűségfüggvények advekcióját mintapontokkal közelítem, amiket
+részecskeként szimulálok a folyadék sebességmezőjében. A módszer előnye, hogy
+a Laplace-operátor sajátfüggvényeinek lineáris kombinációjaként  a sebességmező
+zárt alakban mintavételezhető. Így a folyadékot a benne áramló anyagokkal
+együtt  anélkül tudjuk szimulálni, hogy a teljes tartományt számon kellene
+tartani.
 
 Dolgozatomban különböző megközelítésekkel egyre összetettebb problémákat
 modellezek. Először egyes esetek megoldására nyújtok megoldást gradiens alapú
