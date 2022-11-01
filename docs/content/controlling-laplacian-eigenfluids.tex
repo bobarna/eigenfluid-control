@@ -3,7 +3,7 @@
 Many real world applications require us to optimize for some parameters of
 a physics-based problem. A toy example would be to optimize for some initial
 angle and velocity of a projectile to hit some target (see
-figure~\ref{fig:learning-to-throw}). As a more involved example, \cite{MinDrag}
+figure~\ref{fig:learning-to-throw}). As a more involved example, \citet{MinDrag}
 address finding the best shape to minimize drag. These kinds of inverse problems
 have been around for quite some time in engineering applications.
 
@@ -26,8 +26,8 @@ optimization technique -- in our case, \acf{GD}. Moving further, we look for
 generalized solutions to a set of problems by training \acfp{NN}.
 
 After trying out multiple recent frameworks aimed at differentiable simulations
-(\cite{warp2022}, \cite{difftaichi}), we implemented all of our experiments
-using $\Phi_{Flow}$ (\cite{holl2019pdecontrol}).
+\cite{warp2022,difftaichi}, we implemented all of our experiments
+using $\Phi_{Flow}$ \cite{holl2019pdecontrol}.
 
 \section{Matching Velocities}\label{section:matching-velocities}
 To verify the feasibility of our technique before moving on to more involved
@@ -149,7 +149,7 @@ setup.
 \footnote{Note that we use the terms \textit{smoke}, \textit{marker},
 \textit{density}, and \textit{scalar valued density/marker function}
 interchangeably throughout the text.}
-The work of \cite{holl2019pdecontrol} formulated this problem in an
+The work of \citet{holl2019pdecontrol} formulated this problem in an
 Eulerian representation, with explicitly simulating the shapes as scalar marker
 densities being advected by the velocity field of the simulated fluid. 
 
@@ -212,7 +212,7 @@ equation
 
 $$\pdv{\psi}{t} + \vb{u}\cdot \grad{\psi} = 0.$$
 
-In Eulerian fluid simulation methods as described by \cite{StableFluids}, both
+In Eulerian fluid simulation methods \cite{StableFluids}, both
 $\vb{u}$ and $\vb{\psi}$ are sampled on grids, numerically approximating the
 evolution of the field quantities. Instead, our method proposes sampling the
 density function at discrete particle positions, thus rephrasing the process in
@@ -273,7 +273,7 @@ square for the sampling). For the unique points we sample a different set of
 points for each shape. 
 
 To generate low-discrepancy, quasi-random 2D coordinates, we use a Halton
-sequence (\cite{halton}), giving deterministic coordinates, given coprimes $p$
+sequence \cite{halton}, giving deterministic coordinates, given coprimes $p$
 and $q$. Using one set of primes for sampling $O$ overlapping points, and
 another set of primes for sampling $U$ unique points can give us further
 overlapping points, as the proposed (but potentially rejected) sequence of
@@ -482,7 +482,7 @@ the results of the time evolution on figure~\ref{fig:NN-overfit}, we observe
 that a reduced degress of freedom can yield comparable, or even better results
 with the same setup, and training time. 
 
-Using an Adam (\cite{adam}) optimizer with learning rate $10^{-3}$, the results
+Using an Adam optimizer \cite{adam} with learning rate $10^{-3}$, the results
 shown in Figure~\ref{fig:NN-overfit} were achieved in $260$ epochs. The
 training took $53.94$ seconds.
 
@@ -507,7 +507,7 @@ overlapping, $U=40$ unique, and $T=5$  trivial sample points.}
 \subsection*{Training}
 We generate $2000$ samples, using $1800$ for training, and $200$ for validation.
 Using $N=16$ basis fields, we train the \ac{NN} for the \ac{CFE} problem
-detailed above. (See Figure~\ref{fig:NN-shape-transition-trian}.)
+detailed above. (See Figure~\ref{fig:NN-shape-transition-train}.)
 
 At the end of the training, we generate further data the \ac{NN} has not seen
 during training to further test generalization.

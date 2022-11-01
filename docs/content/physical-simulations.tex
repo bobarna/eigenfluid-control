@@ -1,10 +1,10 @@
 \chapter{Physical Simulations}\label{chapter:physical-simulations}
 Modeling the world around us is a longstanding problem of science. For many
 physical processes, model equations exist, describing how a given system evolves
-through time. From weather and climate forecasts (\cite{stocker2014climate})
-over quantum physics (\cite{QuantumSim}), to the control of plasma fusion
-(\cite{PlasmaControl}), or optimizing the shape of
-vehicles (\cite{OptimizationCFD}), it has become an integral part of engineering
+through time. From weather and climate forecasts \cite{stocker2014climate}
+over quantum physics \cite{QuantumSim}, to the control of plasma fusion
+\cite{PlasmaControl}, or optimizing the shape of
+vehicles \cite{OptimizationCFD}, it has become an integral part of engineering
 applications to use numerical methods to derive solutions from model equations.
 
 In this section, we build up an understanding of modeling physical phenomena
@@ -37,7 +37,7 @@ Eulerian, and the Lagrangian perspective, respectively.
 \subsubsection*{Numerical Integration with Explicit Schemes}
 \label{section:numerical-integration}
 As we introduce only a small subset of numerical methods, we refer to
-\cite{Baraff1997PhysicallyBM} to give an introduction to numerically
+\citet{Baraff1997PhysicallyBM} to give an introduction to numerically
 approximating \acfp{PDE} from a computer graphics perspective for use in
 physically based modeling. They discuss the respective shortcomings of the
 techniques in a visual way.
@@ -100,7 +100,7 @@ differencing, and (especially for high-dimensional or continuous systems), this
 method would become computationally expensive, because a full trajectory needs
 to be computed for each optimizable parameter.
 
-\cite{holl2019pdecontrol} address this issue via the use of differentiable
+\citet{holl2019pdecontrol} address this issue via the use of differentiable
 solvers, backpropagating through the chain of operations via analytic
 derivatives.  Differentiable solvers can efficiently compute the derivatives
 with respect to any of the inputs $\pdv*{\vb{u}(t_{i+1})}{\vb{u}(t_i)}$ and
@@ -188,9 +188,9 @@ ground truth $y^*$ initial parameters, but measures how close its predictions
 were via running a differentiable physics simulation $\mathcal{P}$ at training
 time to calculate the point of impact. The gradients of $\mathcal{P}$ are then
 part of the backpropagation chain. This type of \textit{solver-in-the-loop}
-technique was introduced by \cite{solver-in-the-loop}, outperforming previously
+technique was introduced by \citet{solver-in-the-loop}, outperforming previously
 used learning approaches. For more details and examples on \acf{PBDL} in general,
-also see \cite{pbdl}.
+also see \citet{pbdl}.
 
 In summary, gradients of a differentiable physics simulation give a learning
 method an inductive physical bias, i.e. existing knowledge to solve a problem at
@@ -211,7 +211,7 @@ use of an inductive physical bias to find solutions of an inverse problem.
     error: while the \ac{DP} network gains an understanding of the underlying
     physical system via gradients of the simulation, the supervised network only
     sees examples of input-output pairs, where multimodality becomes an inherent
-    problem.  (Figure recreated after [\cite{LearnToThrow}].)
+    problem.  (Figure recreated after \citet{LearnToThrow}.)
   }
     \label{fig:learning-to-throw}
 \end{figure}

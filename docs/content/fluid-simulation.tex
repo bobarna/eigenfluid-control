@@ -4,7 +4,7 @@ graphics, especially when considering real-time applications. There are multiple
 established ways to simulate fluids, the most widespread being Eulerian (i.e.
 grid-based) and Lagrangian (i.e. particle-based) methods. Here, we restrict
 ourselves to discussing Eulerian methods, and also introduce the Laplacian
-Eigenfunction method, introduced by \cite{dewitt}.
+Eigenfunction method, introduced by \citet{dewitt}.
 
 The dynamics of fluids are governed by the Navier-Stokes Equations:
 \begin{equation}\label{eq:NSE}
@@ -91,7 +91,7 @@ $$\pdv{\vb{u}}{t}\dv{t}{t}
                     + \pdv{\vb{u}}{z}\dv{z}{t}$$
 
 A simple and physically-motivated advection approach, called the semi-Lagrangian
-method was introduced by \cite{StableFluids}.  Advection in a Lagrangian frame
+method was introduced by \citet{StableFluids}.  Advection in a Lagrangian frame
 is trivial: moving particles through a velocity field $\vb{u}$ automatically
 solves $\dv{q}{t} = 0$. (Which is something we will fundamentally base our
 experiments on in chapter~\ref{chapter:controlling-laplacian-eigenfluids}.) 
@@ -123,14 +123,14 @@ the current timestep, i.e. $q^{t}(\vb{x}) = q^{t-1}(\vb{x}_{\text{old}})$.
 
 For our smoke simulation examples in
 chapter~\ref{chapter:controlling-laplacian-eigenfluids} , we are using
-a MacCormak advection scheme (\cite{maccormack}) that uses a forward as well as
+a MacCormak advection scheme \cite{maccormack} that uses a forward as well as
 a backward lookup to estimate and correct the error of the semi-Langrangian
 advection.
 
 \section{The Laplacian Eigenfunction Method}
 \label{section:laplacian-eigenfluids}
-\cite{dewitt} introduced the method of using Laplacian eigenfunctions for fluid
-simulation. \cite{scalable-eigenfluids} addressed scalability and generalization
+\citet{dewitt} introduced the method of using Laplacian eigenfunctions for fluid
+simulation. \citet{scalable-eigenfluids} addressed scalability and generalization
 issues, and referred to the technique as \textit{eigenfluids}, which we also
 adhere to.
 
@@ -161,7 +161,7 @@ a free-slip boundary condition, our basis functions are fully characterized by
 where $\textbf{n}$ is the normal vector at boundary $\partial D$.
 
 Closed-form expressions of $\Phi_{\vb{k}}$ exist on the two dimensional $D \in
-[0, \pi] \times [0, \pi]$ square domain (\cite{chengfield}). Notating the two
+[0, \pi] \times [0, \pi]$ square domain \cite{chengfield}. Notating the two
 scalar components in the $x$ and $y$ directions $\Phi_{\vb{k}} =(\Phi_{\vb{k},
 x}, \Phi_{\vb{k},y})$, we can write them as
 \begin{align*}\label{eq:explicit-u}\numberthis
@@ -174,7 +174,7 @@ x}, \Phi_{\vb{k},y})$, we can write them as
 where $\vb{k} = (k_1, k_2) \in \mathbb{Z}^2$ is the \textit{vector wave number},
 $\lambda_{\vb{k}} = -(k_1^2 + k_2^2)$ is the \textit{eigenvalue}, and
 $\eta_{\vb{k}} = \frac{1}{-\lambda_{\vb{k}}} = \frac{1}{k_1^2 + k_2^2}$ is
-a normalization parameter.  \cite{scalable-eigenfluids} use
+a normalization parameter.  \citet{scalable-eigenfluids} use
 $\frac{1}{\sqrt{-\lambda}} = \frac{1}{\sqrt{k_1^2 + k_2^2}}$ for normalization,
 but we keep the non-root version, as we did not observe any noticeable
 difference between the two during implementation.
@@ -278,7 +278,7 @@ Looking at equation~\eqref{eq:NSE-vorticity}, we can see that after dealing with
 both viscosity and the external forces, the only right-hand term left is the
 advection.
 
-Following \cite{dewitt}, we perform projection to a Laplacian eigenfunction
+Following \citet{dewitt}, we perform projection to a Laplacian eigenfunction
 basis by substituting the expansions $\boldsymbol{\omega} = \sum_i w_i \phi_i,
 \vb{u} = \sum_j w_j\Phi_j$, and $\dot{\boldsymbol{\omega}}
 = \sum_k\dot{w}\phi_k$ into equation~\eqref{eq:NSE-vorticity}. With rearranging
@@ -294,22 +294,22 @@ the terms through linearity of operators, we get
 
 The Advect$(\Phi_i, \phi_j)$ terms represent the non-linear advection of basis
 fields. As the terms are constant, we precompute them, and the basis coefficients
-of the results are stored in ``a set of $\vb{C}_k$ matrices'' (\cite{dewitt}),
+of the results are stored in ``a set of $\vb{C}_k$ matrices'' (\citet{dewitt}),
 resulting in $N$ number of $N \times N$ matrices, or equivalently, a ``$3^{rd}$
-order advection tensor $\mathfrak{C}$'' (\cite{scalable-eigenfluids}).  The
+order advection tensor $\mathfrak{C}$'' (\citet{scalable-eigenfluids}).  The
 dimensions of $\vb{C}$ and $\mathfrak{C}$ are both $N \times N \times N$. In the
 following, we will refer to these precomputed advection values as $N$ $\vb{C}_k$
 matrices.  The respective works also propose different ways to precompute these
 values.
 
-\cite{dewitt} propose 
+\citet{dewitt} propose 
 
 \begin{equation}\label{eq:Ck-dewitt}
 \vb{C}_g[h, i] = \Big( \curl(\phi_h \cross \Phi_i)\Big)\cdot \phi_g.
 \end{equation}
 
-\cite{scalable-eigenfluids} improves on \eqref{eq:Ck-dewitt} by using the method
-introduced by \cite{ModelReductionFluidSim}:
+\citet{scalable-eigenfluids} improve on \eqref{eq:Ck-dewitt} by using the method
+introduced by \citet{ModelReductionFluidSim}:
 \begin{equation}
     \mathfrak{C}(g,h,i) = \int_D (\curl{\Phi_i})\cdot (\Phi_g \cross \Phi_h)
     \text{d}D,
@@ -337,9 +337,9 @@ chapter~\ref{chapter:controlling-laplacian-eigenfluids}.
 Any standard numerical technique (such as the ones discussed in
 section~\ref{section:numerical-integration}) can be used to integrate
 equation~\eqref{eq:eigenfluid-time-derivative} forward in time. However,
-\cite{dewitt} describe a preferred technique that in order to preserve kinetic
+\citet{dewitt} describe a preferred technique that in order to preserve kinetic
 energy, renormalizes the energy of the fluid simulation after each integration
-step. \cite{dewitt} show that due to the orthogonality of the basis functions,
+step. \citet{dewitt} show that due to the orthogonality of the basis functions,
 the total kinetic energy can be calculated as a sum of squared coefficients.
 With this final addition, the final algorithm that we implemented for our
 experiments in chapter~\ref{chapter:controlling-laplacian-eigenfluids} can be
@@ -392,7 +392,7 @@ to a suitable expression which is in the span of $\{\phi_k\}$:
 \end{align*}
 
 The resulting coefficients are\footnote{Deriving the underlying equations by
-hand, and consulting the original implementation of \cite{dewitt}, one of the
+hand, and consulting the original implementation by \citet{dewitt}, one of the
 signs is purposefully different from the appendix in \cite{dewitt}.}
 \begin{align*}\numberthis\label{eq:structure-coeff-values}
     \vb{C}_{i_1+j_1,i_2+j_2}[i,j] &= -\frac{1}{4(i_1^2 - i_2^2)}(i_1j_2-i_2j_1)\\
