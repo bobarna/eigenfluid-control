@@ -8,9 +8,17 @@
 - For an informal overview of some basic concepts, see [this blog post](https://barnabasborcsok.com/posts/eigenfluid-control/).
 
 ## Abstract
-Understanding and modeling our environment is a great and important challenge, spanning many disciplines from weather and climate forecast, through vehicle design to computer graphics. Physical systems are usually described by Partial Differential Equations (PDEs), which we can be approximated using established numerical techniques. Next to predicting outcomes, planning interactions to control physical systems is also a longstanding problem.
+Understanding and modeling our environment is a great and important challenge,
+spanning many disciplines from weather and climate forecast, through vehicle
+design to computer graphics. Physical systems are usually described by Partial
+Differential Equations (PDEs), which we can approximate using established
+numerical techniques. Next to predicting outcomes, planning interactions to
+control physical systems is also a longstanding problem.
 
-In our work, we investigate the use of Laplacian Eigenfunctions to model and control fluid flow. We make use of an explicit description of our simulation domain to derive gradients of the physical simulation, enabling neural network agents to learn to control the physical process to achieve desired outcomes.
+In our work, we investigate the use of Laplacian Eigenfunctions to model and
+control fluid flow. We make use of an explicit description of our simulation
+domain to derive gradients of the physical simulation, enabling neural network
+agents to learn to control the physical process to achieve desired outcomes.
 
 ## Running the Code
 
@@ -45,4 +53,4 @@ conda activate eigenfluid-control
 jupyter notebook
 ```
 
-*TODO* describe layout of code base
+*TODO: describe layout of code base*
