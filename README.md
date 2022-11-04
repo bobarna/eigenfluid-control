@@ -44,7 +44,11 @@ jupyter notebook
 #### In Google Colab
 - [Intro](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/eigenfluid_intro.ipynb)
 - [Optimization -- Velocity Only](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/eigenfluid-optimization-velocity-only.ipynb)
-- **TODO** make other notebooks ready for colab
+- [Optimization -- Initial Velocity for Points](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/eigenfluid-optimization-points.ipynb)
+- [Optimization -- Control Force](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/eigenfluid-force-optimization.ipynb)
+- [Neural Network for Control Force Estimation](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/network-training.ipynb)
+
+- [Shape sampling demo](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/shape_samples_demo.ipynb)
 
 ### Code Layout
 - `docs/`: LaTeX source of the thesis
