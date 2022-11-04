@@ -1,7 +1,7 @@
 # Controlling Laplacian Eigenfluids
 ## Scientific Students' Association Report 2022
 ### Author: Barnabás Börcsök
-### Advisor: dr. László Szécsi
+### Advisor: dr. László Szécsi 
 
 - [thesis.pdf](https://bobarna.github.io/eigenfluid-control/thesis.pdf)
     - Automatically deployed from `docs` folder
@@ -87,7 +87,7 @@ correctness of our implementation.
 ```
 cd original-code
 javac LE.java #compile 
-java LE # run 
+java LE #run 
 java LE > output #print to an output file
 python visu.py #plot the velocity field with matplotlib for comparison
 ```
