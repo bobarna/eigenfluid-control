@@ -37,11 +37,14 @@ pip install notebook
 ```
 
 ### Running the Notebooks
+#### Locally
 ```
 jupyter notebook
 ```
-
-**TODO:** Add colab links
+#### In Google Colab
+- [Intro](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/eigenfluid_intro.ipynb)
+- [Optimization -- Velocity Only](https://colab.research.google.com/github/bobarna/eigenfluid-control/blob/main/eigenfluid-optimization-velocity-only.ipynb)
+- **TODO** make other notebooks ready for colab
 
 ### Code Layout
 - `docs/`: LaTeX source of the thesis
