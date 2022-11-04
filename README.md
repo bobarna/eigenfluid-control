@@ -5,7 +5,8 @@
 
 - [thesis.pdf](https://bobarna.github.io/eigenfluid-control/thesis.pdf)
     - Automatically deployed from `docs` folder
-- For an informal overview of some basic concepts, see [this blog post](https://barnabasborcsok.com/posts/eigenfluid-control/).
+- For an informal overview of some basic concepts, see [this blog
+- post](https://barnabasborcsok.com/posts/eigenfluid-control/).
 
 ## Abstract
 Understanding and modeling our environment is a great and important challenge,
@@ -23,29 +24,17 @@ agents to learn to control the physical process to achieve desired outcomes.
 ## Running the Code
 
 ### Dependencies
-- Python
-- [Jupyter notebook](https://jupyter.org/install)
-- [ΦFlow](https://github.com/tum-pbs/PhiFlow)
+- [Φ<sub>Flow</sub>](https://github.com/tum-pbs/PhiFlow)
     - dash
 - [Pytorch](https://pytorch.org/)
 - [Tensorflow](https://www.tensorflow.org/) -- as an alternative backend
+- [Jupyter notebook](https://jupyter.org/install) -- for running the notebooks
 
-All of these can be installed via [pip](https://pypi.org/project/pip/) on [Python 3.6](https://www.python.org/downloads/) and above:
+All of these can be installed via [pip](https://pypi.org/project/pip/) on
+[Python 3.6](https://www.python.org/downloads/) and above:
 ```
-pip install phiflow dash torch torchvision tensorflow
+pip install phiflow==2.2.2 dash torch torchvision tensorflow
 pip install notebook
-```
-
-#### Using [conda](https://docs.conda.io/en/latest/)
-As an alternative to [pip](https://pypi.org/project/pip/), `environment.yml` describes a [conda](https://docs.conda.io/en/latest/) environemt for installing every necessary Python package in a managed environment.
-
-Create conda environment based on `environment.yml`:
-```
-conda env create
-```
-Activate the conda environment:
-```
-conda activate eigenfluid-control
 ```
 
 ### Running the notebooks
@@ -53,4 +42,60 @@ conda activate eigenfluid-control
 jupyter notebook
 ```
 
-*TODO: describe layout of code base*
+**TODO:** Add colab links
+
+### Code layout
+- `docs/`: LaTeX source of the thesis
+- `src/`: Python/Φ<sub>Flow</sub> source code, imported in the notebooks
+- `*.ipynb`: interactive notebook files
+- `original-code/`: (see below)
+- `taichi/`: (see below)
+
+### Taichi version
+The `taichi` folder contains a minimal [taichi](https://docs.taichi-lang.org/)
+implementation of visualizing the first 100 basis fields.
+
+#### Install taichi
+```
+pip install taichi==1.2.1
+```
+
+#### Run the experiment
+```
+python taichi/main.py
+```
+- Viscosity
+    - `Y`: turn ON
+    - `T`: turn OFF 
+- Step basis fields
+    - `J`: Next basis field (increment)
+    - `K`: Previous basis field (decrement)
+- `V`: Visualize (plot) current velocity field with matplotlib
+    - the title displays the current base coefficient vector (doesn't display
+        properly if many basis fields are used)
+- `R`: Random basis coefficients
+
+Hop into `taichi/main.py`, to change the number of basis fields. 
+(Look for `N=...`.)
+
+### Original code by de Witt et al 
+The `original-code` folder contains the original implementation of *Fluid
+Dynamics using Laplacian Eigenfunctions* by Tyler de Witt, Christian Lessig, and
+Eugene Fiume, downloaded from the project's website:
+[http://www.dgp.toronto.edu/~tyler/fluids/](http://www.dgp.toronto.edu/~tyler/fluids/).
+In the early phases of the project, it was used to print values for checking the
+correctness of our implementation.
+```
+cd original-code
+javac LE.java #compile 
+java LE # run 
+java LE > output #print to an output file
+python visu.py #plot the velocity field with matplotlib for comparison
+```
+
+(For a (more involved) C++ implementation, check out the [source
+code](https://bitbucket.org/cqd123123/eigenfluidrelease/src/release/) for the
+paper [Scalable Laplacian
+Eigenfluids](https://w2.mat.ucsb.edu/qiaodong/SIG18-EigenFluid/index.html).)
+
+

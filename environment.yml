@@ -1,3 +1,6 @@
+# Note: Matplotlib runs into an error when trying to animate, when downloaded
+# through this conda environments, so I stopped using it.
+#
 # Create environment based on this file:
 ## `conda env create`
 
@@ -17,7 +20,6 @@ channels:
 dependencies:
   - python>=3.5
   - pip
-  - jupyterlab
   - notebook
   - ipykernel # for conda env in notebook
   - pip:

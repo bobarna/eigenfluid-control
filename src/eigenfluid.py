@@ -101,8 +101,12 @@ class Eigenfluid():
         return phi
 
     # Return the reconstructed velocity field (SAMPLING_SIZE**2)
-    def reconstruct_velocity(self):
-        phi = self.phi_template(self.w, self.N, self.basis_fields)
+    def reconstruct_velocity(self, w=None, N=None):
+        if w is None:
+            w = self.w
+        if N is None:
+            N = self.N
+        phi = self.phi_template(w, N, self.basis_fields)
         velocity = CenteredGrid(phi,
                                 extrapolation.BOUNDARY,
                                 x=self.SAMPLING_SIZE, y=self.SAMPLING_SIZE,
