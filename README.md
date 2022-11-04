@@ -5,8 +5,7 @@
 
 - [thesis.pdf](https://bobarna.github.io/eigenfluid-control/thesis.pdf)
     - Automatically deployed from `docs` folder
-- For an informal overview of some basic concepts, see [this blog
-- post](https://barnabasborcsok.com/posts/eigenfluid-control/).
+- For an informal overview of some basic concepts, see [this blog post](https://barnabasborcsok.com/posts/eigenfluid-control/).
 
 ## Abstract
 Understanding and modeling our environment is a great and important challenge,
@@ -37,30 +36,30 @@ pip install phiflow==2.2.2 dash torch torchvision tensorflow
 pip install notebook
 ```
 
-### Running the notebooks
+### Running the Notebooks
 ```
 jupyter notebook
 ```
 
 **TODO:** Add colab links
 
-### Code layout
+### Code Layout
 - `docs/`: LaTeX source of the thesis
 - `src/`: Python/Φ<sub>Flow</sub> source code, imported in the notebooks
 - `*.ipynb`: interactive notebook files
 - `original-code/`: (see below)
 - `taichi/`: (see below)
 
-### Taichi version
+### Taichi Version
 The `taichi` folder contains a minimal [taichi](https://docs.taichi-lang.org/)
 implementation of visualizing the first 100 basis fields.
 
-#### Install taichi
+#### Install Taichi
 ```
 pip install taichi==1.2.1
 ```
 
-#### Run the experiment
+#### Run the Taichi Version
 ```
 python taichi/main.py
 ```
@@ -78,7 +77,7 @@ python taichi/main.py
 Hop into `taichi/main.py`, to change the number of basis fields. 
 (Look for `N=...`.)
 
-### Original code by de Witt et al 
+### Original Code by de Witt et al 
 The `original-code` folder contains the original implementation of *Fluid
 Dynamics using Laplacian Eigenfunctions* by Tyler de Witt, Christian Lessig, and
 Eugene Fiume, downloaded from the project's website:
