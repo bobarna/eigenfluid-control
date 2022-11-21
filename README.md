@@ -7,13 +7,8 @@
     - Automatically deployed from `docs` folder
 - For an informal overview of some basic concepts, see [this blog post](https://barnabasborcsok.com/posts/eigenfluid-control/).
 
-## Abstract
-Understanding and modeling our environment is a great and important challenge,
-spanning many disciplines from weather and climate forecast, through vehicle
-design to computer graphics. Physical systems are usually described by Partial
-Differential Equations (PDEs), which we can approximate using established
-numerical techniques. Next to predicting outcomes, planning interactions to
-control physical systems is also a longstanding problem.
+This repository contains the accompanying code for our Scientific Students' 
+Assocation project on Controlling Laplacian Eigenfluids.
 
 In our work, we investigate the use of Laplacian Eigenfunctions to model and
 control fluid flow. We make use of an explicit description of our simulation
