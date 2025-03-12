@@ -1,7 +1,6 @@
 # Controlling Laplacian Eigenfluids
 ## Scientific Students' Association Report 2022
-### Author: Barnabás Börcsök
-### Advisor: dr. László Szécsi 
+Author: Barnabás Börcsök, advised by Dr. László Szécsi
 
 - [thesis.pdf](https://bobarna.github.io/eigenfluid-control/thesis.pdf)
     - Automatically deployed from `docs` folder
@@ -14,6 +13,18 @@ In our work, we investigate the use of Laplacian Eigenfunctions to model and
 control fluid flow. We make use of an explicit description of our simulation
 domain to derive gradients of the physical simulation, enabling neural network
 agents to learn to control the physical process to achieve desired outcomes.
+
+### Citation
+If you found this report useful in your research, please consider citing the shortened version of this work that was presented at CESCG 2023:
+```
+@inproceedings{borcsok2023,
+  title       = {Controlling 2D Laplacian Eigenfluids},
+  author      = {B{\"o}rcs{\"o}k, Barnab{\'a}s and Sz{\'e}csi, L{\'a}szl{\'o}},
+  booktitle   = {Proceedings of CESCG 2023: The 27th Central European Seminar on Computer Graphics},
+  year        = {2023},
+  url         = {https://cescg.org/wp-content/uploads/2023/04/Borcsok-Controlling-2D-Laplacian-Eigenfluids-6.pdf}
+}
+```
 
 ## Running the Code
 
