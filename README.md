@@ -3,8 +3,12 @@
 Author: Barnabás Börcsök, advised by Dr. László Szécsi
 
 - [thesis.pdf](https://bobarna.github.io/eigenfluid-control/thesis.pdf)
-    - Automatically deployed from `docs` folder
+    - My Bachelor's thesis at TU Budapest was an extended version of my submission to the 2022 Scientific Student Associations' Conference (TDK).
+    - Automatically deployed from `docs` folder.
 - For an informal overview of some basic concepts, see [this blog post](https://barnabasborcsok.com/posts/eigenfluid-control/).
+- A shorter version was also presented at CESCG 2023:
+    - [CESCG Paper](https://cescg.org/cescg_submission/controlling-2d-laplacian-eigenfluids/) 
+    - [CESCG Presentation recording (YouTube)](https://youtu.be/XU15lfanWdE)
 
 This repository contains the accompanying code for our Scientific Students' 
 Assocation project on Controlling Laplacian Eigenfluids.
@@ -17,12 +21,12 @@ agents to learn to control the physical process to achieve desired outcomes.
 ### Citation
 If you found this report useful in your research, please consider citing the shortened version of this work that was presented at CESCG 2023:
 ```
-@inproceedings{borcsok2023,
+@inproceedings{borcsok2023control,
   title       = {Controlling 2D Laplacian Eigenfluids},
   author      = {B{\"o}rcs{\"o}k, Barnab{\'a}s and Sz{\'e}csi, L{\'a}szl{\'o}},
-  booktitle   = {Proceedings of CESCG 2023: The 27th Central European Seminar on Computer Graphics},
   year        = {2023},
-  url         = {https://cescg.org/wp-content/uploads/2023/04/Borcsok-Controlling-2D-Laplacian-Eigenfluids-6.pdf}
+  booktitle   = {Proceedings of CESCG 2023: The 27th Central European Seminar on Computer Graphics},
+  note        = {\url{https://github.com/bobarna/eigenfluid-control}},
 }
 ```
 
